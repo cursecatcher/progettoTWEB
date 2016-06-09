@@ -1,0 +1,16 @@
+CREATE TABLE Pizza (
+    id_pizza INT NOT NULL PRIMARY KEY
+        GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), 
+    nome VARCHAR(33) NOT NULL, 
+    prezzo FLOAT NOT NULL, 
+    ingredienti VARCHAR(129) NOT NULL,
+    CHECK (prezzo > 0)
+); 
+
+CREATE TABLE Utente (
+    id_utente INT NOT NULL PRIMARY KEY 
+        GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), 
+    email VARCHAR(65) NOT NULL, 
+    password CHAR(40) NOT NULL,
+    ruolo VARCHAR(10) NOT NULL 
+); 
