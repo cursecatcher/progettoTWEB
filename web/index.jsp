@@ -4,7 +4,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>PiWeb</title>
-        
+
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" 
               integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" 
@@ -21,20 +21,10 @@
         crossorigin="anonymous"></script>
     </head>
     <body>
-        <nav class="navbar navbar-default">
-            <div class="collapse navbar-collapse">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="#0">PiWeb</a>
-                </div>
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="profiloUtente.jsp">Il tuo profilo</a></li>
-                    <li><a href="menu.jsp">Menu</a></li>
-                    <li><a href="login.jsp">Login</a></li>
-                    <li><a href="register.jsp">Registrati</a></li>
-                </ul>
-            </div>
-        </nav>
-        
-        <h1>Homepage :D</h1>
+        <jsp:include page="include/html/header.html"/>
+
+        <div class="container">
+            <h1>Homepage :D</h1>
+        </div>
     </body>
 </html>

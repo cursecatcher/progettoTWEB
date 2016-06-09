@@ -60,9 +60,17 @@ public class ServletUtente extends HttpServlet {
                     ResultSet rs = st.executeQuery("SELECT * FROM Utente WHERE email = '" + email + "'");
 
                     if (rs.next()) {
-                        out.println("OK");
+                        String user_pwd = rs.getString("password"); 
+                        
+                        if (user_pwd.equals(DigestUtils.sha1Hex(password))) {
+                            out.println("OK"); 
+                            /* sessione */
+                        }
+                        else {
+                            out.println("WRONG PASSWORD");
+                        }
                     } else {
-                        out.println("ERR");
+                        out.println("EMAIL NOT FOUND");
                     }
 
                     rs.close();
