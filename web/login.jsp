@@ -5,6 +5,8 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Login</title>
 
+        <meta name="google-signin-client_id" content="495487496441-r9l7mppbotcf6i3rt3cl7fag77hl0v62.apps.googleusercontent.com"></meta>
+
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" 
               integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" 
@@ -19,6 +21,10 @@
                 integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   
         crossorigin="anonymous"></script>
         <script type="text/javascript" src="include/js/log-reg-checks.js"></script>
+        
+        <meta name="google-signin-client_id" content="495487496441-r9l7mppbotcf6i3rt3cl7fag77hl0v62.apps.googleusercontent.com"></meta>
+        <script type='text/javascript' src='include/js/googleplus-script.js'></script>
+        <script src="https://apis.google.com/js/client:platform.js?onload=startApp" async defer></script>
     </head>
     <body>
         <jsp:include page="include/html/header.html"/>
@@ -26,20 +32,29 @@
         <div class="container">
             <h1>Login</h1>
 
-            <form id="form_login" action="ServletController" method="POST">
-                <p>
-                    <label>Email</label>
-                    <input name="email" type="email" required/>
-                </p>
-                <p>
-                    <label>Password</label>
-                    <input name="password" type="password" required/>
-                </p>
+            <div class="form login">
+                <form id="form_login" action="ServletController" method="POST">
+                    <p>
+                        <label>Email</label>
+                        <input name="email" type="email" required/>
+                    </p>
+                    <p>
+                        <label>Password</label>
+                        <input name="password" type="password" required/>
+                    </p>
 
-                <input id='submit-login' type="submit"/>
-            </form>
+                    <input id='submit-login' type="submit"/>
+                </form>
 
-            Non hai ancora un account? Registrati <a href="register.jsp">qui</a>!
+                Non hai ancora un account? Registrati <a href="register.jsp">qui</a>!<br/>
+
+                Oppure accedi col tuo account Google! <a href="#0">#chesiamofighi</a>
+                <div id="gConnect">
+                    <div id="signin-button"></div>
+                </div>
+
+
+            </div>
         </div>
     </body>
 </html>

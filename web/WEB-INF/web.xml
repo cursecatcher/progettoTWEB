@@ -8,6 +8,10 @@
         <servlet-name>ServletTest</servlet-name>
         <servlet-class>test.ServletTest</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ServletGnam</servlet-name>
+        <servlet-class>web.ServletGnam</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ServletController</servlet-name>
         <url-pattern>/ServletController</url-pattern>
@@ -15,6 +19,10 @@
     <servlet-mapping>
         <servlet-name>ServletTest</servlet-name>
         <url-pattern>/ServletTest</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServletGnam</servlet-name>
+        <url-pattern>/ServletGnam</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

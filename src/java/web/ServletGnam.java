@@ -1,56 +1,72 @@
-package test;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package web;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.commons.codec.digest.DigestUtils;
-import web.Constants;
-import web.ServletUtente;
 
-public class ServletTest extends HttpServlet {
+/**
+ *
+ * @author nicol
+ */
+public class ServletGnam extends HttpServlet {
 
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        
+        ServletContext ctx = getServletContext();
+        RequestDispatcher rd = null; 
+        
         try (PrintWriter out = response.getWriter()) {
-
-            try {
-                Connection conn = DriverManager.getConnection(
-                        Constants.DB_URL, Constants.DB_USER, Constants.DB_PASSWORD);
-                Statement st = conn.createStatement();
-
-                String pwdDigest = DigestUtils.sha1Hex("asd");
-
-                String query
-                        = "INSERT INTO Utente(email, password, ruolo) VALUES"
-                        + "('" + "nicola.licheri@gmail.com" + "', '" + pwdDigest + "', 'admin')";
-
-                if (st.executeUpdate(query) == 1) {
-                    out.println("OK");
-                } else {
-                    out.println("BOH");
-                }
-
-                st.close();
-                conn.close();
-
-            } catch (SQLException ex) {
-                Logger.getLogger(ServletUtente.class.getName()).log(Level.SEVERE, null, ex);
+            String action = request.getParameter("action"); 
+            
+            if (action == null) {
+                rd = ctx.getRequestDispatcher("/index.jsp"); 
             }
-
+            else if (action.equalsIgnoreCase("pizza-create")) {
+                ;
+            }
+            else if (action.equalsIgnoreCase("pizza-remove")) {
+                ;
+            }
+            else if (action.equalsIgnoreCase("pizza-modify")) {
+                
+            }
+            else if (action.equalsIgnoreCase("ingrediente-add")) {
+                ;
+            }
+            
+            if (rd != null) {
+                rd.forward(request, response);
+            }
+            
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ServletTest</title>");
+            out.println("<title>Servlet ServletGnam</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ServletTest at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ServletGnam at " + request.getContextPath() + "</h1>");
+            out.println("FFFFFFFATTO???"); 
             out.println("</body>");
             out.println("</html>");
         }

@@ -36,9 +36,8 @@ public class ServletController extends HttpServlet {
         ServletContext ctx = getServletContext();
         RequestDispatcher rd = null; 
         
-        String action = request.getParameter("action"); 
-        
         try (PrintWriter out = response.getWriter()) {
+            String action = request.getParameter("action"); 
             
             if (action == null) {
                 rd = ctx.getRequestDispatcher("/index.jsp"); 
