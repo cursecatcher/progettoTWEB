@@ -32,7 +32,16 @@ public class ServletGnam extends HttpServlet {
         }
     }
 
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+    /**
+     * Handles the HTTP <code>GET</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
 
@@ -41,17 +50,49 @@ public class ServletGnam extends HttpServlet {
 
         try (PrintWriter out = response.getWriter()) {
             String action = request.getParameter("action");
-            System.out.println("ServletUtente - action: " + action);
 
             if (action == null) {
                 rd = ctx.getRequestDispatcher("/index.jsp");
+            } else {
+                rd = ctx.getRequestDispatcher("/error.jsp");
+            }
+
+            if (rd != null) {
+                rd.forward(request, response);
+            }
+        }
+    }
+
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+
+        ServletContext ctx = getServletContext();
+        RequestDispatcher rd = null;
+
+        try (PrintWriter out = response.getWriter()) {
+            String action = request.getParameter("action");
+
+            if (action == null) {
+                rd = ctx.getRequestDispatcher("/index.jsp");
+
             } else if (action.equalsIgnoreCase("pizza-create")) {
-                ;
+                System.out.println("It's time");
 
             } else if (action.equalsIgnoreCase("pizza-remove")) {
                 ;
 
             } else if (action.equalsIgnoreCase("pizza-modify")) {
+                ;
 
             } else if (action.equalsIgnoreCase("ingrediente-add")) {
                 String nome = request.getParameter("nome");
@@ -88,41 +129,14 @@ public class ServletGnam extends HttpServlet {
                 } catch (SQLException ex) {
                     Logger.getLogger(ServletGnam.class.getName()).log(Level.SEVERE, null, ex);
                 }
+            } else {
+                rd = ctx.getRequestDispatcher("/error.jsp");
             }
 
             if (rd != null) {
                 rd.forward(request, response);
             }
         }
-    }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
     }
 
     /**
@@ -133,6 +147,6 @@ public class ServletGnam extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
+    }
 
 }

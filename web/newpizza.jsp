@@ -28,6 +28,8 @@
 
         <link rel='stylesheet' type='text/css' href='include/lib/sol/sol.css'>
         <script type='text/javascript' src='include/lib/sol/sol.js'></script>
+        
+        <script type='text/javascript' src='include/js/gnammy-script.js'></script>
     </head>
     <body>
         <jsp:include page="include/html/header.html"/>
@@ -39,18 +41,18 @@
                 <form id="form_newpi" action="ServletController" method="POST">
                     <p>
                         <label>Nome pizza</label>
-                        <input name="name" type="text" 
+                        <input name="nome" type="text" 
                                placeholder="Nome della pizza (es. margherita)"/>
                     </p>
                     <p>
                         <label>Prezzo</label>
-                        <input name="price" type="number" min="0.5" step="0.1"
+                        <input name="prezzo" type="number" min="0.5" step="0.1"
                                placeholder="Prezzo della pizza..."/>
                     </p>
                     <p>
                         Da quali ingredienti &egrave; composta la pizza?<br/>
 
-                        <select id='select-random' name='culo' multiple="multiple">
+                        <select id='select-random' name='ingredientiPizza' multiple="multiple">
                             <jsp:getProperty name="ingredientiBean" property="listaIngredienti"/>
                         </select>
                         

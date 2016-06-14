@@ -5,6 +5,7 @@ CREATE TABLE Pizza (
     prezzo FLOAT NOT NULL, 
     ingredienti VARCHAR(129) NOT NULL,
     CHECK (prezzo > 0)
+/* inserire flag: nopomo, nolattosio */
 ); 
 
 CREATE TABLE Utente (
@@ -21,4 +22,5 @@ CREATE TABLE Ingrediente (
     nome VARCHAR(33) NOT NULL UNIQUE, 
     prezzo FLOAT NOT NULL, /* forse inutile */
     CHECK (prezzo > 0)
+
 );
