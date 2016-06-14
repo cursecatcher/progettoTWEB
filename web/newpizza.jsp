@@ -4,6 +4,7 @@
 
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<jsp:useBean id="ingredientiBean" scope="page" class="beans.Ingredienti" />
 <!DOCTYPE html>
 <html>
     <head>
@@ -50,10 +51,7 @@
                         Da quali ingredienti &egrave; composta la pizza?<br/>
 
                         <select id='select-random' name='culo' multiple="multiple">
-                            <option value='1'>Pomodoro</option>
-                            <option value='2'>Mozzarella</option>
-                            <option value='3'>Prosciutto</option>
-                            <option value='4'>Funghi</option>
+                            <jsp:getProperty name="ingredientiBean" property="listaIngredienti"/>
                         </select>
                         
                         <script type='text/javascript'>

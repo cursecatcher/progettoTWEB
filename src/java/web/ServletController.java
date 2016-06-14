@@ -51,6 +51,10 @@ public class ServletController extends HttpServlet {
                 rd = ctx.getNamedDispatcher("ServletUtente");
                 System.out.println("REGISTRAZIONE"); 
             }
+            else if (action.equalsIgnoreCase("ingrediente-add")) {
+                rd = ctx.getNamedDispatcher("ServletGnam"); 
+                System.out.println("INSERIMENTO INGREDIENTE"); 
+            }
             else {
                 System.out.println("OPERAZIONE NON SUPPORTATA"); 
                 rd = ctx.getRequestDispatcher("/error.jsp"); 

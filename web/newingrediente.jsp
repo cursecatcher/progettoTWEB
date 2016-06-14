@@ -17,26 +17,31 @@
 
         <script src="https://code.jquery.com/jquery-2.2.4.min.js"   
                 integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   
-                crossorigin="anonymous"></script>
+        crossorigin="anonymous"></script>
+
+        <script type="text/javascript" src="include/js/gnammy-script.js"></script>
     </head>
     <body>
         <jsp:include page="include/html/header.html"/>
-        
+
         <div class='container'>
             <h1>Inserimento ingredienti</h1>
 
             <form id="form_newingr" action='ServletController' method="POST">
+                <input type="hidden" name="action" value="ingrediente-add"/>
                 <p>
                     <label>Nome ingrediente</label>
                     <input type="text" name="nome" maxlength="32"/>
                 </p>
                 <p>
                     <label>Prezzo</label>
-                    <input type="number" name="price" min="0.1" step="0.1"/>
+                    <input type="number" name="prezzo" min="0.1" step="0.1"/>
                 </p>
                 <input type="submit" id="submit-newingr"/>
+                
+                <!-- div risultato operazione ? -->
             </form>
-
+            <p>Torna all'<a href='newpizza.jsp'>inserimento delle pizze</a>!!</p>
         </div>
     </body>
 </html>
