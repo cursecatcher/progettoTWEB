@@ -47,6 +47,10 @@ public class ServletController extends HttpServlet {
                 rd = ctx.getNamedDispatcher("ServletUtente");
                 System.out.println("LOGIN"); 
             }
+            else if (action.equalsIgnoreCase("login-googleplus")) {
+                rd = ctx.getNamedDispatcher("ServletUtente");
+                System.out.println("LOGIN G+"); 
+            }
             else if (action.equalsIgnoreCase("user-registrazione")) {
                 rd = ctx.getNamedDispatcher("ServletUtente");
                 System.out.println("REGISTRAZIONE"); 

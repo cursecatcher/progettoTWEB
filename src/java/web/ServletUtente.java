@@ -15,6 +15,8 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.WebServlet;
 import org.apache.commons.codec.digest.DigestUtils;
+import verifytoken.Verify;
+
 
 @WebServlet(name = "ServletUtente", urlPatterns = {"/ServletUtente"})
 public class ServletUtente extends HttpServlet {
@@ -119,6 +121,24 @@ public class ServletUtente extends HttpServlet {
                     Logger.getLogger(ServletUtente.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
+            } else if (action.equalsIgnoreCase("login-googleplus")) {
+                System.out.println("ServletUtente login g+");
+                
+                String[] verify = Verify.getUserCredentials(
+                        request.getParameter("id_token"),
+                        request.getParameter("access_token"));
+
+                if (verify != null) {
+                    System.out.println("Andato tutto ok"); 
+                    System.out.println(verify[1]);
+                }
+                else {
+                    System.out.println("EH, VOLEVI");
+                }
+                
+                
+
+                
             } else if (action.equalsIgnoreCase("user-registrazione")) {
                 String email = request.getParameter("email");
                 String password = request.getParameter("password");

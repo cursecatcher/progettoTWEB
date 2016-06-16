@@ -55,6 +55,7 @@ function onSignInCallback(authResult) {
 
         $form.find('input[name="id_token"]').val(authResponse.id_token);
         $form.find('input[name="access_token"]').val(authResponse.access_token);
+        
 
         gapi.client.plus.people.get({'userId': 'me'}).then(
                 function (profile) {
