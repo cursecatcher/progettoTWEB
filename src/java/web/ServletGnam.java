@@ -87,6 +87,47 @@ public class ServletGnam extends HttpServlet {
 
             } else if (action.equalsIgnoreCase("pizza-create")) {
                 System.out.println("It's time");
+                
+                String nome = request.getParameter("nome"); 
+                String id_ingredienti = request.getParameter("listaIngredienti"); 
+                float prezzo = Float.parseFloat(request.getParameter("prezzo"));
+              
+                if (id_ingredienti.equalsIgnoreCase("")) {
+                    System.out.println("L'utente e' un coglione -> pizza senza ingredienti");
+                }
+                
+                
+                try {
+                    Connection conn = DriverManager.getConnection(Constants.DB_URL, Constants.DB_USER, Constants.DB_PASSWORD);
+                    Statement st = conn.createStatement();
+                    String query = "INSERT INTO Pizza(nome, prezzo, ingredienti) VALUES "    
+                                   + "('" + nome + "', " + prezzo + ", '" + id_ingredienti + "')";
+                    boolean res;
+                    
+                    System.out.println("Query: " + query); 
+                    
+                    try {
+                        res = st.executeUpdate(query) == 1;
+                    } catch (SQLIntegrityConstraintViolationException ex) {
+                        res = false;
+                        Logger.getLogger(ServletGnam.class.getName()).log(Level.INFO, null, ex);
+                    } finally {
+                        st.close();
+                        conn.close();
+                    }
+                    
+                    if (res) {
+                        System.out.println("OK");
+                        out.println("OK");
+                    } else {
+                        System.out.println("ERRORE");
+                        out.println("ERR");
+                    }
+                    
+                } catch (SQLException ex) {
+                    Logger.getLogger(ServletGnam.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
 
             } else if (action.equalsIgnoreCase("pizza-remove")) {
                 ;

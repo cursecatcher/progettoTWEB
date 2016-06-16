@@ -1,7 +1,7 @@
 CREATE TABLE Pizza (
     id_pizza INT NOT NULL PRIMARY KEY
         GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), 
-    nome VARCHAR(33) NOT NULL, 
+    nome VARCHAR(33) NOT NULL UNIQUE, 
     prezzo FLOAT NOT NULL, 
     ingredienti VARCHAR(129) NOT NULL,
     CHECK (prezzo > 0)
