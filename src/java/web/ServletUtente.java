@@ -137,7 +137,7 @@ public class ServletUtente extends HttpServlet {
                         String query = "SELECT * FROM Utente WHERE email = '" + verify[1] + "'";
                         ResultSet rs = st.executeQuery(query);
 
-                        /* Email utente non presente: inserisco l'utente con password null */
+                        /* Email utente non presente: inserisco nuovo utente con password null */
                         if (!rs.next()) {
                             query = "INSERT INTO Utente (email, password, ruolo) VALUES "
                                     + "('" + verify[1] + "', null, 'cliente')";
@@ -157,7 +157,6 @@ public class ServletUtente extends HttpServlet {
                         
                         /* creazione sessione */
 
-                        
                     } catch (SQLException ex) {
                         Logger.getLogger(ServletUtente.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -177,10 +176,9 @@ public class ServletUtente extends HttpServlet {
                     String query;
 
                     if (!rs.next()) {
-                        String pwdDigest = DigestUtils.sha1Hex(password);
-
-                        query = "INSERT INTO Utente(email, password, ruolo) VALUES"
-                                + "('" + email + "', '" + pwdDigest + "', 'cliente')";
+                        query = "INSERT INTO Utente(email, password, ruolo) VALUES " +
+                                "('" + email + "', " + 
+                                "'" + DigestUtils.sha1Hex(password) + "', 'cliente')"; 
 
                         if (st.executeUpdate(query) == 1) {
                             out.println("OK");
@@ -193,12 +191,8 @@ public class ServletUtente extends HttpServlet {
                         /* Utente gia' registrato: verifica se l'utente ha gia' una 
                         password associata*/
                         if (rs.getString("password") == null) {
-                            System.out.println("Password == null");
-                            String pwdDigest = DigestUtils.sha1Hex(password);
-
-                            query = "UPDATE Utente SET password='" + pwdDigest + "'"
-                                    + " WHERE email='" + email + "'";
-                            
+                            query = "UPDATE Utente SET password='" + DigestUtils.sha1Hex(password) + "'"
+                                    + " WHERE id_utente=" + rs.getInt("id_utente");
                             st.executeUpdate(query); 
                             
                         } else {
@@ -224,8 +218,6 @@ public class ServletUtente extends HttpServlet {
         }
     }
     
-
-    
     private Connection getDBConnection() {
         Connection conn = null; 
         
@@ -241,14 +233,9 @@ public class ServletUtente extends HttpServlet {
         return conn; 
     }
     
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
+    }
 
 }
