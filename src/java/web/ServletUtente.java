@@ -7,7 +7,6 @@ package web;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,7 +33,7 @@ public class ServletUtente extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -81,13 +80,11 @@ public class ServletUtente extends HttpServlet {
 
         ServletContext ctx = getServletContext();
         RequestDispatcher rd = null;
-
         String action = request.getParameter("action");
 
         System.out.println("ServletUtente - action: " + action);
 
         try (PrintWriter out = response.getWriter()) {
-
             if (action == null) {
                 rd = ctx.getRequestDispatcher("/index.jsp");
 
@@ -96,19 +93,22 @@ public class ServletUtente extends HttpServlet {
                 String password = request.getParameter("password");
 
                 try {
-                    Connection conn = DriverManager.getConnection(
-                            Constants.DB_URL, Constants.DB_USER, Constants.DB_PASSWORD);
+                    Connection conn = getDBConnection();
                     Statement st = conn.createStatement();
                     ResultSet rs = st.executeQuery("SELECT * FROM Utente WHERE email = '" + email + "'");
 
                     if (rs.next()) {
                         String user_pwd = rs.getString("password");
 
-                        if (user_pwd.equals(DigestUtils.sha1Hex(password))) {
-                            out.println("OK");
-                            /* sessione */
+                        if (user_pwd != null) {
+                            if (user_pwd.equals(DigestUtils.sha1Hex(password))) {
+                                out.println("OK");
+                                /* sessione */
+                            } else {
+                                out.println("WRONG PASSWORD");
+                            }
                         } else {
-                            out.println("WRONG PASSWORD");
+                            System.out.println("Account social");
                         }
                     } else {
                         out.println("EMAIL NOT FOUND");
@@ -123,38 +123,63 @@ public class ServletUtente extends HttpServlet {
 
             } else if (action.equalsIgnoreCase("login-googleplus")) {
                 System.out.println("ServletUtente login g+");
-                
+
                 String[] verify = Verify.getUserCredentials(
                         request.getParameter("id_token"),
                         request.getParameter("access_token"));
 
                 if (verify != null) {
-                    System.out.println("Andato tutto ok"); 
-                    System.out.println(verify[1]);
-                }
-                else {
+                    System.out.println("Andato tutto ok");
+
+                    try {
+                        Connection conn = getDBConnection();
+                        Statement st = conn.createStatement();
+                        String query = "SELECT * FROM Utente WHERE email = '" + verify[1] + "'";
+                        ResultSet rs = st.executeQuery(query);
+
+                        /* Email utente non presente: inserisco l'utente con password null */
+                        if (!rs.next()) {
+                            query = "INSERT INTO Utente (email, password, ruolo) VALUES "
+                                    + "('" + verify[1] + "', null, 'cliente')";
+
+                            System.out.println("Inserimento nuovo utente g+");
+                            if (st.executeUpdate(query) == 1) {
+                                System.out.println("OK");
+                            } else {
+                                System.out.println("FAIL");
+                            }
+
+                        }
+                        
+                        rs.close();
+                        st.close();
+                        conn.close();
+                        
+                        /* creazione sessione */
+
+                        
+                    } catch (SQLException ex) {
+                        Logger.getLogger(ServletUtente.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                } else {
                     System.out.println("EH, VOLEVI");
                 }
-                
-                
 
-                
             } else if (action.equalsIgnoreCase("user-registrazione")) {
                 String email = request.getParameter("email");
                 String password = request.getParameter("password");
 
                 //controllo email e password != null? 
                 try {
-                    Connection conn = DriverManager.getConnection(
-                            Constants.DB_URL, Constants.DB_USER, Constants.DB_PASSWORD);
+                    Connection conn = getDBConnection();
                     Statement st = conn.createStatement();
-                    ResultSet rs = st.executeQuery("SELECT id_utente FROM Utente WHERE email = '" + email + "'");
+                    ResultSet rs = st.executeQuery("SELECT * FROM Utente WHERE email = '" + email + "'");
+                    String query;
 
                     if (!rs.next()) {
                         String pwdDigest = DigestUtils.sha1Hex(password);
 
-                        String query
-                                = "INSERT INTO Utente(email, password, ruolo) VALUES"
+                        query = "INSERT INTO Utente(email, password, ruolo) VALUES"
                                 + "('" + email + "', '" + pwdDigest + "', 'cliente')";
 
                         if (st.executeUpdate(query) == 1) {
@@ -164,7 +189,21 @@ public class ServletUtente extends HttpServlet {
                         }
 
                     } else {
-                        out.println("ERR");
+                        System.out.println("Utente gia' registrato");
+                        /* Utente gia' registrato: verifica se l'utente ha gia' una 
+                        password associata*/
+                        if (rs.getString("password") == null) {
+                            System.out.println("Password == null");
+                            String pwdDigest = DigestUtils.sha1Hex(password);
+
+                            query = "UPDATE Utente SET password='" + pwdDigest + "'"
+                                    + " WHERE email='" + email + "'";
+                            
+                            st.executeUpdate(query); 
+                            
+                        } else {
+                            System.out.println("Password != null");
+                        }
                     }
 
                     rs.close();
@@ -184,7 +223,24 @@ public class ServletUtente extends HttpServlet {
             }
         }
     }
+    
 
+    
+    private Connection getDBConnection() {
+        Connection conn = null; 
+        
+        try {
+            conn = DriverManager.getConnection(
+                            Constants.DB_URL, Constants.DB_USER, Constants.DB_PASSWORD);
+        }
+        catch (SQLException ex) {
+            Logger.getLogger(ServletUtente.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Connessione al DB fallita"); 
+        }
+        
+        return conn; 
+    }
+    
     /**
      * Returns a short description of the servlet.
      *

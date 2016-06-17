@@ -52,15 +52,17 @@
                 <div id="gConnect">
                     <div id="signin-button"></div>
                 </div>
-                
+                <!--
                 <form id="form-login-googleplus" method="POST" action="ServletController">
+                    <!--
                     <input type="hidden" name="action" value="login-googleplus"/>
+                    <!--
                     <input type="text" name="name"/>
                     <input type="text" name="surname"/>
-                    <input type="text" name="email"/>
-                    <input type="text" name="id_token"/>
-                    <input type="text" name="access_token"/> 
-                </form>
+                    <input type="text" name="email"/> --><!--
+                    <input type="hidden" name="id_token"/>
+                    <input type="hidden" name="access_token"/> --><!--
+                </form>  -->
 
 
             </div>
