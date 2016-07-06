@@ -16,7 +16,6 @@ import javax.servlet.annotation.WebServlet;
 import org.apache.commons.codec.digest.DigestUtils;
 import verifytoken.Verify;
 
-
 @WebServlet(name = "ServletUtente", urlPatterns = {"/ServletUtente"})
 public class ServletUtente extends HttpServlet {
 
@@ -33,7 +32,6 @@ public class ServletUtente extends HttpServlet {
         }
     }
 
-    
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -81,7 +79,6 @@ public class ServletUtente extends HttpServlet {
         ServletContext ctx = getServletContext();
         RequestDispatcher rd = null;
         String action = request.getParameter("action");
-
         System.out.println("ServletUtente - action: " + action);
 
         try (PrintWriter out = response.getWriter()) {
@@ -95,7 +92,7 @@ public class ServletUtente extends HttpServlet {
                 try {
                     Connection conn = getDBConnection();
                     Statement st = conn.createStatement();
-                    ResultSet rs = st.executeQuery("SELECT * FROM Utente WHERE email = '" + email + "'");
+                    ResultSet rs = Query.getUserByEmail(st, email);
 
                     if (rs.next()) {
                         String user_pwd = rs.getString("password");
@@ -129,34 +126,31 @@ public class ServletUtente extends HttpServlet {
                         request.getParameter("access_token"));
 
                 if (verify != null) {
-                    System.out.println("Andato tutto ok");
+                    System.out.println("Autenticazione G+ OK");
 
                     try {
                         Connection conn = getDBConnection();
                         Statement st = conn.createStatement();
-                        String query = "SELECT * FROM Utente WHERE email = '" + verify[1] + "'";
-                        ResultSet rs = st.executeQuery(query);
+                        ResultSet rs = Query.getUserByEmail(st, verify[1]);
 
                         /* Email utente non presente: inserisco nuovo utente con password null */
                         if (!rs.next()) {
-                            query = "INSERT INTO Utente (email, password, ruolo) VALUES "
-                                    + "('" + verify[1] + "', null, 'cliente')";
 
                             System.out.println("Inserimento nuovo utente g+");
-                            if (st.executeUpdate(query) == 1) {
+
+                            if (Query.insertNewClient(st, verify[1], null)) {
                                 System.out.println("OK");
                             } else {
                                 System.out.println("FAIL");
                             }
 
                         }
-                        
+
                         rs.close();
                         st.close();
                         conn.close();
-                        
-                        /* creazione sessione */
 
+                        /* creazione sessione */
                     } catch (SQLException ex) {
                         Logger.getLogger(ServletUtente.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -172,15 +166,10 @@ public class ServletUtente extends HttpServlet {
                 try {
                     Connection conn = getDBConnection();
                     Statement st = conn.createStatement();
-                    ResultSet rs = st.executeQuery("SELECT * FROM Utente WHERE email = '" + email + "'");
-                    String query;
+                    ResultSet rs = Query.getUserByEmail(st, email);
 
                     if (!rs.next()) {
-                        query = "INSERT INTO Utente(email, password, ruolo) VALUES " +
-                                "('" + email + "', " + 
-                                "'" + DigestUtils.sha1Hex(password) + "', 'cliente')"; 
-
-                        if (st.executeUpdate(query) == 1) {
+                        if (Query.insertNewClient(st, email, password)) {
                             out.println("OK");
                         } else {
                             out.println("BOH");
@@ -188,13 +177,10 @@ public class ServletUtente extends HttpServlet {
 
                     } else {
                         System.out.println("Utente gia' registrato");
-                        /* Utente gia' registrato: verifica se l'utente ha gia' una 
-                        password associata*/
+
                         if (rs.getString("password") == null) {
-                            query = "UPDATE Utente SET password='" + DigestUtils.sha1Hex(password) + "'"
-                                    + " WHERE id_utente=" + rs.getInt("id_utente");
-                            st.executeUpdate(query); 
-                            
+                            Query.changeClientPassword(st, rs.getInt("id_utente"), password);
+
                         } else {
                             System.out.println("Password != null");
                         }
@@ -217,25 +203,24 @@ public class ServletUtente extends HttpServlet {
             }
         }
     }
-    
+
     private Connection getDBConnection() {
-        Connection conn = null; 
-        
+        Connection conn = null;
+
         try {
             conn = DriverManager.getConnection(
-                            Constants.DB_URL, Constants.DB_USER, Constants.DB_PASSWORD);
-        }
-        catch (SQLException ex) {
+                    Constants.DB_URL, Constants.DB_USER, Constants.DB_PASSWORD);
+        } catch (SQLException ex) {
             Logger.getLogger(ServletUtente.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("Connessione al DB fallita"); 
+            System.out.println("Connessione al DB fallita");
         }
-        
-        return conn; 
+
+        return conn;
     }
-    
+
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "NOPE";
     }
 
 }
