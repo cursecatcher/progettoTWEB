@@ -3,12 +3,14 @@ package test;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
+import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import org.apache.commons.codec.digest.DigestUtils;
 import web.Constants;
 import web.ServletUtente;
@@ -19,7 +21,7 @@ public class ServletTest extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-
+            /*
             try {
                 Connection conn = DriverManager.getConnection(
                         Constants.DB_URL, Constants.DB_USER, Constants.DB_PASSWORD);
@@ -42,7 +44,7 @@ public class ServletTest extends HttpServlet {
 
             } catch (SQLException ex) {
                 Logger.getLogger(ServletUtente.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            }*/
 
             out.println("<!DOCTYPE html>");
             out.println("<html>");
@@ -51,6 +53,16 @@ public class ServletTest extends HttpServlet {
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet ServletTest at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Test Sessione</h1>");
+            
+            HttpSession session = request.getSession();
+            Enumeration e = session.getAttributeNames();
+
+            while (e.hasMoreElements()) {
+                String name = (String) e.nextElement();
+                out.println(name + ": " + session.getAttribute(name) + "<BR>");
+            }
+
             out.println("</body>");
             out.println("</html>");
         }

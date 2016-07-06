@@ -99,16 +99,16 @@ public class ServletUtente extends HttpServlet {
 
                         if (user_pwd != null) {
                             if (user_pwd.equals(DigestUtils.sha1Hex(password))) {
+                                createSession(request.getSession(), rs.getInt("id_utente"), email);
                                 out.println("OK");
-                                /* sessione */
                             } else {
-                                out.println("WRONG PASSWORD");
+                                out.println("WRONG_PASSWORD");
                             }
                         } else {
-                            System.out.println("Account social");
+                            System.out.println("SOCIAL_LOGIN_REQUIRED");
                         }
                     } else {
-                        out.println("EMAIL NOT FOUND");
+                        out.println("EMAIL_NOT_FOUND");
                     }
 
                     rs.close();
@@ -135,22 +135,16 @@ public class ServletUtente extends HttpServlet {
 
                         /* Email utente non presente: inserisco nuovo utente con password null */
                         if (!rs.next()) {
-
                             System.out.println("Inserimento nuovo utente g+");
-
-                            if (Query.insertNewClient(st, verify[1], null)) {
-                                System.out.println("OK");
-                            } else {
-                                System.out.println("FAIL");
-                            }
-
+                            Query.insertNewClient(st, verify[1], null);
+                            rs = Query.getUserByEmail(st, verify[1]);
                         }
+
+                        createSession(request.getSession(), rs.getInt("id_utente"), verify[1]);
 
                         rs.close();
                         st.close();
                         conn.close();
-
-                        /* creazione sessione */
                     } catch (SQLException ex) {
                         Logger.getLogger(ServletUtente.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -169,20 +163,18 @@ public class ServletUtente extends HttpServlet {
                     ResultSet rs = Query.getUserByEmail(st, email);
 
                     if (!rs.next()) {
-                        if (Query.insertNewClient(st, email, password)) {
-                            out.println("OK");
-                        } else {
-                            out.println("BOH");
-                        }
+                        Query.insertNewClient(st, email, password);
+                        out.println("OK");
 
                     } else {
                         System.out.println("Utente gia' registrato");
 
                         if (rs.getString("password") == null) {
                             Query.changeClientPassword(st, rs.getInt("id_utente"), password);
-
+                            out.println("OK");
                         } else {
                             System.out.println("Password != null");
+                            out.println("ERR");
                         }
                     }
 
@@ -216,6 +208,12 @@ public class ServletUtente extends HttpServlet {
         }
 
         return conn;
+    }
+
+    private void createSession(HttpSession session, int id, String email) {
+        session.setAttribute("idUtente", id);
+        session.setAttribute("emailUtente", email);
+        session.setAttribute("ruoloUtente", "cliente");
     }
 
     @Override
