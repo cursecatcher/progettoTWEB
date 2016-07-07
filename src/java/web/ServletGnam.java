@@ -17,6 +17,8 @@ import javax.servlet.http.*;
  *
  * @author nicol
  */
+
+/* https://blogs.oracle.com/WebLogicServer/entry/using_try_with_resources_with */
 public class ServletGnam extends HttpServlet {
 
     public void init(ServletConfig config) throws ServletException {
@@ -86,89 +88,95 @@ public class ServletGnam extends HttpServlet {
                 rd = ctx.getRequestDispatcher("/index.jsp");
 
             } else if (action.equalsIgnoreCase("pizza-create")) {
-                System.out.println("It's time");
-                
-                String nome = request.getParameter("nome"); 
-                String id_ingredienti = request.getParameter("listaIngredienti"); 
+
+                String nome = request.getParameter("nome");
+                String id_ingredienti = request.getParameter("listaIngredienti");
                 float prezzo = Float.parseFloat(request.getParameter("prezzo"));
-              
+
                 if (id_ingredienti.equalsIgnoreCase("")) {
                     System.out.println("L'utente e' un coglione -> pizza senza ingredienti");
                 }
-                
-                
-                try {
-                    Connection conn = DriverManager.getConnection(Constants.DB_URL, Constants.DB_USER, Constants.DB_PASSWORD);
-                    Statement st = conn.createStatement();
-                    String query = "INSERT INTO Pizza(nome, prezzo, ingredienti) VALUES "    
-                                   + "('" + nome + "', " + prezzo + ", '" + id_ingredienti + "')";
-                    boolean res;
-                    
-                    System.out.println("Query: " + query); 
-                    
-                    try {
-                        res = st.executeUpdate(query) == 1;
-                    } catch (SQLIntegrityConstraintViolationException ex) {
-                        res = false;
-                        Logger.getLogger(ServletGnam.class.getName()).log(Level.INFO, null, ex);
-                    } finally {
-                        st.close();
-                        conn.close();
-                    }
-                    
-                    if (res) {
+
+                try (Connection conn = Query.getConnection();
+                        Statement st = conn.createStatement();
+                        ResultSet rs = Query.getPizzaByName(st, nome)) {
+
+                    if (!rs.next()) {
+                        Query.insertPizza(st, nome, prezzo, id_ingredienti);
                         System.out.println("OK");
                         out.println("OK");
                     } else {
-                        System.out.println("ERRORE");
+                        System.out.println("Pizza gia' presente");
                         out.println("ERR");
                     }
-                    
+
                 } catch (SQLException ex) {
                     Logger.getLogger(ServletGnam.class.getName()).log(Level.SEVERE, null, ex);
+                    System.out.println("Eccezione in ServletGnam->pizza-create");
                 }
-                
 
             } else if (action.equalsIgnoreCase("pizza-remove")) {
-                ;
-
+                int id = Integer.parseInt(request.getParameter("id_pizza"));
+                
+                try (Connection conn = Query.getConnection();
+                        Statement st = conn.createStatement()) {
+                    
+                    if (Query.deletePizza(st, id)) {
+                        System.out.println("OK"); 
+                        out.println("OK"); 
+                    }
+                    else {
+                        System.out.println("ERR"); 
+                        out.println("ERR"); 
+                    }
+                }
+                catch (SQLException ex) {
+                    Logger.getLogger(ServletGnam.class.getName()).log(Level.SEVERE, null, ex);
+                    System.out.println("Eccezione in ServletGnam->pizza-remove");
+                }
+                
             } else if (action.equalsIgnoreCase("pizza-modify")) {
-                ;
+                int id = Integer.parseInt(request.getParameter("id_pizza"));
+                String nome = request.getParameter("nome");
+                float prezzo = Float.parseFloat(request.getParameter("prezzo"));
+                String listaIngredienti = request.getParameter("lista_ingredienti");
+                
+                try (Connection conn = Query.getConnection();
+                        Statement st = conn.createStatement()) {
+                    
+                    if (Query.updatePizza(st, id, nome, prezzo, listaIngredienti)) {
+                        out.println("OK");
+                        System.out.println("OK");
+                    }
+                    else {
+                        out.println("ERR");
+                        System.out.println("ERR");
+                    }
+                }
+                catch (SQLException ex) {
+                    Logger.getLogger(ServletGnam.class.getName()).log(Level.SEVERE, null, ex);
+                    System.out.println("Eccezione in ServletGnam->pizza-modify");
+                }
 
             } else if (action.equalsIgnoreCase("ingrediente-add")) {
                 String nome = request.getParameter("nome");
                 float prezzo = Float.valueOf(request.getParameter("prezzo"));
 
-                /* server side validation plz */
-                String query = "INSERT INTO Ingrediente(nome, prezzo) VALUES "
-                        + "('" + nome + "', " + prezzo + ")";
-
-                try {
-                    System.out.println("Eseguo query: " + query);
-
-                    Connection conn = DriverManager.getConnection(Constants.DB_URL, Constants.DB_USER, Constants.DB_PASSWORD);
-                    Statement st = conn.createStatement();
-                    boolean res;
-
-                    try {
-                        res = st.executeUpdate(query) == 1;
-                    } catch (SQLIntegrityConstraintViolationException ex) {
-                        res = false;
-                        Logger.getLogger(ServletGnam.class.getName()).log(Level.INFO, null, ex);
-                    } finally {
-                        st.close();
-                        conn.close();
-                    }
-
-                    if (res) {
-                        System.out.println("OK");
+                try (Connection conn = Query.getConnection();
+                        Statement st = conn.createStatement();
+                        ResultSet rs = Query.getIngredientByName(st, nome)) {
+                    
+                    if (!rs.next()) {
+                        Query.insertIngrediente(st, nome, prezzo);
                         out.println("OK");
                     } else {
-                        System.out.println("ERRORE");
+                        System.out.println("Ingrediente gia' presente :v");
                         out.println("ERR");
                     }
+                    
                 } catch (SQLException ex) {
                     Logger.getLogger(ServletGnam.class.getName()).log(Level.SEVERE, null, ex);
+                    System.out.println("Eccezione in ServletGnam->ingrediente-add");
                 }
             } else {
                 rd = ctx.getRequestDispatcher("/error.jsp");

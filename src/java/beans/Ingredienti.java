@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 import org.json.JSONException;
 
 import org.json.JSONObject;
-import web.Constants;
+import web.Query;
 
 /**
  *
@@ -71,8 +71,7 @@ public class Ingredienti {
         try {
             System.out.println("DriverManager.registerDriver Ingredienti Bean");
             DriverManager.registerDriver(new org.apache.derby.jdbc.ClientDriver());
-            Connection conn = DriverManager.getConnection(
-                    Constants.DB_URL, Constants.DB_USER, Constants.DB_PASSWORD);
+            Connection conn = Query.getConnection();
             Statement st = conn.createStatement();
             String query = "SELECT * FROM Ingrediente"; 
             ResultSet rs = st.executeQuery(query); 

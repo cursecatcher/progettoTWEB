@@ -89,10 +89,13 @@ public class ServletUtente extends HttpServlet {
                 String email = request.getParameter("email");
                 String password = request.getParameter("password");
 
-                try {
+                try (Connection conn = Query.getConnection();
+                        Statement st = conn.createStatement();
+                        ResultSet rs = Query.getUserByEmail(st, email)) {
+                    /*
                     Connection conn = getDBConnection();
                     Statement st = conn.createStatement();
-                    ResultSet rs = Query.getUserByEmail(st, email);
+                    ResultSet rs = Query.getUserByEmail(st, email);*/
 
                     if (rs.next()) {
                         String user_pwd = rs.getString("password");
@@ -110,10 +113,7 @@ public class ServletUtente extends HttpServlet {
                     } else {
                         out.println("EMAIL_NOT_FOUND");
                     }
-
-                    rs.close();
-                    st.close();
-                    conn.close();
+                    
                 } catch (SQLException ex) {
                     Logger.getLogger(ServletUtente.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -128,23 +128,21 @@ public class ServletUtente extends HttpServlet {
                 if (verify != null) {
                     System.out.println("Autenticazione G+ OK");
 
-                    try {
-                        Connection conn = getDBConnection();
-                        Statement st = conn.createStatement();
+                    try (Connection conn = Query.getConnection();
+                            Statement st = conn.createStatement()) {
+                        
                         ResultSet rs = Query.getUserByEmail(st, verify[1]);
-
-                        /* Email utente non presente: inserisco nuovo utente con password null */
+                        
                         if (!rs.next()) {
                             System.out.println("Inserimento nuovo utente g+");
                             Query.insertNewClient(st, verify[1], null);
                             rs = Query.getUserByEmail(st, verify[1]);
+                            rs.next();
                         }
 
                         createSession(request.getSession(), rs.getInt("id_utente"), verify[1]);
-
                         rs.close();
-                        st.close();
-                        conn.close();
+                        
                     } catch (SQLException ex) {
                         Logger.getLogger(ServletUtente.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -157,10 +155,9 @@ public class ServletUtente extends HttpServlet {
                 String password = request.getParameter("password");
 
                 //controllo email e password != null? 
-                try {
-                    Connection conn = getDBConnection();
-                    Statement st = conn.createStatement();
-                    ResultSet rs = Query.getUserByEmail(st, email);
+                try (Connection conn = Query.getConnection();
+                        Statement st = conn.createStatement();
+                        ResultSet rs = Query.getUserByEmail(st, email)) {
 
                     if (!rs.next()) {
                         Query.insertNewClient(st, email, password);
@@ -170,17 +167,13 @@ public class ServletUtente extends HttpServlet {
                         System.out.println("Utente gia' registrato");
 
                         if (rs.getString("password") == null) {
-                            Query.changeClientPassword(st, rs.getInt("id_utente"), password);
+                            Query.updateUserPassword(st, rs.getInt("id_utente"), password);
                             out.println("OK");
                         } else {
                             System.out.println("Password != null");
                             out.println("ERR");
                         }
                     }
-
-                    rs.close();
-                    st.close();
-                    conn.close();
 
                 } catch (SQLException ex) {
                     Logger.getLogger(ServletUtente.class.getName()).log(Level.SEVERE, null, ex);
@@ -196,6 +189,7 @@ public class ServletUtente extends HttpServlet {
         }
     }
 
+    /*
     private Connection getDBConnection() {
         Connection conn = null;
 
@@ -208,8 +202,7 @@ public class ServletUtente extends HttpServlet {
         }
 
         return conn;
-    }
-
+    }*/
     private void createSession(HttpSession session, int id, String email) {
         session.setAttribute("idUtente", id);
         session.setAttribute("emailUtente", email);

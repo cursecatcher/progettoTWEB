@@ -13,9 +13,9 @@ function startApp() {
             gapi.signin2.render('gConnect', {
                 scope: 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email',
                 fetch_basic_profile: false,
-                theme: 'dark',
+                theme: 'dark'/*,
                 width: 568,
-                height: 60
+                height: 60*/
             });
             /* inizializza il listener */
             gapi.auth2.init({fetch_basic_profile: false,

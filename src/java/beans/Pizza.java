@@ -4,7 +4,7 @@ import java.sql.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
-import web.Constants;
+import web.Query;
 
 public class Pizza {
     
@@ -13,8 +13,7 @@ public class Pizza {
         
         try {
             DriverManager.registerDriver(new org.apache.derby.jdbc.ClientDriver()); 
-            Connection conn = DriverManager.getConnection(
-                            Constants.DB_URL, Constants.DB_USER, Constants.DB_PASSWORD);
+            Connection conn = Query.getConnection();
             Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery("SELECT nome, ingredienti, prezzo FROM Pizza"); 
             

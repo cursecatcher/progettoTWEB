@@ -4,18 +4,24 @@ import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import web.Constants;
+import web.Query;
 
 public class Utente {
+    private int idUtente; 
     private String email; 
     private String password; 
     private String role; 
     
     
     public Utente() {
+        idUtente = -1; 
         email = "unknown"; 
         password = ""; 
         role = "not logged"; 
+    }
+    
+    public void setIdUtente(int id) {
+        this.idUtente = id; 
     }
     
     public void setEmail(String email) {
@@ -35,8 +41,7 @@ public class Utente {
         
         try {
             DriverManager.registerDriver(new org.apache.derby.jdbc.ClientDriver());
-            Connection conn = DriverManager.getConnection(
-                            Constants.DB_URL, Constants.DB_USER, Constants.DB_PASSWORD);
+           Connection conn = Query.getConnection();
             Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery("SELECT * FROM Prenotazione" );  //where...
         }
