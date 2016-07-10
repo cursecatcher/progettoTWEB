@@ -1,6 +1,9 @@
-<%-- 
-    inserire scriptlet che controlli il login (o qualcosa del genere)
---%>
+<%
+    if (!"authenticated".equals(session.getAttribute("usertoken"))) {
+        String redirectURL = "login.jsp";
+        response.sendRedirect(redirectURL);
+    }
+%>
 
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -28,12 +31,12 @@
 
         <link rel='stylesheet' type='text/css' href='include/lib/sol/sol.css'>
         <script type='text/javascript' src='include/lib/sol/sol.js'></script>
-        
+
         <script type='text/javascript' src='include/js/gnammy-script.js'></script>
     </head>
     <body>
         <jsp:include page="include/html/header.html"/>
-        
+
         <div class='container'>
             <h1>Nuova pizza</h1>
 
@@ -56,17 +59,19 @@
                         <select id='select-random' name='ingredientiPizza' multiple="multiple">
                             <jsp:getProperty name="ingredientiBean" property="listaIngredienti"/>
                         </select>
-                        
+
                         <script type='text/javascript'>
-                            $(function() {
-                               $('#select-random').searchableOptionList(); 
+                            $(function () {
+                                $('#select-random').searchableOptionList({
+                                    maxHeight: '200px'
+                                });
                             });
                         </script>
                     </p>
                     <input id='submit-newpi' type="submit"/>
                 </form>
             </div>
-            
+
             Clicca <a href='newingrediente.jsp'>qui</a> per inserire un ingrediente mancante! 
         </div>
     </body>

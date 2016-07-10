@@ -5,6 +5,7 @@
  */
 package web;
 
+import beans.Utente;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
@@ -92,92 +93,87 @@ public class ServletUtente extends HttpServlet {
                 try (Connection conn = Query.getConnection();
                         Statement st = conn.createStatement();
                         ResultSet rs = Query.getUserByEmail(st, email)) {
-                    /*
-                    Connection conn = getDBConnection();
-                    Statement st = conn.createStatement();
-                    ResultSet rs = Query.getUserByEmail(st, email);*/
 
                     if (rs.next()) {
                         String user_pwd = rs.getString("password");
 
                         if (user_pwd != null) {
                             if (user_pwd.equals(DigestUtils.sha1Hex(password))) {
-                                createSession(request.getSession(), rs.getInt("id_utente"), email);
+                                createSession(
+                                        request.getSession(),
+                                        rs.getInt("id_utente"),
+                                        email,
+                                        rs.getString("ruolo")
+                                );
                                 out.println("OK");
                             } else {
                                 out.println("WRONG_PASSWORD");
                             }
                         } else {
-                            System.out.println("SOCIAL_LOGIN_REQUIRED");
+                            System.out.println("TRY_G+");
                         }
                     } else {
                         out.println("EMAIL_NOT_FOUND");
                     }
-                    
+
                 } catch (SQLException ex) {
                     Logger.getLogger(ServletUtente.class.getName()).log(Level.SEVERE, null, ex);
                 }
-
             } else if (action.equalsIgnoreCase("login-googleplus")) {
                 System.out.println("ServletUtente login g+");
 
-                String[] verify = Verify.getUserCredentials(
+                String email = Verify.getUserCredentials(
                         request.getParameter("id_token"),
                         request.getParameter("access_token"));
 
-                if (verify != null) {
+                if (email != null) {
                     System.out.println("Autenticazione G+ OK");
 
                     try (Connection conn = Query.getConnection();
                             Statement st = conn.createStatement()) {
-                        
-                        ResultSet rs = Query.getUserByEmail(st, verify[1]);
-                        
+
+                        ResultSet rs = Query.getUserByEmail(st, email);
+
                         if (!rs.next()) {
                             System.out.println("Inserimento nuovo utente g+");
-                            Query.insertNewClient(st, verify[1], null);
-                            rs = Query.getUserByEmail(st, verify[1]);
+                            Query.insertNewClient(st, email, null);
+                            rs = Query.getUserByEmail(st, email);
                             rs.next();
                         }
 
-                        createSession(request.getSession(), rs.getInt("id_utente"), verify[1]);
+                        createSession(request.getSession(), rs.getInt("id_utente"), email, rs.getString("ruolo"));
                         rs.close();
-                        
+
                     } catch (SQLException ex) {
                         Logger.getLogger(ServletUtente.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 } else {
                     System.out.println("EH, VOLEVI");
                 }
-
             } else if (action.equalsIgnoreCase("user-registrazione")) {
                 String email = request.getParameter("email");
                 String password = request.getParameter("password");
 
-                //controllo email e password != null? 
-                try (Connection conn = Query.getConnection();
-                        Statement st = conn.createStatement();
-                        ResultSet rs = Query.getUserByEmail(st, email)) {
+                if (password.equals(request.getParameter("password2"))) {
+                    try (Connection conn = Query.getConnection();
+                            Statement st = conn.createStatement();
+                            ResultSet rs = Query.getUserByEmail(st, email)) {
 
-                    if (!rs.next()) {
-                        Query.insertNewClient(st, email, password);
-                        out.println("OK");
+                        if (!rs.next()) {
+                            Query.insertNewClient(st, email, password);
+                            out.println("OK");
 
-                    } else {
-                        System.out.println("Utente gia' registrato");
-
-                        if (rs.getString("password") == null) {
+                        } else if (rs.getString("password") == null) {
                             Query.updateUserPassword(st, rs.getInt("id_utente"), password);
                             out.println("OK");
                         } else {
-                            System.out.println("Password != null");
-                            out.println("ERR");
+                            out.println("USER_ALREADY_EXISTS");
                         }
+                    } catch (SQLException ex) {
+                        Logger.getLogger(ServletUtente.class.getName()).log(Level.SEVERE, null, ex);
                     }
-
-                } catch (SQLException ex) {
-                    Logger.getLogger(ServletUtente.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                // else..le due password non coincidono
 
             } else {
                 rd = ctx.getRequestDispatcher("/error.jsp");
@@ -189,24 +185,11 @@ public class ServletUtente extends HttpServlet {
         }
     }
 
-    /*
-    private Connection getDBConnection() {
-        Connection conn = null;
-
-        try {
-            conn = DriverManager.getConnection(
-                    Constants.DB_URL, Constants.DB_USER, Constants.DB_PASSWORD);
-        } catch (SQLException ex) {
-            Logger.getLogger(ServletUtente.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("Connessione al DB fallita");
-        }
-
-        return conn;
-    }*/
-    private void createSession(HttpSession session, int id, String email) {
+    private void createSession(HttpSession session, int id, String email, String ruolo) {
+        session.setAttribute("usertoken", "authenticated");
         session.setAttribute("idUtente", id);
         session.setAttribute("emailUtente", email);
-        session.setAttribute("ruoloUtente", "cliente");
+        session.setAttribute("ruoloUtente", ruolo);
     }
 
     @Override
