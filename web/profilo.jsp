@@ -15,6 +15,18 @@
     </head>
     <body>
         <h1>Hello World!</h1>
-        <jsp:getProperty name="userBean" property="email"/>
+        
+        Sei loggato come: ${userBean.email}<br/>
+        Ruolo utente: ${userBean.ruolo}<br/>
+
+        <p>
+            <a href="newpizza.jsp">NUOVA PIZZA</a>. 
+            (solo amministratore)
+        </p>
+        <p>
+            <a href="newordine.jsp">PRENOTAZIONE</a> 
+            (cliente && amministratore)
+        </p>
+
     </body>
 </html>

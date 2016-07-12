@@ -5,9 +5,9 @@
     }
 %>
 
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<jsp:useBean id="ingredientiBean" scope="page" class="beans.Ingredienti" />
+<jsp:useBean id="ingredienti" scope="page" class="beans.Ingredienti" />
 <!DOCTYPE html>
 <html>
     <head>
@@ -57,7 +57,11 @@
                         Da quali ingredienti &egrave; composta la pizza?<br/>
 
                         <select id='select-random' name='ingredientiPizza' multiple="multiple">
-                            <jsp:getProperty name="ingredientiBean" property="listaIngredienti"/>
+                            <c:forEach var="ingrediente" items="${ingredienti.listaIngredienti}">
+                                <option value="${ingrediente.id}">
+                                    ${ingrediente.nome}
+                                </option>
+                            </c:forEach>
                         </select>
 
                         <script type='text/javascript'>

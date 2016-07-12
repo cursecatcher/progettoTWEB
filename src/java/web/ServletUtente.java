@@ -78,7 +78,7 @@ public class ServletUtente extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
 
         ServletContext ctx = getServletContext();
-        RequestDispatcher rd = null;
+        RequestDispatcher rd = ctx.getRequestDispatcher("/error.jsp");
         String action = request.getParameter("action");
         System.out.println("ServletUtente - action: " + action);
 
@@ -105,7 +105,9 @@ public class ServletUtente extends HttpServlet {
                                         email,
                                         rs.getString("ruolo")
                                 );
-                                out.println("OK");
+
+                                //   out.println("OK");
+                                rd = ctx.getRequestDispatcher("/profilo.jsp");
                             } else {
                                 out.println("WRONG_PASSWORD");
                             }
@@ -175,13 +177,9 @@ public class ServletUtente extends HttpServlet {
                 }
                 // else..le due password non coincidono
 
-            } else {
-                rd = ctx.getRequestDispatcher("/error.jsp");
             }
 
-            if (rd != null) {
-                rd.forward(request, response);
-            }
+            rd.forward(request, response);
         }
     }
 

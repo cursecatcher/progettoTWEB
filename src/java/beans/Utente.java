@@ -42,6 +42,10 @@ public class Utente {
     public String getEmail() {
         return this.email;
     }
+    
+    public String getRuolo() {
+        return this.role;
+    }
 
     /**
      *

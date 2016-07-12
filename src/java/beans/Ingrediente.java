@@ -9,39 +9,40 @@ package beans;
  *
  * @author nico
  */
-public class Pizza {
+public class Ingrediente {
     private int id; 
-    private String nome;
+    private String nome; 
     private float prezzo; 
     
-    public Pizza() {
-        this.id = -1; 
+    public Ingrediente() {
+        this.id = -1;
         this.nome = ""; 
-        this.prezzo = -1; 
+        this.prezzo = 0; 
     }
-    
+
+    public int getId() {
+        return id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public float getPrezzo() {
+        return prezzo;
+    }
+
     public void setId(int id) {
-        this.id = id; 
+        this.id = id;
     }
-    
+
     public void setNome(String nome) {
-        this.nome = nome; 
+        this.nome = nome;
     }
-    
+
     public void setPrezzo(float prezzo) {
         this.prezzo = prezzo;
     }
     
-    public String getNome() {
-        return this.nome; 
-    }
-    
-    public int getId() {
-        return this.id;
-    }
-    
-    public float getPrezzo() {
-        return this.prezzo;
-    }
     
 }

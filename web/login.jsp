@@ -34,6 +34,7 @@
 
             <div class="form login">
                 <form id="form_login" action="ServletController" method="POST">
+                    <input type="hidden" name="action" value="user-login"
                     <p>
                         <label>Email</label>
                         <input name="email" type="email" required/>
@@ -43,7 +44,8 @@
                         <input name="password" type="password" required/>
                     </p>
 
-                    <input id='submit-login' type="submit"/>
+                    <!--<input id='submit-login' type="submit"/>-->
+                    <button id="submit-login" type="button" class="btn btn-primary">asd</button>
                 </form>
 
                 Non hai ancora un account? Registrati <a href="register.jsp">qui</a>!<br/>

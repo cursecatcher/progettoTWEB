@@ -7,6 +7,16 @@ jQuery(document).ready(function ($) {
     var $form_reg = $('#form_reg');
 
     $('#submit-login').on('click', function (event) {
+        var email = $form_login.find('input[name=email]').val().trim();
+        var password = $form_login.find('input[name=password]').val();
+
+        if (email_regex.test(email) && password !== "") {
+            $form_login.submit();
+        }
+    });
+
+/*
+    $('#submit-login').on('click', function (event) {
         event.preventDefault();
 
         var email = $form_login.find('input[name=email]').val().trim();
@@ -38,7 +48,7 @@ jQuery(document).ready(function ($) {
 
 
 
-    });
+    });*/
 
     $('#submit-reg').on('click', function (event) {
         event.preventDefault();

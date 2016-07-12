@@ -31,16 +31,16 @@
 
         <div class="container">
             <h1>Homepage :D</h1>
+            <p>
+                <a href="login.jsp">LOGIN</a>
+            </p>
+            <p>
+                <a href="register.jsp">REGTRAZIONE</a>
+            </p>
+            <p>
+                <a href="menu.jsp">MENU</a>
+            </p>
             
-            <p>
-                Per inserire una nuova pizza, fai click <a href="newpizza.jsp">qui</a>. (solo amministratore)
-            </p>
-            <p>
-                Per fare un ordine, fai click <a href="newordine.jsp">qua</a> (cliente && amministratore)
-            </p>
-            <p>
-                Per vedere il menu, fai click <a href="menu.jsp">quo</a> 
-            </p>
         </div>
     </body>
 </html>
