@@ -1,5 +1,3 @@
-
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -27,7 +25,7 @@
         <script type='text/javascript' src='include/js/prenotazioni.js'></script>
     </head>
     <body>
-        <%@include file="include/html/header.html" %>
+        <%@include file="include/header.jsp" %>
 
         <div class='container'>
             <h1>Elenco Pizze</h1>

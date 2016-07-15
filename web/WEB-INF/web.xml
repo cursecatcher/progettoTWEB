@@ -12,6 +12,26 @@
         <servlet-name>ServletGnam</servlet-name>
         <servlet-class>web.ServletGnam</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Controller</servlet-name>
+        <servlet-class>web.Controller</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GestoreMenu</servlet-name>
+        <servlet-class>web.GestoreMenu</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GestoreCliente</servlet-name>
+        <servlet-class>web.GestoreCliente</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GestoreCucina</servlet-name>
+        <servlet-class>web.GestoreCucina</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GestorePrenotazioni</servlet-name>
+        <servlet-class>web.GestorePrenotazioni</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ServletController</servlet-name>
         <url-pattern>/ServletController</url-pattern>
@@ -23,6 +43,26 @@
     <servlet-mapping>
         <servlet-name>ServletGnam</servlet-name>
         <url-pattern>/ServletGnam</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Controller</servlet-name>
+        <url-pattern>/Controller</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GestoreMenu</servlet-name>
+        <url-pattern>/GestoreMenu</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GestoreCliente</servlet-name>
+        <url-pattern>/GestoreCliente</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GestoreCucina</servlet-name>
+        <url-pattern>/GestoreCucina</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GestorePrenotazioni</servlet-name>
+        <url-pattern>/GestorePrenotazioni</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

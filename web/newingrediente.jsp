@@ -27,7 +27,7 @@
         <div class='container'>
             <h1>Inserimento ingredienti</h1>
 
-            <form id="form_newingr" action='ServletController' method="POST">
+            <form id="form_newingr" action='Controller' method="POST">
                 <input type="hidden" name="action" value="ingrediente-add"/>
                 <p>
                     <label>Nome ingrediente</label>

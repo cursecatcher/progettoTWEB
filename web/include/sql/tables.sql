@@ -5,7 +5,6 @@ CREATE TABLE Pizza (
     prezzo FLOAT NOT NULL, 
     ingredienti VARCHAR(129) NOT NULL,
     CHECK (prezzo > 0)
-/* inserire flag: nopomo, nolattosio */
 ); 
 
 CREATE TABLE Utente (
@@ -23,4 +22,23 @@ CREATE TABLE Ingrediente (
     prezzo FLOAT NOT NULL, /* forse inutile */
     CHECK (prezzo >= 0) 
 
+);
+
+/* nuove */
+CREATE TABLE Prenotazione (
+    id_prenotazione INT NOT NULL PRIMARY KEY 
+        GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), 
+    fk_utente INT REFERENCES Utente(id_utente),
+    data_consegna DATE, 
+    consegnato BOOLEAN DEFAULT FALSE 
+    
+); 
+
+CREATE TABLE PrenotazionePizza (
+    id INT NOT NULL PRIMARY KEY 
+        GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), 
+    quantita INT NOT NULL,
+    fk_prenotazione INT REFERENCES Prenotazione(id_prenotazione),
+    fk_pizza INT REFERENCES Pizza(id_pizza),    
+    CHECK (quantita > 0)
 );

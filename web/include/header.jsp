@@ -1,3 +1,4 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <nav class="navbar navbar-default">
     <div class="collapse navbar-collapse">
         <div class="navbar-header">
@@ -12,7 +13,7 @@
             </li>
             <li><a href="menu.jsp">Menu</a></li>
             <li><a href="login.jsp">Login</a></li>
-            <li><a href="register.jsp">Registrati</a></li>
+            <li><a href="register.jsp">${sessionScope.usertoken}</a></li>
         </ul>
     </div>
 </nav>

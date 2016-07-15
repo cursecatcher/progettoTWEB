@@ -8,7 +8,7 @@ public class Admin extends Utente {
     
     public Admin() {
         super();
-        this.setRole("admin");
+        this.setRuolo("admin");
     }
     
     public String getPrenotazioni() {

@@ -28,7 +28,7 @@
             <h1>Registrazione</h1>
 
             <div class="form login">
-                <form id="form_reg" action="ServletController" method="POST">
+                <form id="form_reg" action="Controller" method="POST">
                     <p>
                         <label>Email</label>
                         <input type="email" name="email" required/>

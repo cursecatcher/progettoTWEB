@@ -41,7 +41,7 @@
             <h1>Nuova pizza</h1>
 
             <div class="form insert">
-                <form id="form_newpi" action="ServletController" method="POST">
+                <form id="form_newpi" action="Controller" method="POST">
                     <input type="hidden" name="action" value="pizza-create"/>
                     <p>
                         <label>Nome pizza</label>

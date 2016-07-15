@@ -4,20 +4,46 @@
     Author     : nico
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<jsp:useBean id="userBean" scope="session" class="beans.Utente" />
-<jsp:setProperty name="userBean" property="*"/>
+
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" 
+              integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" 
+              crossorigin="anonymous">
+
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" 
+              integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" 
+              crossorigin="anonymous">
+
+        <script src="https://code.jquery.com/jquery-2.2.4.min.js"   
+                integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   
+        crossorigin="anonymous"></script>
     </head>
     <body>
-        <h1>Hello World!</h1>
+
+        <%@include file="include/header.jsp" %>
         
-        Sei loggato come: ${userBean.email}<br/>
-        Ruolo utente: ${userBean.ruolo}<br/>
+        <div class="container">
+            <h1>Hello World!</h1>
+
+            ${user.id} <br/>
+            Sei loggato come: ${user.email}<br/>
+            Ruolo utente: ${user.ruolo}<br/>
+
+            <p>
+            <form action="Controller" method="GET">
+                <input type="hidden" name="action" value="newpizza"/>
+                <input type="submit" class="btn btn-link" value="NUOVA PIZZA"/>  
+            </form>
+        </p>
 
         <p>
             <a href="newpizza.jsp">NUOVA PIZZA</a>. 
@@ -27,6 +53,6 @@
             <a href="newordine.jsp">PRENOTAZIONE</a> 
             (cliente && amministratore)
         </p>
-
-    </body>
+    </div>
+</body>
 </html>

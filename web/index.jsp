@@ -1,14 +1,17 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+<jsp:useBean id='menu' scope="page" class="beans.Menu"/>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>PiWeb</title>
+        <title>Homepage</title>
 
         <script src="https://code.jquery.com/jquery-2.2.4.min.js"   
                 integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   
-                crossorigin="anonymous"></script>
-        
+        crossorigin="anonymous"></script>
+
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" 
               integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" 
@@ -23,24 +26,27 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" 
                 integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" 
         crossorigin="anonymous"></script>
-        
-        
+
+
     </head>
     <body>
-        <jsp:include page="include/html/header.html"/>
+        <jsp:include page="include/header.jsp"/>
 
         <div class="container">
             <h1>Homepage :D</h1>
-            <p>
-                <a href="login.jsp">LOGIN</a>
-            </p>
-            <p>
-                <a href="register.jsp">REGTRAZIONE</a>
-            </p>
-            <p>
-                <a href="menu.jsp">MENU</a>
-            </p>
-            
+
+            <c:forEach var="pizza" items="${menu.pizze}">
+                <div class="row menu-pizza">
+                    <div class="pizza-nome">
+                        <c:out value="${pizza.nome}"/>
+                    </div>
+                    <div class="pizza-prezzo">
+                        <c:out value="${pizza.prezzo}"/>
+                    </div>
+                </div>
+            </c:forEach>
+
+
         </div>
     </body>
 </html>

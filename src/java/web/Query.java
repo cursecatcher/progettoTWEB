@@ -51,6 +51,10 @@ public class Query {
             throws SQLException {
         return st.executeQuery("SELECT * FROM Utente WHERE email = " + quote(email));
     }
+    
+    public static ResultSet getUserById(Statement st, int id) throws SQLException {
+        return st.executeQuery("SELECT * FROM Utente WHERE id_utente=" + id);
+    }
 
     /**
      * Modifica la password di un certo utente di tipo cliente, dato il suo id

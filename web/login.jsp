@@ -33,7 +33,7 @@
             <h1>Login</h1>
 
             <div class="form login">
-                <form id="form_login" action="ServletController" method="POST">
+                <form id="form_login" action="Controller" method="POST">
                     <input type="hidden" name="action" value="user-login"
                     <p>
                         <label>Email</label>
@@ -55,7 +55,7 @@
                     <div id="signin-button"></div>
                 </div>
                 <!--
-                <form id="form-login-googleplus" method="POST" action="ServletController">
+                <form id="form-login-googleplus" method="POST" action="Controller">
                     <!--
                     <input type="hidden" name="action" value="login-googleplus"/>
                     <!--
