@@ -31,8 +31,8 @@ import verifytoken.Verify;
  * @author nico
  */
 public class GestoreCliente extends HttpServlet {
-    
-     public void init(ServletConfig config) throws ServletException {
+
+    public void init(ServletConfig config) throws ServletException {
         System.out.println("Init ServletUtente");
         super.init(config);
 
@@ -75,7 +75,7 @@ public class GestoreCliente extends HttpServlet {
             }
         }
     }
-    
+
     /**
      * Handles the HTTP <code>POST</code> method.
      *
@@ -109,32 +109,28 @@ public class GestoreCliente extends HttpServlet {
                     if (rs.next()) {
                         String user_pwd = rs.getString("password");
 
-                        if (user_pwd != null) {
-                            if (user_pwd.equals(DigestUtils.sha1Hex(password))) {
-                                HttpSession session = request.getSession();
-                                session.setAttribute("idUtente", rs.getInt("id_utente"));
-                                session.setAttribute("usertoken", "authenticated");
-                                /*
+                        if (user_pwd.equals(DigestUtils.sha1Hex(password))) {
+                            HttpSession session = request.getSession();
+                            session.setAttribute("idUtente", rs.getInt("id_utente"));
+                            session.setAttribute("usertoken", "authenticated");
+                            /*
                                 createSession(
                                         request.getSession(),
                                         rs.getInt("id_utente"),
                                         email,
                                         rs.getString("ruolo")
                                 );*/
-                                
-                                Utente u = new Utente(); 
-                                u.setId(rs.getInt("id_utente"));
-                                u.setEmail(email);
-                                u.setRuolo(rs.getString("ruolo"));
-                                request.setAttribute("user", u);
 
-                                //   out.println("OK");
-                                rd = ctx.getRequestDispatcher("/profilo.jsp");
-                            } else {
-                                out.println("WRONG_PASSWORD");
-                            }
+                            Utente u = new Utente();
+                            u.setId(rs.getInt("id_utente"));
+                            u.setEmail(email);
+                            u.setRuolo(rs.getString("ruolo"));
+                            request.setAttribute("user", u);
+
+                            //   out.println("OK");
+                            rd = ctx.getRequestDispatcher("/profilo.jsp");
                         } else {
-                            System.out.println("TRY_G+");
+                            out.println("WRONG_PASSWORD");
                         }
                     } else {
                         out.println("EMAIL_NOT_FOUND");
@@ -143,37 +139,7 @@ public class GestoreCliente extends HttpServlet {
                 } catch (SQLException ex) {
                     Logger.getLogger(GestoreCliente.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            } else if (action.equalsIgnoreCase("login-googleplus")) {
-                System.out.println("ServletUtente login g+");
 
-                String email = Verify.getUserCredentials(
-                        request.getParameter("id_token"),
-                        request.getParameter("access_token"));
-
-                if (email != null) {
-                    System.out.println("Autenticazione G+ OK");
-
-                    try (Connection conn = Query.getConnection();
-                            Statement st = conn.createStatement()) {
-
-                        ResultSet rs = Query.getUserByEmail(st, email);
-
-                        if (!rs.next()) {
-                            System.out.println("Inserimento nuovo utente g+");
-                            Query.insertNewClient(st, email, null);
-                            rs = Query.getUserByEmail(st, email);
-                            rs.next();
-                        }
-
-                        createSession(request.getSession(), rs.getInt("id_utente"), email, rs.getString("ruolo"));
-                        rs.close();
-
-                    } catch (SQLException ex) {
-                        Logger.getLogger(GestoreCliente.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                } else {
-                    System.out.println("EH, VOLEVI");
-                }
             } else if (action.equalsIgnoreCase("user-registrazione")) {
                 String email = request.getParameter("email");
                 String password = request.getParameter("password");
@@ -185,10 +151,6 @@ public class GestoreCliente extends HttpServlet {
 
                         if (!rs.next()) {
                             Query.insertNewClient(st, email, password);
-                            out.println("OK");
-
-                        } else if (rs.getString("password") == null) {
-                            Query.updateUserPassword(st, rs.getInt("id_utente"), password);
                             out.println("OK");
                         } else {
                             out.println("USER_ALREADY_EXISTS");
@@ -211,7 +173,6 @@ public class GestoreCliente extends HttpServlet {
         session.setAttribute("emailUtente", email);
         session.setAttribute("ruoloUtente", ruolo);
     }
-     
 
     /**
      * Returns a short description of the servlet.

@@ -31,6 +31,8 @@
 
         <div class="container">
             <h1>Login</h1>
+            
+            ${message}
 
             <div class="form login">
                 <form id="form_login" action="Controller" method="POST">
@@ -49,11 +51,11 @@
                 </form>
 
                 Non hai ancora un account? Registrati <a href="register.jsp">qui</a>!<br/>
-
+<!--
                 Oppure accedi col tuo account Google! <a href="#0">#chesiamofighi</a>
                 <div id="gConnect">
                     <div id="signin-button"></div>
-                </div>
+                </div> -->
                 <!--
                 <form id="form-login-googleplus" method="POST" action="Controller">
                     <!--

@@ -38,6 +38,7 @@
             <div id="elenco-pizze">
                 <c:forEach var="pizza" items="${menu.pizze}">
                     <div class="menu-pizza">
+                        <!-- link scelta pizza -->
                         <a id="pizza-${pizza.id}" class="choose-pizza" href="#0">
                             <span class="glyphicon glyphicon-plus"></span>
                         </a>
@@ -49,6 +50,16 @@
                         </div>
                     </div>
                 </c:forEach>
+            </div>
+            
+            <div id="carrello">
+                <form action="Controller" method="POST">
+                    <input type="hidden" name="action" value="add-prenotazione"/>
+                    <!-- form dinamico by jquery, oppure invio di dati grezzi
+                    ed elaborazione a carico della servlet , che è probabilmente 
+                    la cosa migliore -->
+                    <input type="submit" name="submit" value="Ordina!" class="btn btn-primary"/>
+                </form>
             </div>
         </div>
     </body>

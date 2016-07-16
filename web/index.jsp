@@ -41,7 +41,8 @@
                         <c:out value="${pizza.nome}"/>
                     </div>
                     <div class="pizza-prezzo">
-                        <c:out value="${pizza.prezzo}"/>
+                        <c:out value="${pizza.prezzo}"/> <br/>
+                        <c:out value="${pizza.listaIngredienti}"/>
                     </div>
                 </div>
             </c:forEach>

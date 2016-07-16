@@ -105,6 +105,8 @@ public class Controller extends HttpServlet {
                 request.setAttribute("user", u);
                 rd = ctx.getRequestDispatcher("/profilo.jsp");
             } else {
+                request.setAttribute("message", "Login richiesto per accedere alla pagina");
+                rd = ctx.getRequestDispatcher("/login.jsp"); 
                 System.out.println("LOGIN REQUIRED");
             }
 
@@ -151,6 +153,10 @@ public class Controller extends HttpServlet {
             } else if (action.equalsIgnoreCase("pizza-create")) {
                 rd = ctx.getNamedDispatcher("GestoreCucina");
 
+            }
+            else if (action.equalsIgnoreCase("add-prenotazione")) {
+                rd = ctx.getNamedDispatcher("GestorePrenotazioni");
+                
             }
 
             rd.forward(request, response);

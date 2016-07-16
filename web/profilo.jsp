@@ -1,8 +1,9 @@
-<%-- 
-    Document   : profilo
-    Created on : 10-lug-2016, 20.57.22
-    Author     : nico
---%>
+<%
+    if (!"authenticated".equals(session.getAttribute("usertoken"))) {
+        String redirectURL = "login.jsp";
+        response.sendRedirect(redirectURL);
+    }
+%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -52,6 +53,9 @@
         <p>
             <a href="newordine.jsp">PRENOTAZIONE</a> 
             (cliente && amministratore)
+        </p>
+        <p>
+            <a href="gestione-prenotazioni.jsp">Archivio Prenotazioni</a>
         </p>
     </div>
 </body>

@@ -32,14 +32,14 @@
 
             <c:forEach var="pizza" items="${menu.pizze}">
                 <div class="menu-pizza">
-                    <a id="pizza-${pizza.id}" class="choose-pizza" href="#0">
-                        <span class="glyphicon glyphicon-plus"></span>
-                    </a>
                     <div class="pizza-nome">
                         <c:out value="${pizza.nome}"/>
                     </div>
                     <div class="pizza-prezzo">
                         <c:out value="${pizza.prezzo}"/>
+                    </div>
+                    <div class="pizza-ingredienti">
+                        <c:out value="${pizza.listaIngredienti}"/>
                     </div>
                 </div>
             </c:forEach>
