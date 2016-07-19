@@ -172,6 +172,9 @@ public class Query {
         String query = "DELETE FROM Pizza WHERE id=" + id; 
         return st.executeUpdate(query) == 1; 
     }
+    
+    
+    
 
     /* ***************************************************************** */
     private static String quote(String s) {

@@ -5,8 +5,14 @@
  */
 package web;
 
+import com.google.gson.internal.Pair;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -30,17 +36,48 @@ public class GestorePrenotazioni extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+
+        ServletContext ctx = getServletContext();
+        RequestDispatcher rd = ctx.getRequestDispatcher("/error.jsp");
+
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet GestorePrenotazioni</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet GestorePrenotazioni at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+            String action = request.getParameter("action");
+            System.out.println("GestorePrenotazioni --  action: " + action);
+
+            if (action == null) {
+                rd = ctx.getRequestDispatcher("/index.jsp");
+                
+            } else if (action.equalsIgnoreCase("add-prenotazione")) {
+                int num_pizze = Integer.parseInt(request.getParameter("num_pizze")); 
+                List<Pair<Integer, Integer>> ordine = new ArrayList<>();
+                
+                out.println("Numero pizze:" + num_pizze); 
+                
+                /* inserisci record in Prenotazione */ 
+                
+                
+                for (int i = 0; i < num_pizze; i++) {
+                    String id = request.getParameter("id_pizza-" + i); 
+                    String quantity = request.getParameter("quantity-" + i); 
+                    
+                    out.println("id:" + id); 
+                    out.println("quantity: " + quantity); 
+                    
+                    ordine.add(new Pair<>(new Integer(id), new Integer(quantity)));
+                    
+                    
+                    /* inserisci records in PrenotazionePizza */ 
+  //                  ordine.add(new Pair<Integer, Integer>); 
+                }
+                
+                out.println("Sintesi ordine: "); 
+                for (Pair p : ordine) {
+                    out.println("-" + p);
+                }
+                
+            }
+
+            //      rd.forward(request, response);
         }
     }
 
