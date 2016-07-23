@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 public class GestoreCucina extends HttpServlet {
 
     public void init(ServletConfig config) throws ServletException {
-        System.out.println("Init ServletGnam");
+        System.out.println("Init GestoreCucina");
         super.init(config);
 
         try {

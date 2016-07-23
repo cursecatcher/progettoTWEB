@@ -34,41 +34,26 @@
             
             ${message}
 
-            <div class="form login">
+            <div class="col-md-5">
                 <form id="form_login" action="Controller" method="POST">
-                    <input type="hidden" name="action" value="user-login"
-                    <p>
-                        <label>Email</label>
-                        <input name="email" type="email" required/>
-                    </p>
-                    <p>
-                        <label>Password</label>
-                        <input name="password" type="password" required/>
-                    </p>
+                    <input type="hidden" name="action" value="user-login"/>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input id="email" name="email" type="email" 
+                               class="form-control" required/>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input id="password" name="password" type="password" 
+                               class="form-control" required/>
+                    </div>
 
                     <!--<input id='submit-login' type="submit"/>-->
-                    <button id="submit-login" type="button" class="btn btn-primary">asd</button>
+                    <button id="submit-login" type="button" class="btn btn-primary">
+                        Accedi
+                    </button>
                 </form>
-
                 Non hai ancora un account? Registrati <a href="register.jsp">qui</a>!<br/>
-<!--
-                Oppure accedi col tuo account Google! <a href="#0">#chesiamofighi</a>
-                <div id="gConnect">
-                    <div id="signin-button"></div>
-                </div> -->
-                <!--
-                <form id="form-login-googleplus" method="POST" action="Controller">
-                    <!--
-                    <input type="hidden" name="action" value="login-googleplus"/>
-                    <!--
-                    <input type="text" name="name"/>
-                    <input type="text" name="surname"/>
-                    <input type="text" name="email"/> --><!--
-                    <input type="hidden" name="id_token"/>
-                    <input type="hidden" name="access_token"/> --><!--
-                </form>  -->
-
-
             </div>
         </div>
     </body>

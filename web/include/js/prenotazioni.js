@@ -70,9 +70,12 @@ jQuery(document).ready(function ($) {
     });
 
     $timepicker.timepicker({
-        minTime: '19:30pm',
-        maxTime: '11:30pm',
-        forceRoundTime: true
+        minTime: '19:30',
+        maxTime: '23:30',
+        forceRoundTime: true, 
+        show2400: true, 
+        timeFormat: 'H:i', 
+        step: 15
     });
     
 

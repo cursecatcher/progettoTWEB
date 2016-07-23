@@ -27,20 +27,23 @@
         <div class="container">
             <h1>Registrazione</h1>
 
-            <div class="form login">
+            <div class="col-md-5">
                 <form id="form_reg" action="Controller" method="POST">
-                    <p>
-                        <label>Email</label>
-                        <input type="email" name="email" required/>
-                    </p>
-                    <p>
-                        <label>Password</label>
-                        <input type="password" name="password" required/>
-                    </p>
-                    <p>
-                        <label>Conferma password</label>
-                        <input type="password" name="password2" required/>
-                    </p>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input id="email" type="email" name="email" 
+                               class="form-control" placeholder="La tua email" required/>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input id="password" type="password" name="password" 
+                               class="form-control" placeholder="Password..." required/>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm-password">Conferma password</label>
+                        <input id="confirm-password" type="password" name="password2" 
+                               class="form-control" placeholder="Conferma password" required/>
+                    </div>
                     <input id='submit-reg' type="submit"/>
 
                 </form>
