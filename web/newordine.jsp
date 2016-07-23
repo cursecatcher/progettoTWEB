@@ -27,39 +27,52 @@
                 integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" 
         crossorigin="anonymous"></script>
 
+        <!-- DataPicker jQuery -->
+        <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+        <!-- TimePicker -->
+        <link rel="stylesheet" href="include/lib/timepicker/jquery.timepicker.css">
+        <script type="text/javascript" src="include/lib/timepicker/jquery.timepicker.min.js"></script>
+
         <script type="text/javascript" src="include/js/prenotazioni.js"></script>
     </head>
     <body>
         <%@include file="include/header.jsp" %>
 
         <div class="container">
-            <h1>EH, VOLEVI!</h1>
-
-            <div class="col-md-8">
+            <div class="col-md-6">
+                <h1>Prenotazione</h1>
                 <div id="elenco-pizze">
                     <c:forEach var="pizza" items="${menu.pizze}">
-                        <div class="menu-pizza">
+                        <div class="menu-pizza row">
                             <!-- link scelta pizza -->
-                            <a id="pizza-${pizza.id}" class="choose-pizza" href="#0">
+                            <a class="choose-pizza" href="#0"
+                               data-id-pizza="${pizza.id}"
+                               data-nome-pizza="${pizza.nome}">
                                 <span class="glyphicon glyphicon-plus"></span>
                             </a>
-                            <div class="pizza-nome">
+                            <span class="pizza-nome text-uppercase">
                                 <c:out value="${pizza.nome}"/>
-                            </div>
-                            <div class="pizza-prezzo">
-                                <c:out value="${pizza.prezzo}"/>
-                            </div>
-                        </div>
-                    </c:forEach>
+                            </span>
+                            <span class="pizza-prezzo pull-right">
+                                <c:out value="${pizza.prezzo}"/>&nbsp;&euro;
+                            </span>
+                        </div> 
+                    </c:forEach> 
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
+                <h1>Il tuo ordine</h1>
                 <div id="carrello">
                     <!-- jquery -->
                 </div>
                 <form id="form-carrello" action="Controller" method="POST">
                     <input type="hidden" name="action" value="add-prenotazione"/>
-                    <input type="number" name="num_pizze" value='0'/>
+                    <input type="hidden" name="num_pizze" value='0'/>
+                    <input type="text" name="dataConsegna" id="datapicker" 
+                           placeholder="data di consegna" readonly="readonly"/>
+                    <input type="text" name="oraConsegna" id="timepicker" 
+                           placeholder="Orario di consegna"/> 
                     <!-- input create dinamicamente by jquery -->
                     <input type="submit" name="submit" value="Ordina!" class="btn btn-primary"/>
                 </form>

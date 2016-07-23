@@ -32,15 +32,14 @@ public class Menu {
             DriverManager.registerDriver(new org.apache.derby.jdbc.ClientDriver());
             Connection conn = Query.getConnection();
             Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery("SELECT id_ingrediente, nome FROM Ingrediente");
-
+            ResultSet rs = Query.getAllIngredients(st); 
             /* carico hashmap */
             while (rs.next()) {
                 String key = String.valueOf(rs.getInt("id_ingrediente"));
                 this.ingredientiMap.put(key, rs.getString("nome"));
             }
 
-            rs = st.executeQuery("SELECT * FROM Pizza");
+            rs = Query.getAllPizze(st);
             /* faccio le pizze */
             while (rs.next()) {
                 String[] ingredienti = rs.getString("ingredienti").split(",");

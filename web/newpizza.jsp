@@ -8,6 +8,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:useBean id="ingredienti" scope="page" class="beans.Ingredienti" />
+<jsp:useBean id="menu" scope="page" class="beans.Menu" />
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -38,24 +40,42 @@
         <jsp:include page="include/html/header.html"/>
 
         <div class='container'>
-            <h1>Nuova pizza</h1>
+            <div class="col-md-6">
+                <h1>Catalogo pizze</h1>
+                <c:forEach var="pizza" items="${menu.pizze}">
+                    <div class="row-fluid">
+                        <span class="text-uppercase">
+                            <c:out value="${pizza.nome}"/>
+                        </span>
+                        <span class="pull-right">
+                            <c:out value="${pizza.prezzo}"/>&nbsp;&euro;
+                        </span>
+                        <p class="text-capitalize">
+                            <c:out value="${pizza.listaIngredienti}"/>
+                        </p>
+                    </div> 
+                </c:forEach>
+            </div>
 
-            <div class="form insert">
+            <div class="col-md-6">
+                <h1>Nuova pizza</h1>
+
                 <form id="form_newpi" action="Controller" method="POST">
                     <input type="hidden" name="action" value="pizza-create"/>
-                    <p>
-                        <label>Nome pizza</label>
-                        <input name="nome" type="text" 
-                               placeholder="Nome della pizza (es. margherita)"/>
-                    </p>
-                    <p>
-                        <label>Prezzo</label>
-                        <input name="prezzo" type="number" min="0.5" step="0.1"
-                               placeholder="Prezzo della pizza..."/>
-                    </p>
-                    <p>
-                        Da quali ingredienti &egrave; composta la pizza?<br/>
+                    <div class="form-group">
+                        <label for="nome_pizza">Nome pizza</label>
+                        <input id="nome_pizza" name="nome" type="text" class="form-control"
+                               placeholder="Nome della pizza"/>
+                    </div>
 
+                    <div class="form-group">
+                        <label for="prezzo_pizza">Prezzo pizza</label>
+                        <input id="prezzo_pizza" name="prezzo" type="number" min="0.5" step="0.1"
+                               class="form-control" placeholder="Prezzo della pizza..."/>
+                    </div>
+
+                    <div>
+                        <p><strong>Scegli gli ingredienti da mettere sulla pizza: </strong></p>
                         <select id='select-random' name='ingredientiPizza' multiple="multiple">
                             <c:forEach var="ingrediente" items="${ingredienti.listaIngredienti}">
                                 <option value="${ingrediente.id}">
@@ -71,12 +91,16 @@
                                 });
                             });
                         </script>
-                    </p>
-                    <input id='submit-newpi' type="submit"/>
+                    </div>
+                    <br/>
+                    <button id='submit-newpi' type="submit" class="btn btn-default">
+                        Inserisci pizza
+                    </button>
                 </form>
+                <div id="result-op" class="alert" role="alert"><!--jquery--></div>
+                
+                Clicca <a href='newingrediente.jsp'>qui</a> per inserire un ingrediente mancante! 
             </div>
-
-            Clicca <a href='newingrediente.jsp'>qui</a> per inserire un ingrediente mancante! 
         </div>
     </body>
 </html>

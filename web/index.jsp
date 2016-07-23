@@ -33,21 +33,25 @@
         <jsp:include page="include/header.jsp"/>
 
         <div class="container">
-            <h1>Homepage :D</h1>
+            <h1>Le nostre pizze</h1>
 
             <c:forEach var="pizza" items="${menu.pizze}">
-                <div class="row menu-pizza">
-                    <div class="pizza-nome">
-                        <c:out value="${pizza.nome}"/>
-                    </div>
-                    <div class="pizza-prezzo">
-                        <c:out value="${pizza.prezzo}"/> <br/>
+                <div class="row-fluid">
+                    <h4>
+                        <span class="text-uppercase">
+                            <c:out value="${pizza.nome}"/> 
+                        </span>
+                        <span class="pull-right">
+                            <small>
+                                <c:out value="${pizza.prezzo}"/>&nbsp;&euro;
+                            </small>
+                        </span>
+                    </h4>
+                    <p class="text-capitalize">
                         <c:out value="${pizza.listaIngredienti}"/>
-                    </div>
+                    </p>
                 </div>
             </c:forEach>
-
-
         </div>
     </body>
 </html>

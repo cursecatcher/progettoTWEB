@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
 public class GestoreCucina extends HttpServlet {
 
     public void init(ServletConfig config) throws ServletException {
@@ -87,31 +86,32 @@ public class GestoreCucina extends HttpServlet {
                 rd = ctx.getRequestDispatcher("/index.jsp");
 
             } else if (action.equalsIgnoreCase("pizza-create")) {
-
                 String nome = request.getParameter("nome");
                 String id_ingredienti = request.getParameter("listaIngredienti");
                 float prezzo = Float.parseFloat(request.getParameter("prezzo"));
 
                 if (id_ingredienti.equalsIgnoreCase("")) {
-                    System.out.println("L'utente e' un coglione -> pizza senza ingredienti");
-                }
+                    System.out.println("L'admin e' un pirla -> pizza senza ingredienti");
+                    out.print("ERR_NO_INGREDIENTI");
+                } else {
+                    try (Connection conn = Query.getConnection();
+                            Statement st = conn.createStatement();
+                            ResultSet rs = Query.getPizzaByName(st, nome)) {
 
-                try (Connection conn = Query.getConnection();
-                        Statement st = conn.createStatement();
-                        ResultSet rs = Query.getPizzaByName(st, nome)) {
+                        if (!rs.next()) {
+                            Query.insertPizza(st, nome, prezzo, id_ingredienti);
+                            System.out.println("OK");
+                            out.print("OK");
+                        } else {
+                            System.out.println("Pizza gia' presente");
+                            out.print("ERR_DUPLICATE");
+                        }
 
-                    if (!rs.next()) {
-                        Query.insertPizza(st, nome, prezzo, id_ingredienti);
-                        System.out.println("OK");
-                        out.println("OK");
-                    } else {
-                        System.out.println("Pizza gia' presente");
-                        out.println("ERR");
+                    } catch (SQLException ex) {
+                        Logger.getLogger(GestoreCucina.class.getName()).log(Level.SEVERE, null, ex);
+                        System.out.println("Eccezione in ServletGnam->pizza-create");
+                        out.print("ERR_SQL_EXCEPTION"); 
                     }
-
-                } catch (SQLException ex) {
-                    Logger.getLogger(GestoreCucina.class.getName()).log(Level.SEVERE, null, ex);
-                    System.out.println("Eccezione in ServletGnam->pizza-create");
                 }
 
             } else if (action.equalsIgnoreCase("pizza-remove")) {
@@ -143,14 +143,15 @@ public class GestoreCucina extends HttpServlet {
 
                     if (Query.updatePizza(st, id, nome, prezzo, listaIngredienti)) {
                         out.println("OK");
-                        System.out.println("OK");
+                        System.out.print("OK");
                     } else {
-                        out.println("ERR");
-                        System.out.println("ERR");
+                        out.print("ERR_DUPLICATE");
+                        System.out.println("ERR_DUPLICATE");
                     }
                 } catch (SQLException ex) {
                     Logger.getLogger(GestoreCucina.class.getName()).log(Level.SEVERE, null, ex);
                     System.out.println("Eccezione in ServletGnam->pizza-modify");
+                    out.print("ERR_SQL_EXCEPTION");
                 }
 
             } else if (action.equalsIgnoreCase("ingrediente-add")) {
@@ -163,15 +164,16 @@ public class GestoreCucina extends HttpServlet {
 
                     if (!rs.next()) {
                         Query.insertIngrediente(st, nome, prezzo);
-                        out.println("OK");
+                        out.print("OK");
                     } else {
                         System.out.println("Ingrediente gia' presente :v");
-                        out.println("ERR");
+                        out.print("ERR_DUPLICATE");
                     }
 
                 } catch (SQLException ex) {
                     Logger.getLogger(GestoreCucina.class.getName()).log(Level.SEVERE, null, ex);
                     System.out.println("Eccezione in ServletGnam->ingrediente-add");
+                    out.print("ERR_SQL_EXCEPTION");
                 }
             } else {
                 rd = ctx.getRequestDispatcher("/error.jsp");

@@ -1,4 +1,7 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+<jsp:useBean id='ingredienti' scope="page" class="beans.Ingredienti"/>
 <!DOCTYPE html>
 <html>
     <head>
@@ -25,23 +28,40 @@
         <jsp:include page="include/html/header.html"/>
 
         <div class='container'>
-            <h1>Inserimento ingredienti</h1>
-
-            <form id="form_newingr" action='Controller' method="POST">
-                <input type="hidden" name="action" value="ingrediente-add"/>
-                <p>
-                    <label>Nome ingrediente</label>
-                    <input type="text" name="nome" maxlength="32"/>
-                </p>
-                <p>
-                    <label>Prezzo</label>
-                    <input type="number" name="prezzo" min="0.1" step="0.1"/>
-                </p>
-                <input type="submit" id="submit-newingr"/>
-                
-                <!-- div risultato operazione ? -->
-            </form>
-            <p>Torna all'<a href='newpizza.jsp'>inserimento delle pizze</a>!!</p>
+            <div class="col-md-6">
+                <h1>Catalogo ingredienti</h1>
+                <ul>
+                    <c:forEach var="ingrediente" items="${ingredienti.listaIngredienti}">
+                        <li>
+                            <span class="text-capitalize">
+                                <c:out value="${ingrediente.nome}"/>
+                            </span>
+                        </li>
+                    </c:forEach>
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <h1>Inserimento ingredienti</h1>
+                <form id="form_newingr" action="Controller" method="POST">
+                    <div class='form-group'>
+                         <input type="hidden" name="action" value="ingrediente-add"/>
+                    </div>
+                    <div class="form-group">
+                        <label for='nome-ingrediente'>Nome ingrediente</label>
+                        <input id='nome-ingrediente' type="text" name="nome" class="form-control"
+                               maxlength="32" placeholder="Nome ingrediente..."/>
+                    </div>
+                    <div class="form-group">
+                        <label for='prezzo-ingrediente'>Prezzo</label>
+                        <input id='prezzo-ingrediente' type="number" name="prezzo" class="form-control"
+                               min="0.1" step="0.1"/>
+                    </div>
+                    <button type="submit" class='btn btn-default' 
+                            id="submit-newingr">Inserisci</button>
+                </form>
+                <p>Torna all'<a href='newpizza.jsp'>inserimento delle pizze</a>!!</p>
+                <div id="result-op" class="alert" role="alert"><!--jquery--></div>
+            </div>
         </div>
     </body>
 </html>

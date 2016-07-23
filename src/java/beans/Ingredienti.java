@@ -27,7 +27,7 @@ public class Ingredienti {
             DriverManager.registerDriver(new org.apache.derby.jdbc.ClientDriver());
             Connection conn = Query.getConnection();
             Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM Ingrediente"); 
+            ResultSet rs = Query.getAllIngredients(st); 
             
             while (rs.next()) {
                 Ingrediente i = new Ingrediente(); 

@@ -24,8 +24,8 @@ function Prenotazione() {
             return x.id_pizza === id_pizza;
         });
 
-        if (this.pizze[i] > 1) {
-            this.pizze[i]--;
+        if (this.pizze[i].quantity > 1) {
+            this.pizze[i].quantity--;
         } else {
             this.pizze = this.pizze.filter(function (x) {
                 return x.id_pizza !== id_pizza;
@@ -41,31 +41,61 @@ function Prenotazione() {
         var content = "";
 
         for (var i = 0; i < this.pizze.length; i++) {
-            content += "<div>" +
+            content += "<li>" +
+                    "<a class='remove-pizza' data-id-pizza='" + this.pizze[i].id_pizza + "' href='#0'>" +
+                    "<span class='glyphicon glyphicon-minus'></span></a>" +
                     this.pizze[i].quantity + "x " + this.pizze[i].nome +
-                    "</div>";
+                    "</li>";
 
         }
 
-        $div.html(content);
+        $div.html("<ul>" + content + "</ul>");
     };
 }
 
 var ordine = new Prenotazione();
 
 jQuery(document).ready(function ($) {
+    $datapicker = $('#datapicker');
+    $timepicker = $('#timepicker');
+
+    $datapicker.datepicker({
+        showOn: "both", /*
+         buttonImage: "images/calendario.png",
+         buttonImageOnly: true,*/
+        minDate: 0,
+        monthNames: ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"],
+        dayNamesMin: ["Do", "Lu", "Ma", "Me", "Gi", "Ve", "Sa"],
+        dateFormat: "dd-mm-yy"
+    });
+
+    $timepicker.timepicker({
+        minTime: '19:30pm',
+        maxTime: '11:30pm',
+        forceRoundTime: true
+    });
+    
+
+
+
 
     $('.choose-pizza').on('click', function () {
-        var idpizza = $(this).attr("id").replace("pizza-", "");
-        var nomePizza = $(this).next().text().trim();
+        var idpizza = $(this).data("id-pizza");
+        var nomePizza = $(this).data("nome-pizza");
 
         ordine.addPizza(idpizza, nomePizza);
         console.log("Scelta pizza -  id: " + idpizza);
         console.log("Stato ordine: " + JSON.stringify(ordine));
         ordine.print($("#carrello"));
+    });
 
+    $(document).on('click', '.remove-pizza', function () {
+        var idpizza = $(this).data("id-pizza");
+//        var idpizza = $(this).attr("id").replace("del-pizza-", "");
 
-
+        ordine.removePizza(idpizza);
+        ordine.print($("#carrello"));
+        console.log("Stato ordine: " + JSON.stringify(ordine));
     });
 
 

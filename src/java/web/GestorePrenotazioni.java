@@ -8,6 +8,9 @@ package web;
 import com.google.gson.internal.Pair;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -73,6 +76,14 @@ public class GestorePrenotazioni extends HttpServlet {
                 out.println("Sintesi ordine: "); 
                 for (Pair p : ordine) {
                     out.println("-" + p);
+                }
+                
+                try (Connection conn = Query.getConnection();
+                        Statement st = conn.createStatement()) {
+                    String query = "INSERT INTO Prenotazione(fk_utente, data_consegna, consegnato)";
+                }
+                catch (SQLException ex) {
+                    ;
                 }
                 
             }
