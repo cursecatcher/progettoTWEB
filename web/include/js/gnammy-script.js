@@ -55,7 +55,8 @@ jQuery(document).ready(function ($) {
         var nome = $form_pizza.find("input[name=nome]").val().trim();
         var prezzo = $form_pizza.find("input[name=prezzo]").val();
         var ingredienti = [];
-        var $div = $('#result-op');
+        var $div = $('#result-container');
+        var $span = $('#result-message'); 
 
         $("select option:selected").each(function () {
             ingredienti.push($(this).val());
@@ -81,30 +82,35 @@ jQuery(document).ready(function ($) {
                     listaIngredienti: ingredienti.join(",")
                 },
                 function (response) {
+                    $div.removeClass("alert-success alert-warning alert-danger hidden"); 
+                    
                     if (response == "OK") {
                         console.log("qui");
-                        $div.removeClass();
-                        $div.addClass("alert alert-success");
-                        $div.text("Pizza inserita!");
+                        $div.addClass("alert-success"); 
+                        $span.html("<h4>T'appost!</h4>" + 
+                                "<p>La pizza specificata &egrave; stata inserita con successo nel DB.</br>" + 
+                                "'Sta senza pensier.</p>"); 
 
                     } else if (response == "ERR_DUPLICATE") {
                         console.log("quo");
-                        $div.removeClass();
-                        $div.addClass("alert alert-warning");
-                        $div.text("Pizza gia' presente!");
+                        $div.addClass("alert-warning"); 
+                        $span.html("<h4>Inserimento non andato a buon fine</h4>" + 
+                                "<p>La pizza <strong>" + nome + "</strong> &egrave; gi&agrave; presente nel menu.</br>" +
+                                "Scegli un altro nome!</p>");  
 
                     } else if (response == "ERR_NO_INGREDIENTI") {
                         console.log("qua");
-                        $div.removeClass();
-                        $div.addClass("alert alert-danger");
-                        $div.text("E gli ingredienti?");
+                        $div.addClass("alert-danger"); 
+                        $span.html("<h4>Inserimento non andato a buon fine</h4>" + 
+                                "<p></p>"); 
 
                     } else if (response == "ERR_SQL_EXCEPTION") {
                         console.log("WTF");
-                        $div.removeClass();
-                        $div.addClass("alert alert-danger");
-                        $div.text("MACELLI SUL SERVER! SCAPPATEEEEE");
-
+                        $div.addClass("alert-danger"); 
+                        $span.html("<h4>Inserimento non andato a buon fine</h4>" + 
+                                "<p>Si &egrave; verificato un errore inatteso sul server.</br>" + 
+                                "Misteri dell'informatica</p>");  
+                        $span.text(response); 
                     }
                 }
         );

@@ -33,6 +33,9 @@
         <!-- TimePicker -->
         <link rel="stylesheet" href="include/lib/timepicker/jquery.timepicker.css">
         <script type="text/javascript" src="include/lib/timepicker/jquery.timepicker.min.js"></script>
+        <!-- DatePicker -->
+        <link rel="stylesheet" href="include/lib/datepicker/bootstrap-datepicker3.min.css">
+        <script type="text/javascript" src="include/lib/datepicker/bootstrap-datepicker.min.js"></script>
 
         <script type="text/javascript" src="include/js/prenotazioni.js"></script>
     </head>
@@ -66,16 +69,54 @@
                 <div id="carrello">
                     <!-- jquery -->
                 </div>
+
                 <form id="form-carrello" action="Controller" method="POST">
                     <input type="hidden" name="action" value="add-prenotazione"/>
                     <input type="hidden" name="num_pizze" value='0'/>
-                    <input type="text" name="dataConsegna" id="datapicker" 
-                           placeholder="data di consegna" readonly="readonly"/>
-                    <input type="text" name="oraConsegna" id="timepicker" 
-                           placeholder="Orario di consegna"/> 
+                    <!--
+                    <div id="datepicker" class="form-group">
+                        <label for="datepicker">Data consegna</label>
+                        <div class="input-group">
+                            <input name="dataConsegna" type="text" 
+                                   class="form-control" placeholder="gg-mm-yyyy">
+                            <span class="input-group-addon">
+                                <i class="glyphicon glyphicon-th"></i>
+                            </span>
+                        </div>
+                    </div> -->
+
+                    <div class="form-group">
+                        <label for="data">Data consegna</label>
+                        <div id="datepicker" class="input-group date">
+                            <input id="data" name="dataConsegna" type="text" 
+                                   class="form-control"/>
+                            <span class="input-group-addon">
+                                <i class="glyphicon glyphicon-th"></i>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="orario">Ora di consegna</label>
+                        <div id="timepicker" class="input-group">
+                            <input id="orario" type="text" name="oraConsegna"
+                                   placeholder="hh:mm" class="form-control"/> 
+                            <span class="input-group-addon">
+                                <i class="glyphicon glyphicon-time"></i>
+                            </span>
+                        </div>
+                    </div> 
                     <!-- input create dinamicamente by jquery -->
                     <input type="submit" name="submit" value="Ordina!" class="btn btn-primary"/>
-                </form>
+                </form> 
+
+                <div id="result-container" class="alert alert-dismissible hidden" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <span id="result-message"></span>     
+                </div>
+
+
+
             </div>
         </div>
     </body>

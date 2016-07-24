@@ -56,28 +56,24 @@ function Prenotazione() {
 var ordine = new Prenotazione();
 
 jQuery(document).ready(function ($) {
-    $datapicker = $('#datapicker');
-    $timepicker = $('#timepicker');
 
-    $datapicker.datepicker({
-        showOn: "both", /*
-         buttonImage: "images/calendario.png",
-         buttonImageOnly: true,*/
-        minDate: 0,
-        monthNames: ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"],
-        dayNamesMin: ["Do", "Lu", "Ma", "Me", "Gi", "Ve", "Sa"],
-        dateFormat: "dd-mm-yy"
+    $('#datepicker').datepicker({
+        format: "dd-mm-yyyy",
+        weekStart: 1,
+        language: "it",
+        autoclose: true,
+        todayHighlight: true
     });
 
-    $timepicker.timepicker({
+    $('#orario').timepicker({
         minTime: '19:30',
         maxTime: '23:30',
-        forceRoundTime: true, 
-        show2400: true, 
-        timeFormat: 'H:i', 
+        forceRoundTime: true,
+        show2400: true,
+        timeFormat: 'H:i',
         step: 15
     });
-    
+
 
 
 
@@ -102,7 +98,14 @@ jQuery(document).ready(function ($) {
     });
 
 
-    $('#form-carrello').on('submit', function () {
+    $('#form-carrello').on('submit', function (event) {
+        console.log($(this).serialize()); 
+        
+        var data = $(this).find("input[name=dataConsegna]").val();
+        var ora = $(this).find("input[name=oraConsegna]").val(); 
+        
+        
+        
         if (ordine.length() > 0) {
             var inputs = [];
             //   inputs.push("<input type='number' name='num_pizze' value='" + ordine.length() + "'");
@@ -116,7 +119,7 @@ jQuery(document).ready(function ($) {
             $(this).append(inputs.join(""));
         } else {
             console.log("ordine vuoto");
-            return false;
+            event.preventDefault(); 
         }
     });
 }); 

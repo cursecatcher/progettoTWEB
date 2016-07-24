@@ -27,9 +27,16 @@
               integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" 
               crossorigin="anonymous">
 
+        <!-- jQuery -->
         <script src="https://code.jquery.com/jquery-2.2.4.min.js"   
                 integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   
         crossorigin="anonymous"></script>
+
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" 
+                integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" 
+        crossorigin="anonymous"></script>
+
 
         <link rel='stylesheet' type='text/css' href='include/lib/sol/sol.css'>
         <script type='text/javascript' src='include/lib/sol/sol.js'></script>
@@ -70,12 +77,15 @@
 
                     <div class="form-group">
                         <label for="prezzo_pizza">Prezzo pizza</label>
-                        <input id="prezzo_pizza" name="prezzo" type="number" min="0.5" step="0.1"
-                               class="form-control" placeholder="Prezzo della pizza..."/>
+                        <div class="input-group">
+                            <input id="prezzo_pizza" name="prezzo" type="number" min="0.5" step="0.1"
+                                   class="form-control" placeholder="Prezzo della pizza..."/>
+                            <span class="input-group-addon">&euro;</span>
+                        </div>
                     </div>
 
                     <div>
-                        <p><strong>Scegli gli ingredienti da mettere sulla pizza: </strong></p>
+                        <p><strong>Seleziona gli ingredienti da mettere sulla pizza </strong></p>
                         <select id='select-random' name='ingredientiPizza' multiple="multiple">
                             <c:forEach var="ingrediente" items="${ingredienti.listaIngredienti}">
                                 <option value="${ingrediente.id}">
@@ -97,8 +107,12 @@
                         Inserisci pizza
                     </button>
                 </form>
-                <div id="result-op" class="alert" role="alert"><!--jquery--></div>
-                
+                <div id="result-container" class="alert alert-dismissible hidden" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <span id="result-message"></span>
+
+                </div>
+
                 Clicca <a href='newingrediente.jsp'>qui</a> per inserire un ingrediente mancante! 
             </div>
         </div>
