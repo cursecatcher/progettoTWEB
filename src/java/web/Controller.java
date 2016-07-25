@@ -59,6 +59,9 @@ public class Controller extends HttpServlet {
             } else if (action.equalsIgnoreCase("pizza-create")) {
                 rd = ctx.getNamedDispatcher("GestoreCucina");
                 System.out.println("INSERIMENTO PIZZA");
+            } else if (action.equalsIgnoreCase("pizza-edit")) {
+                rd = ctx.getNamedDispatcher("GestoreCucina");
+                System.out.println("MODIFICA PIZZA");
             } else {
                 System.out.println("OPERAZIONE NON SUPPORTATA");
                 rd = ctx.getRequestDispatcher("/error.jsp");
@@ -106,7 +109,7 @@ public class Controller extends HttpServlet {
                 rd = ctx.getRequestDispatcher("/profilo.jsp");
             } else {
                 request.setAttribute("message", "Login richiesto per accedere alla pagina");
-                rd = ctx.getRequestDispatcher("/login.jsp"); 
+                rd = ctx.getRequestDispatcher("/login.jsp");
                 System.out.println("LOGIN REQUIRED");
             }
 
@@ -153,10 +156,12 @@ public class Controller extends HttpServlet {
             } else if (action.equalsIgnoreCase("pizza-create")) {
                 rd = ctx.getNamedDispatcher("GestoreCucina");
 
-            }
-            else if (action.equalsIgnoreCase("add-prenotazione")) {
+            } else if (action.equalsIgnoreCase("pizza-edit")) {
+                rd = ctx.getNamedDispatcher("GestoreCucina");
+
+            } else if (action.equalsIgnoreCase("add-prenotazione")) {
                 rd = ctx.getNamedDispatcher("GestorePrenotazioni");
-                
+
             }
 
             rd.forward(request, response);

@@ -21,31 +21,33 @@ import web.Query;
  */
 public class Menu {
 
-    private Collection<Pizza> pizze = new ArrayList<>();
-    private HashMap<String, String> ingredientiMap;
+    private Collection<Pizza> pizze;
+ //   private HashMap<String, String> ingredientiMap;
 
     public Menu() {
-        this.ingredientiMap = new HashMap<String, String>();
+        this.pizze = Query.getPizze();
+        
+    //    this.ingredientiMap = new HashMap<String, String>();
         System.out.println("CREAZIONE BEAN");
-
+/*
         try {
             DriverManager.registerDriver(new org.apache.derby.jdbc.ClientDriver());
             Connection conn = Query.getConnection();
             Statement st = conn.createStatement();
             ResultSet rs = Query.getAllIngredients(st); 
-            /* carico hashmap */
+            // carico hashmap 
             while (rs.next()) {
                 String key = String.valueOf(rs.getInt("id_ingrediente"));
                 this.ingredientiMap.put(key, rs.getString("nome"));
             }
 
             rs = Query.getAllPizze(st);
-            /* faccio le pizze */
+            // faccio le pizze 
             while (rs.next()) {
                 String[] ingredienti = rs.getString("ingredienti").split(",");
                 String flatlist_ingredienti = "";
 
-                /* creo stringa ingredienti pizza */
+                
                 for (String key : ingredienti) {
                     flatlist_ingredienti += this.ingredientiMap.get(key) + ", ";
                 }
@@ -67,7 +69,7 @@ public class Menu {
             conn.close();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
-        }
+        }*/
     }
 
     public Collection<Pizza> getPizze() {

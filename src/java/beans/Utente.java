@@ -1,13 +1,10 @@
 package beans;
 
 import java.sql.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.apache.commons.codec.digest.DigestUtils;
-
-import verifytoken.Verify;
-
+import java.util.ArrayList;
+import java.util.Collection;
 import web.Query;
+
 
 public class Utente {
     private int id;
@@ -74,6 +71,30 @@ public class Utente {
 
     public void setRuolo(String role) {
         this.ruolo = role;
+    }
+    
+    public Collection<Prenotazione> getPrenotazioni()  {
+        Collection<Prenotazione> prenotazioniUtente = new ArrayList<>();
+        
+        try (Connection conn = Query.getConnection();
+                Statement st = conn.createStatement();
+                ResultSet rs = Query.getPrenotazioniByUserId(st, this.id);) {
+            
+            while (rs.next()) {
+                Prenotazione p = new Prenotazione(); 
+                
+                p.setDataConsegna(rs.getDate("data_consegna"));
+                p.setOrarioConsegna(rs.getTime("ora_consegna"));
+                p.setPrezzoTotale(rs.getFloat("prezzo_totale")); 
+                
+                prenotazioniUtente.add(p);
+            }
+        }
+        catch (SQLException ex) {
+            ;
+        }
+        
+        return prenotazioniUtente; 
     }
 
 }

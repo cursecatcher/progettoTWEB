@@ -1,7 +1,27 @@
 jQuery(document).ready(function ($) {
     $form_ingredienti = $('#form_newingr');
     $form_pizza = $('#form_newpi');
+    $edit_pizza = $('#form_editpi'); 
     
+
+    $(".edit-link").on('click', function() {
+        var nome = $(this).data('nome'); 
+        var id = $(this).data('id'); 
+        var prezzo = $(this).data('prezzo'); 
+        var listaIngredienti = $(this).data('ingredienti'); 
+        
+        console.log("Nome: " + nome); 
+        console.log("id: " + id); 
+        console.log("prezzo:" + prezzo); 
+        console.log("ingredienti: " + listaIngredienti);
+        
+        $('#id_pizza_edit').val(id); 
+        $('#nome_pizza_edit').val(nome); 
+        $('#prezzo_pizza_edit').val(prezzo);  
+        
+        
+        
+    }); 
 
     $('#form_newingr').submit(function (event) {
         console.log('submit!!!');

@@ -145,22 +145,13 @@ public class GestoreCliente extends HttpServlet {
                 String password = request.getParameter("password");
 
                 if (password.equals(request.getParameter("password2"))) {
-                    try (Connection conn = Query.getConnection();
-                            Statement st = conn.createStatement();
-                            ResultSet rs = Query.getUserByEmail(st, email)) {
-
-                        if (!rs.next()) {
-                            Query.insertNewClient(st, email, password);
-                            out.println("OK");
-                        } else {
-                            out.println("USER_ALREADY_EXISTS");
-                        }
-                    } catch (SQLException ex) {
-                        Logger.getLogger(GestoreCliente.class.getName()).log(Level.SEVERE, null, ex);
+                    if (Query.insertNewClient(email, password)) {
+                        out.println("OK"); 
+                    }
+                    else {
+                        out.println("USER_ALREADY_EXISTS");
                     }
                 }
-                // else..le due password non coincidono
-
             }
 
             rd.forward(request, response);

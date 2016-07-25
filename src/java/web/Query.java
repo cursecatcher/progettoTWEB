@@ -1,15 +1,18 @@
 package web;
 
+import beans.Ingrediente;
+import beans.Pizza;
 import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 
-/**
- *
- * @author nico
- */
+/* Fare in modo che i metodi restituiscano non ResultSet, ma direttamente oggetti
+ -> incapsulare tutti i metodi del db in questa classe ??*/
 public class Query {
 
     private static final String DB_URL = "jdbc:derby://localhost:1527/pizzeriaDB";
@@ -22,26 +25,82 @@ public class Query {
 
     /**
      *
-     * @param st
      * @return
-     * @throws SQLException
      */
-    public static ResultSet getAllPizze(Statement st) throws SQLException {
-        String query = "SELECT * FROM Pizza ORDER BY nome";
+    public static Collection<Pizza> getPizze() {
+        Collection<Pizza> res = new ArrayList<>();
+        String query = "SELECT * FROM Pizza";
+        String iquery = "SELECT * FROM Ingrediente";
         System.out.println("Eseguo query: " + query);
-        return st.executeQuery(query);
+
+        try (Connection conn = getConnection();
+                Statement st = conn.createStatement()) {
+            ResultSet rs = st.executeQuery(iquery);
+            // carico hashmap <id ingrediente , nome ingrediente>
+            HashMap<String, String> ingredientiMap = new HashMap<>();
+            while (rs.next()) {
+                String key = String.valueOf(rs.getInt("id_ingrediente"));
+                ingredientiMap.put(key, rs.getString("nome"));
+            }
+            rs.close();
+
+            /* faccio le pizze */
+            rs = st.executeQuery(query);
+
+            while (rs.next()) {
+                String[] ingredienti = rs.getString("ingredienti").split(",");
+                String flatlist = "";
+
+                /* creo stringa ingredienti pizza */
+                for (String key : ingredienti) {
+                    flatlist += ingredientiMap.get(key) + ", ";
+                }
+                flatlist = flatlist.substring(0, flatlist.length() - 2);
+
+                Pizza p = new Pizza();
+
+                p.setId(rs.getInt("id_pizza"));
+                p.setNome(rs.getString("nome"));
+                p.setPrezzo(rs.getFloat("prezzo"));
+                p.setListIngredienti(flatlist);
+
+                res.add(p);
+            }
+
+            rs.close();
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            res = null;
+        }
+
+        return res;
     }
 
     /**
      *
-     * @param st
      * @return
-     * @throws SQLException
      */
-    public static ResultSet getAllIngredients(Statement st) throws SQLException {
+    public static Collection<Ingrediente> getIngredienti() {
         String query = "SELECT * FROM Ingrediente ORDER BY nome";
+        Collection<Ingrediente> ingredienti = new ArrayList<>();
         System.out.println("Eseguo query: " + query);
-        return st.executeQuery(query);
+
+        try (Connection conn = getConnection();
+                Statement st = conn.createStatement();
+                ResultSet rs = st.executeQuery(query)) {
+            while (rs.next()) {
+                Ingrediente i = new Ingrediente();
+                i.setId(rs.getInt("id_ingrediente"));
+                i.setNome(rs.getString("nome"));
+                i.setPrezzo(rs.getFloat("prezzo"));
+                ingredienti.add(i);
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            ingredienti = null;
+        }
+
+        return ingredienti;
     }
 
     /**
@@ -54,16 +113,27 @@ public class Query {
      * @return true se l'inserimento va a buon fine, false altrimenti
      * @throws SQLException
      */
-    public static boolean insertNewClient(Statement st, String email, String password)
-            throws SQLException {
-        password = password == null
-                ? "null" : quote(DigestUtils.sha1Hex(password));
+    public static boolean insertNewClient(String email, String password) /*  throws SQLException*/ {
+        String query = "INSERT INTO Utente(email, password, ruolo) VALUES (?,?,'cliente')";
+        boolean res = false;
 
-        String query = "INSERT INTO UTENTE (email, password, ruolo) VALUES"
-                + parentize(quote(email.toLowerCase()), password, quote("cliente"));
+        try (Connection conn = getConnection();
+                Statement st = conn.createStatement();
+                ResultSet rs = getUserByEmail(st, email);) {
+            /* Controllo se esiste un utente registrato con la stessa mail */
+            if (!rs.next()) {
+                try (PreparedStatement pst = conn.prepareStatement(query);) {
+                    pst.setString(1, email.toLowerCase());
+                    pst.setString(2, DigestUtils.sha1Hex(password));
+                    res = pst.executeUpdate() == 1;
+                }
+            }
 
-        System.out.println("Eseguo query: " + query);
-        return st.executeUpdate(query) == 1;
+        } catch (SQLException ex) {
+            System.out.println("Eccezione in Query.insertNewClient: " + ex.getMessage());
+        }
+
+        return res;
     }
 
     /**
@@ -97,13 +167,21 @@ public class Query {
      * altrimenti
      * @throws SQLException
      */
-    public static boolean updateUserPassword(Statement st, int id_cliente, String password)
-            throws SQLException {
-        password = quote(DigestUtils.sha1Hex(password));
-        String query = "UPDATE Utente SET password=" + password
-                + " WHERE id_utente=" + id_cliente;
-        System.out.println("Eseguo query: " + query);
-        return st.executeUpdate(query) == 1;
+    private static boolean updateUserPassword(int id_cliente, String password) {
+        String query = "UPDATE Utente SET password=? WHERE id_utente=?";
+        boolean res = false; 
+        
+        try (Connection conn = getConnection(); 
+                PreparedStatement pst = conn.prepareStatement(query);) {
+            pst.setString(1, DigestUtils.sha1Hex(password)); 
+            pst.setInt(2, id_cliente);
+            res = pst.executeUpdate() == 1; 
+        }
+        catch (SQLException ex) {
+            System.out.println("Eccezione in Query.updateUserPassword: " + ex.getMessage()); 
+        }
+        
+        return res; 
     }
 
     /**
@@ -131,13 +209,26 @@ public class Query {
      * @return true se l'inserimento è andato a buon fine, false altrimenti
      * @throws SQLException
      */
-    public static boolean insertIngrediente(Statement st, String nome, float prezzo)
-            throws SQLException {
-        nome = quote(nome.toLowerCase());
-        String query = "INSERT INTO Ingrediente(nome, prezzo) VALUES "
-                + parentize(nome, Float.toString(prezzo));
-        System.out.println("Eseguo query: " + query);
-        return st.executeUpdate(query) == 1;
+    public static boolean insertIngrediente(String nome, float prezzo) {
+        String query = "INSERT INTO Ingrediente(nome, prezzo) VALUES (?, ?)"; 
+        boolean res = false; 
+        
+        try (Connection conn = getConnection();
+                Statement st = conn.createStatement(); 
+                ResultSet rs = getIngredientByName(st, nome)) {
+            if (!rs.next()) {
+                try (PreparedStatement pst = conn.prepareStatement(query)) {
+                    pst.setString(1, nome.toLowerCase());
+                    pst.setFloat(2, prezzo);
+                    res = pst.executeUpdate() == 1; 
+                }
+            }
+        }
+        catch (SQLException ex) {
+            System.out.println("Eccezione in Query.insertIngrediente: " + ex.getMessage()); 
+        }
+        
+        return res; 
     }
 
     /**
@@ -150,13 +241,36 @@ public class Query {
      * @return true se l'inserimento va a buon fine, false altrimenti
      * @throws SQLException
      */
-    public static boolean insertPizza(Statement st, String nome, float prezzo, String ingredienti)
+    private static boolean insertPizza(Statement st, String nome, float prezzo, String ingredienti)
             throws SQLException {
         nome = quote(nome.toLowerCase());
         String query = "INSERT INTO Pizza(nome, prezzo, ingredienti) VALUES "
                 + parentize(nome, Float.toString(prezzo), quote(ingredienti));
         System.out.println("Eseguo query: " + query);
         return st.executeUpdate(query) == 1;
+    }
+    
+    public static boolean insertPizza(String nome, float prezzo, String ingredienti) {
+        String query = "INSERT INTO Pizza(nome, prezzo, ingredienti) VALUES (?,?,?)"; 
+        boolean res = false; 
+        
+        try (Connection conn = getConnection(); 
+                Statement st = conn.createStatement();
+                ResultSet rs = getPizzaByName(st, nome)) {
+            if (!rs.next()) {
+                try (PreparedStatement pst = conn.prepareStatement(query)) {
+                    pst.setString(1, nome);
+                    pst.setFloat(2, prezzo);
+                    pst.setString(3, ingredienti);
+                    res = pst.executeUpdate() == 1; 
+                }
+            }
+        }
+        catch (SQLException ex) {
+            
+        }
+        
+        return res; 
     }
 
     /**
@@ -229,6 +343,13 @@ public class Query {
         System.out.println("Eseguo query: " + query);
 
         return 0;
+    }
+
+    public static ResultSet getPrenotazioniByUserId(Statement st, int userId)
+            throws SQLException {
+        String query = "SELECT * FROM Prenotazione WHERE fk_utente=" + userId;
+        System.out.println("Eseguo query: " + query);
+        return st.executeQuery(query);
     }
 
 

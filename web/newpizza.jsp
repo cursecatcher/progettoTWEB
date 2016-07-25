@@ -52,7 +52,11 @@
                 <c:forEach var="pizza" items="${menu.pizze}">
                     <div class="row-fluid">
                         <span class="text-uppercase">
-                            <c:out value="${pizza.nome}"/>
+                            <a href="#0" class="edit-link"
+                               data-id="${pizza.id}" data-nome="${pizza.nome}" 
+                               data-prezzo="${pizza.prezzo}" data-ingredienti="1 2 3">
+                                <c:out value="${pizza.nome}"/>
+                            </a>
                         </span>
                         <span class="pull-right">
                             <c:out value="${pizza.prezzo}"/>&nbsp;&euro;
@@ -64,56 +68,107 @@
                 </c:forEach>
             </div>
 
+
             <div class="col-md-6">
-                <h1>Nuova pizza</h1>
+                
+                <div id="inserimento-pizza">
+                    <h1>Nuova pizza</h1>
 
-                <form id="form_newpi" action="Controller" method="POST">
-                    <input type="hidden" name="action" value="pizza-create"/>
-                    <div class="form-group">
-                        <label for="nome_pizza">Nome pizza</label>
-                        <input id="nome_pizza" name="nome" type="text" class="form-control"
-                               placeholder="Nome della pizza"/>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="prezzo_pizza">Prezzo pizza</label>
-                        <div class="input-group">
-                            <input id="prezzo_pizza" name="prezzo" type="number" min="0.5" step="0.1"
-                                   class="form-control" placeholder="Prezzo della pizza..."/>
-                            <span class="input-group-addon">&euro;</span>
+                    <form id="form_newpi" action="Controller" method="POST">
+                        <!--action-->
+                        <input type="hidden" name="action" value="pizza-create"/>
+                        <!-- nome pizza -->
+                        <div class="form-group">
+                            <label for="nome_pizza_create">Nome pizza</label>
+                            <input id="nome_pizza_create" name="nome" type="text" class="form-control"
+                                   placeholder="Nome della pizza"/>
                         </div>
-                    </div>
+                        <!-- prezzo -->
+                        <div class="form-group">
+                            <label for="prezzo_pizza_create">Prezzo pizza</label>
+                            <div class="input-group">
+                                <input id="prezzo_pizza_create" name="prezzo" type="number" min="0.5" step="0.1"
+                                       class="form-control" placeholder="Prezzo della pizza..."/>
+                                <span class="input-group-addon">&euro;</span>
+                            </div>
+                        </div>
+                        <!-- ingredienti -->
+                        <div>
+                            <p><strong>Seleziona gli ingredienti da mettere sulla pizza </strong></p>
+                            <select id='select-ingredienti' name='ingredientiPizza' multiple="multiple">
+                                <c:forEach var="ingrediente" items="${ingredienti.listaIngredienti}">
+                                    <option value="${ingrediente.id}">
+                                        ${ingrediente.nome}
+                                    </option>
+                                </c:forEach>
+                            </select>
 
-                    <div>
-                        <p><strong>Seleziona gli ingredienti da mettere sulla pizza </strong></p>
-                        <select id='select-random' name='ingredientiPizza' multiple="multiple">
-                            <c:forEach var="ingrediente" items="${ingredienti.listaIngredienti}">
-                                <option value="${ingrediente.id}">
-                                    ${ingrediente.nome}
-                                </option>
-                            </c:forEach>
-                        </select>
-
-                        <script type='text/javascript'>
-                            $(function () {
-                                $('#select-random').searchableOptionList({
-                                    maxHeight: '200px'
+                            <script type='text/javascript'>
+                                $(function () {
+                                    $('#select-ingredienti').searchableOptionList({
+                                        maxHeight: '200px'
+                                    });
                                 });
-                            });
-                        </script>
+                            </script>
+                        </div>
+                        <br/>
+                        <button id='submit-newpi' type="submit" class="btn btn-default">
+                            Inserisci pizza
+                        </button>
+                    </form>
+                    <div id="result-container" class="alert alert-dismissible hidden" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <span id="result-message"></span>
+
                     </div>
-                    <br/>
-                    <button id='submit-newpi' type="submit" class="btn btn-default">
-                        Inserisci pizza
-                    </button>
-                </form>
-                <div id="result-container" class="alert alert-dismissible hidden" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <span id="result-message"></span>
 
+                    Clicca <a href='newingrediente.jsp'>qui</a> per inserire un ingrediente mancante! 
+                </div> 
+                <div id="modifica-pizza">
+                    <h1>Modifica pizza</h1>
+                    <form id="editpi-form" action="Controller" method="POST">
+                        <input type="hidden" name="action" value="pizza-edit"/>
+                        <input type="hidden" name="id" id="id_pizza_edit" value="-1"/>
+
+                        <div class="form-group">
+                            <label for="nome_pizza_edit">Nome pizza</label>
+                            <input id="nome_pizza_edit" name="nome" type="text" class="form-control"
+                                   placeholder="Nome della pizza"/>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="prezzo_pizza_edit">Prezzo pizza</label>
+                            <div class="input-group">
+                                <input id="prezzo_pizza_edit" name="prezzo" type="number" min="0.5" step="0.1"
+                                       class="form-control" placeholder="Prezzo della pizza..."/>
+                                <span class="input-group-addon">&euro;</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <p><strong>Seleziona gli ingredienti da mettere sulla pizza </strong></p>
+                            <select id='select-random' name='ingredientiPizza' multiple="multiple">
+                                <c:forEach var="ingrediente" items="${ingredienti.listaIngredienti}">
+                                    <option value="${ingrediente.id}">
+                                        ${ingrediente.nome}
+                                    </option>
+                                </c:forEach>
+                            </select>
+
+                            <script type='text/javascript'>
+                                $(function () {
+                                    $('#select-random').searchableOptionList({
+                                        maxHeight: '200px'
+                                    });
+                                });
+                            </script>
+                        </div>
+                        <br/>
+                        <button id='submit-editpi' type="submit" class="btn btn-default">
+                            Conferma modifiche
+                        </button>
+                    </form>
                 </div>
-
-                Clicca <a href='newingrediente.jsp'>qui</a> per inserire un ingrediente mancante! 
             </div>
         </div>
     </body>

@@ -31,32 +31,46 @@
     <body>
 
         <%@include file="include/header.jsp" %>
-        
+
         <div class="container">
-            <h1>Hello World!</h1>
+            <div class="col-md-6">
+                <h1>Profilo utente </h1>
 
-            ${user.id} <br/>
-            Sei loggato come: ${user.email}<br/>
-            Ruolo utente: ${user.ruolo}<br/>
+                ${user.id} <br/>
+                Sei loggato come: ${user.email}<br/>
+                Ruolo utente: ${user.ruolo}<br/>
 
-            <p>
-            <form action="Controller" method="GET">
-                <input type="hidden" name="action" value="newpizza"/>
-                <input type="submit" class="btn btn-link" value="NUOVA PIZZA"/>  
-            </form>
-        </p>
+                <p>
+                <form action="Controller" method="GET">
+                    <input type="hidden" name="action" value="newpizza"/>
+                    <input type="submit" class="btn btn-link" value="NUOVA PIZZA"/>  
+                </form>
+                </p>
 
-        <p>
-            <a href="newpizza.jsp">NUOVA PIZZA</a>. 
-            (solo amministratore)
-        </p>
-        <p>
-            <a href="newordine.jsp">PRENOTAZIONE</a> 
-            (cliente && amministratore)
-        </p>
-        <p>
-            <a href="gestione-prenotazioni.jsp">Archivio Prenotazioni</a>
-        </p>
-    </div>
-</body>
+                <p>
+                    <a href="newpizza.jsp">NUOVA PIZZA</a>. 
+                    (solo amministratore)
+                </p>
+                <p>
+                    <a href="newordine.jsp">PRENOTAZIONE</a> 
+                    (cliente && amministratore)
+                </p>
+                <p>
+                    <a href="gestione-prenotazioni.jsp">Archivio Prenotazioni</a>
+                </p>
+            </div>
+            <div class="col-md-6">
+                <h1>Le tue prenotazioni</h1>
+                
+                <c:forEach var="prenotazione" items="${user.prenotazioni}">
+                    <div class="row">
+                        Ordine<br/>
+                        Data consegna: ${prenotazione.dataConsegna} <br/>
+                        Orario consegna: ${prenotazione.orarioConsegna} <br/>
+                        ${prenotazione.prezzo} &euro; 
+                    </div>
+                </c:forEach>
+            </div>
+        </div>
+    </body>
 </html>
