@@ -18,6 +18,12 @@
         <script src="https://code.jquery.com/jquery-2.2.4.min.js"   
                 integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   
         crossorigin="anonymous"></script>
+        
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" 
+                integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" 
+        crossorigin="anonymous"></script>
+        
         <script type="text/javascript" src="include/js/log-reg-checks.js"></script>
     </head>
     <body>
@@ -44,13 +50,18 @@
                         <input id="confirm-password" type="password" name="password2" 
                                class="form-control" placeholder="Conferma password" required/>
                     </div>
-                    <input id='submit-reg' type="submit"/>
+                    <input id='submit-reg' class="btn btn-primary" type="submit" value="Iscriviti"/>
 
                 </form>
 
                 <p>
                     Hai gi&agrave; un account? Effettua il <a href="login.jsp">login</a>!
                 </p>
+                <div id="result-container" class="alert alert-dismissible hidden" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <span id="result-message"></span>
+                </div>
+
             </div>
         </div>
     </body>

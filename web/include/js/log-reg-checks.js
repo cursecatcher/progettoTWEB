@@ -6,6 +6,25 @@ jQuery(document).ready(function ($) {
     var $form_login = $('#form_login');
     var $form_reg = $('#form_reg');
 
+    $(function() {
+        var $span = $('#result-message'); 
+        var t = $span.text().trim(); 
+        
+        if (t !== "") {
+            $('#result-container').removeClass("hidden"); 
+            if (t === "WRONG_PASSWORD") {
+                $span.html("<h4>Attenzione!</h4>" + 
+                        "Password incorretta. Riprova, sarai pi&ugrave; fortunato! ");
+            }
+            else if (t === "EMAIL_NOT_FOUND") {
+                $span.html("<h4>Attenzione!</h4>" + 
+                        "L'email specificata non &egrave; associata a nessun account. Per ora");
+            }
+        }
+        
+        
+    });
+
     $('#submit-login').on('click', function (event) {
         var email = $form_login.find('input[name=email]').val().trim();
         var password = $form_login.find('input[name=password]').val();
@@ -15,43 +34,13 @@ jQuery(document).ready(function ($) {
         }
     });
 
-/*
-    $('#submit-login').on('click', function (event) {
-        event.preventDefault();
 
-        var email = $form_login.find('input[name=email]').val().trim();
-        var password = $form_login.find('input[name=password]').val();
-
-        if (email_regex.test(email)) {
-            $.post(
-                    //url 
-                    $form_login.attr("action"),
-                    //data
-                            {
-                                action: 'user-login',
-                                email: email,
-                                password: password
-                            },
-                    //callback
-                            function (response) {
-                                if (response === "OK") {
-
-                                } else {
-                                    console.log("response: " + response);
-                                }
-                            });
-                } else {
-            console.log("not valid email address");
-        }
-
-        console.log(email, password);
-
-
-
-    });*/
 
     $('#submit-reg').on('click', function (event) {
         event.preventDefault();
+
+        var $div = $('#result-container');
+        var $span = $('#result-message');
 
         var email = $form_reg.find('input[name=email]').val().trim();
         var password = $form_reg.find('input[name=password]').val();
@@ -62,13 +51,29 @@ jQuery(document).ready(function ($) {
                 $.post(
                         $form_reg.attr('action'),
                         {
-                            action: 'user-registrazione', 
-                            email: email, 
-                            password: password, 
+                            action: 'user-registrazione',
+                            email: email,
+                            password: password,
                             password2: confirmPassword
                         },
                         function (response) {
-                            console.log("response: " + response);  
+                            console.log("response: " + response);
+                            $div.removeClass("alert-success alert-warning alert-danger hidden");
+
+                            if (response === "OK") {
+                                $div.addClass("alert-success");
+                                $span.html("<h4>Registrazione effettuata con successo</h4>" +
+                                        "<a href='login.jsp'>Clicca qui</a> per accedere!");
+                            } else if (response === "USER_ALREADY_EXISTS") {
+                                $div.addClass("alert-danger");
+                                $span.html("<h4>Attenzione</h4>" +
+                                        "L'email " + email + " &egrave; gi&agrave; registrata!");
+                            } else if (response === "PASSWORD_MISMATCH") {
+                                $div.addClass("alert-warning");
+                                $span.html("<h4>Attenzione</h4>" +
+                                        "Le password non coincidono");
+                            }
+
                         }
                 );
             } else {

@@ -2,6 +2,7 @@ package web;
 
 import beans.Ingrediente;
 import beans.Pizza;
+import beans.Utente;
 import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.lang3.StringUtils;
+//import org.apache.commons.lang3.StringUtils;
 
 /* Fare in modo che i metodi restituiscano non ResultSet, ma direttamente oggetti
  -> incapsulare tutti i metodi del db in questa classe ??*/
@@ -117,11 +118,11 @@ public class Query {
         String query = "INSERT INTO Utente(email, password, ruolo) VALUES (?,?,'cliente')";
         boolean res = false;
 
-        try (Connection conn = getConnection();
+        try (Connection conn = getConnection()) {/*
                 Statement st = conn.createStatement();
-                ResultSet rs = getUserByEmail(st, email);) {
+                ResultSet rs = getUserByEmail(st, email);) {*/
             /* Controllo se esiste un utente registrato con la stessa mail */
-            if (!rs.next()) {
+            if (getUserByEmail(conn, email) == null) {
                 try (PreparedStatement pst = conn.prepareStatement(query);) {
                     pst.setString(1, email.toLowerCase());
                     pst.setString(2, DigestUtils.sha1Hex(password));
@@ -150,11 +151,56 @@ public class Query {
         System.out.println("Eseguo query: " + query);
         return st.executeQuery(query);
     }
+    
+    public static Utente getUserByEmail(Connection conn, String email) throws SQLException {
+        String query = "SELECT * FROM Utente WHERE email = ?"; 
+        Utente u = null; 
+        
+        PreparedStatement pst = conn.prepareStatement(query); 
+        pst.setString(1, email);
+        ResultSet rs = pst.executeQuery();
+        
+        if (rs.next()) {
+            u = new Utente();
+            u.setId(rs.getInt("id_utente"));
+            u.setEmail(rs.getString("email"));
+            u.setPassword(rs.getString("password"));
+            u.setRuolo(rs.getString("ruolo"));
+        }
+        
+        rs.close();
+        pst.close();
+        
+        return u; 
+    }
 
     public static ResultSet getUserById(Statement st, int id) throws SQLException {
         String query = "SELECT * FROM Utente WHERE id_utente=" + id;
         System.out.println("Eseguo query: " + query);
         return st.executeQuery(query);
+    }
+    
+    public static Utente getUserById(Connection conn, int id) throws SQLException {
+        String query = "SELECT * FROM Utente WHERE id_utente = ?"; 
+        Utente u = null; 
+        
+        PreparedStatement pst = conn.prepareStatement(query); 
+        pst.setInt(1, id);
+        
+        ResultSet rs = pst.executeQuery();
+        
+        if (rs.next()) {
+            u = new Utente();
+            u.setId(rs.getInt("id_utente"));
+            u.setEmail(rs.getString("email"));
+            u.setPassword(rs.getString("password"));
+            u.setRuolo(rs.getString("ruolo"));
+        }
+        
+        rs.close();
+        pst.close();
+        
+        return u; 
     }
 
     /**

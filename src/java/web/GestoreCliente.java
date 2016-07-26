@@ -90,7 +90,7 @@ public class GestoreCliente extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
 
         ServletContext ctx = getServletContext();
-        RequestDispatcher rd = ctx.getRequestDispatcher("/error.jsp");
+        RequestDispatcher rd = null;//ctx.getRequestDispatcher("/error.jsp");
         String action = request.getParameter("action");
         System.out.println("ServletUtente - action: " + action);
 
@@ -102,42 +102,31 @@ public class GestoreCliente extends HttpServlet {
                 String email = request.getParameter("email");
                 String password = request.getParameter("password");
 
-                try (Connection conn = Query.getConnection();
-                        Statement st = conn.createStatement();
-                        ResultSet rs = Query.getUserByEmail(st, email)) {
+                try (Connection conn = Query.getConnection()) {
+                    Utente u = Query.getUserByEmail(conn, email);
 
-                    if (rs.next()) {
-                        String user_pwd = rs.getString("password");
-
-                        if (user_pwd.equals(DigestUtils.sha1Hex(password))) {
+                    if (u != null) {
+                        if (u.getPassword().equals(DigestUtils.sha1Hex(password))) {
                             HttpSession session = request.getSession();
-                            session.setAttribute("idUtente", rs.getInt("id_utente"));
+                            session.setAttribute("idUtente", u.getId());
                             session.setAttribute("usertoken", "authenticated");
-                            /*
-                                createSession(
-                                        request.getSession(),
-                                        rs.getInt("id_utente"),
-                                        email,
-                                        rs.getString("ruolo")
-                                );*/
 
-                            Utente u = new Utente();
-                            u.setId(rs.getInt("id_utente"));
-                            u.setEmail(email);
-                            u.setRuolo(rs.getString("ruolo"));
                             request.setAttribute("user", u);
 
-                            //   out.println("OK");
                             rd = ctx.getRequestDispatcher("/profilo.jsp");
                         } else {
-                            out.println("WRONG_PASSWORD");
+                            request.setAttribute("message", "WRONG_PASSWORD");
+                            request.setAttribute("previous_email", email);
+                            rd = ctx.getRequestDispatcher("/login.jsp");
                         }
                     } else {
-                        out.println("EMAIL_NOT_FOUND");
+                        request.setAttribute("message", "EMAIL_NOT_FOUND");
+                        rd = ctx.getRequestDispatcher("/login.jsp");
                     }
-
                 } catch (SQLException ex) {
                     Logger.getLogger(GestoreCliente.class.getName()).log(Level.SEVERE, null, ex);
+                    System.out.println("Eccezione ???");
+                    //redirect a error.jsp
                 }
 
             } else if (action.equalsIgnoreCase("user-registrazione")) {
@@ -146,15 +135,21 @@ public class GestoreCliente extends HttpServlet {
 
                 if (password.equals(request.getParameter("password2"))) {
                     if (Query.insertNewClient(email, password)) {
-                        out.println("OK"); 
+                        out.print("OK");
+                    } else {
+                        out.print("USER_ALREADY_EXISTS");
                     }
-                    else {
-                        out.println("USER_ALREADY_EXISTS");
-                    }
+                } else {
+                    out.print("PASSWORD_MISMATCH");
                 }
+
+            } else {
+                rd = ctx.getRequestDispatcher("/error.jsp");
             }
 
-            rd.forward(request, response);
+            if (rd != null) {
+                rd.forward(request, response);
+            }
         }
     }
 
