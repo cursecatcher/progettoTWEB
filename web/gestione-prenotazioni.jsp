@@ -1,9 +1,3 @@
-<%-- 
-    Document   : gestione-prenotazioni
-    Created on : 15-lug-2016, 20.23.12
-    Author     : nico
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>

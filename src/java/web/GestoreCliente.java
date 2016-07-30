@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package web;
 
 import beans.Utente;
@@ -24,7 +19,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.apache.commons.codec.digest.DigestUtils;
-import verifytoken.Verify;
+import org.json.JSONObject;
+import org.json.JSONException;
+
 
 /**
  *
@@ -66,7 +63,7 @@ public class GestoreCliente extends HttpServlet {
 
             if (action == null) {
                 rd = ctx.getRequestDispatcher("/index.jsp");
-            } else {
+            }  else {
                 rd = ctx.getRequestDispatcher("/error.jsp");
             }
 

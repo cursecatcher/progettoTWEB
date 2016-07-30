@@ -107,7 +107,7 @@ public class GestoreCucina extends HttpServlet {
                 try (Connection conn = Query.getConnection();
                         Statement st = conn.createStatement()) {
 
-                    if (Query.deletePizza(st, id)) {
+                    if (Query.deletePizza(id)) {
                         System.out.println("OK");
                         out.println("OK");
                     } else {

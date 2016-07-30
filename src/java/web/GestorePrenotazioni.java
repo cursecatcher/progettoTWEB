@@ -5,6 +5,7 @@
  */
 package web;
 
+import beans.Prenotazione;
 import com.google.gson.internal.Pair;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -31,6 +32,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  *
@@ -76,7 +80,7 @@ public class GestorePrenotazioni extends HttpServlet {
 
             } else if (action.equalsIgnoreCase("add-prenotazione")) {
                 int num_pizze = Integer.parseInt(request.getParameter("num_pizze"));
-                HttpSession session = request.getSession(); 
+                HttpSession session = request.getSession();
                 java.sql.Date date = null;
                 java.sql.Time time = null;
                 /* parsing data e orario */
@@ -100,7 +104,7 @@ public class GestorePrenotazioni extends HttpServlet {
                 /* inserisci record in Prenotazione */
                 for (int i = 0; i < num_pizze; i++) {
                     String id = request.getParameter("id_pizza-" + i);
-                    String quantity = request.getParameter("quantity-" + i);                    
+                    String quantity = request.getParameter("quantity-" + i);
                     ordine.add(new Pair<>(new Integer(id), new Integer(quantity)));
                 }
 
@@ -108,44 +112,43 @@ public class GestorePrenotazioni extends HttpServlet {
                 for (Pair p : ordine) {
                     System.out.println("-" + p);
                 }
-                
+
                 /* Inserisco record prenotazione nel db */
-                String query = "INSERT INTO Prenotazione(fk_utente, data_consegna, ora_consegna) "  +
-                        "VALUES (?, ?, ?)";
+                String query = "INSERT INTO Prenotazione(fk_utente, data_consegna, ora_consegna) "
+                        + "VALUES (?, ?, ?)";
                 try (Connection conn = Query.getConnection();
                         PreparedStatement st = conn.prepareStatement(
                                 query, Statement.RETURN_GENERATED_KEYS);) {
                     st.setInt(1, (int) session.getAttribute("idUtente"));
                     st.setDate(2, date);
                     st.setTime(3, time);
-                    
+
                     int affectedRows = st.executeUpdate();
                     if (affectedRows == 0) {
-                        System.out.println("ERRORE BOOOH BOOH"); 
+                        System.out.println("ERRORE BOOOH BOOH");
                     } else {
                         /* ottengo ID del record appena inserito */
                         try (ResultSet generatedKey = st.getGeneratedKeys()) {
                             if (generatedKey.next()) {
-                                long idPrenotazione = generatedKey.getLong(1); 
+                                long idPrenotazione = generatedKey.getLong(1);
                                 System.out.println("ID generato: " + idPrenotazione);
                                 /* inserisco nel db le varie componenti dell'ordine */
-                                query = "INSERT INTO PrenotazionePizza (fk_prenotazione, fk_pizza, quantita) " + 
-                                        "VALUES(?, ?, ?)";
+                                query = "INSERT INTO PrenotazionePizza (fk_prenotazione, fk_pizza, quantita) "
+                                        + "VALUES(?, ?, ?)";
                                 try (PreparedStatement st2 = conn.prepareStatement(query)) {
-                                    for (Pair p: ordine) {
-                                        st2.setInt(1, (int) idPrenotazione);                                        
+                                    for (Pair p : ordine) {
+                                        st2.setInt(1, (int) idPrenotazione);
                                         st2.setInt(2, (int) p.first);
                                         st2.setInt(3, (int) p.second);
                                         st2.addBatch();
                                     }
                                     st2.executeBatch();
-                                    
+
                                 }
                             } else {
                                 System.out.println("ERRORE  BOOH");
                             }
-                        }
-                        catch (SQLException ex2) {
+                        } catch (SQLException ex2) {
                             System.out.println("E mo?");
                             System.out.println(ex2.getMessage());
                         }
@@ -155,7 +158,6 @@ public class GestorePrenotazioni extends HttpServlet {
                     System.out.println(ex.getMessage());
                 }
 
-                
                 /*
                 try (Connection conn = Query.getConnection();
                         Statement st = conn.createStatement()) {
@@ -182,7 +184,53 @@ public class GestorePrenotazioni extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        ServletContext ctx = getServletContext();
+        RequestDispatcher rd = null;
+        String action = request.getParameter("action");
+
+        try (PrintWriter out = response.getWriter()) {
+            if (action == null) {
+                rd = ctx.getRequestDispatcher("/index.jsp"); 
+            } else if (action.equalsIgnoreCase("get-prenotazione")) {
+                JSONObject json = new JSONObject();
+                int id_prenotazione = Integer.parseInt(request.getParameter("id")); 
+
+                try {
+                    Prenotazione p = Query.getPrenotazione(id_prenotazione); 
+                    
+                    json.accumulate("data_consegna", p.getDataConsegna());
+                    json.accumulate("orario_consegna", p.getOrarioConsegna());
+                    json.accumulate("prezzo_totale", p.getPrezzo());
+                    json.accumulate("consegnato", p.isConsegnato());
+                    /* JSON ARRAY con Pizza, quantità */
+                    JSONArray pizze = new JSONArray();
+                    
+                    for (Pair<String, Integer> current: p.getOrdine()) {
+                        JSONObject temp = new JSONObject();
+                        
+                        temp.accumulate("nome_pizza", current.first); 
+                        temp.accumulate("quantita", current.second); 
+                        
+                        pizze.put(temp); 
+                    }
+                    
+                    json.accumulate("pizze", pizze);
+                    
+                } catch (JSONException ex) {
+                    System.out.println("SBRAAAAAAAAAAAA!!!" + ex.getMessage()); 
+                }
+
+                response.setContentType("application/json");
+                out.write(json.toString());
+            } else {
+
+            }
+
+            if (rd != null) {
+                rd.forward(request, response);
+            }
+        }
+
     }
 
     /**

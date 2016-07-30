@@ -27,6 +27,9 @@
         <script src="https://code.jquery.com/jquery-2.2.4.min.js"   
                 integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   
         crossorigin="anonymous"></script>
+        
+        <script type="text/javascript" src="include/js/profilo.js"></script>
+        
     </head>
     <body>
 
@@ -68,6 +71,8 @@
                         Data consegna: ${prenotazione.dataConsegna} <br/>
                         Orario consegna: ${prenotazione.orarioConsegna} <br/>
                         ${prenotazione.prezzo} &euro; 
+                        <a href="#0" class="btn btn-primary view-prenotazione" 
+                           data-id="${prenotazione.id}">Vedi dettagli</a>
                     </div>
                 </c:forEach>
             </div>

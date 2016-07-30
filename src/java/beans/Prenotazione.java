@@ -3,28 +3,32 @@ package beans;
 import java.sql.Time;
 import java.sql.Date;
 import java.util.Collection;
-import org.apache.commons.lang3.tuple.Pair;
+import com.google.gson.internal.Pair;
 
 
 public class Prenotazione {
     private int id; 
+    
     private Date dataConsegna; 
     private Time orarioConsegna; 
     private float prezzo; 
-    private Collection<Pair<Pizza, Integer>> ordine; 
+    private Collection<Pair<String, Integer>> ordine; //coppia <nome pizza, quantita>
+    private boolean consegnato; 
     
     
     public Prenotazione() {
+        this.id = -1;
         this.dataConsegna = null; 
         this.orarioConsegna = null; 
         this.prezzo = 0; 
+        this.ordine = null; 
     }
 
     public int getId() {
         return this.id;
     }
     
-    public Collection<Pair<Pizza, Integer>> getOrdine() {
+    public Collection<Pair<String, Integer>> getOrdine() {
         return this.ordine;
     }
 
@@ -39,6 +43,10 @@ public class Prenotazione {
     public float getPrezzo() {
         return this.prezzo;
     }
+    
+    public boolean isConsegnato() {
+        return consegnato;
+    }
 
     public void setId(int id) {
         this.id = id;
@@ -52,7 +60,18 @@ public class Prenotazione {
         this.orarioConsegna = orarioConsegna;
     }
 
-    public void setPrezzoTotale(float prezzo) {
-        this.prezzo = prezzo; 
+    public void setOrdine(Collection<Pair<String, Integer>> ordine) {
+        this.ordine = ordine;
     }
+
+    public void setPrezzo(float prezzo) {
+        this.prezzo = prezzo;
+    }
+
+    public void setConsegnato(boolean consegnato) {
+        this.consegnato = consegnato;
+    }
+    
+    
+    
 }
