@@ -31,7 +31,7 @@ CREATE TABLE Prenotazione (
     fk_utente INT REFERENCES Utente(id_utente),
     data_consegna DATE, 
     ora_consegna TIME,
-    prezzo_totale FLOAT,
+    /*prezzo_totale FLOAT,*/
     consegnato BOOLEAN DEFAULT FALSE 
 ); 
 

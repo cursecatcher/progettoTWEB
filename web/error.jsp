@@ -6,6 +6,8 @@
         <title>Errore</title>
     </head>
     <body>
+        <%@include file="include/header.jsp" %>
+        
         <h1>Ops!</h1>
         
         Si &egrave; verificato un errore inatteso!

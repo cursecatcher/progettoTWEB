@@ -29,7 +29,7 @@
         <script type="text/javascript" src="include/js/log-reg-checks.js"></script>
     </head>
     <body>
-        <jsp:include page="include/html/header.html"/>
+        <jsp:include page="include/header.jsp"/>
 
         <div class="container">
             <h1>Login</h1>

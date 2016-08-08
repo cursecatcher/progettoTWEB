@@ -437,6 +437,15 @@ public class Query {
 
         return pr;
     }
+    
+    public static ArrayList<Prenotazione> getPrenotazioni() {
+        ArrayList<Prenotazione> pr = new ArrayList<>();
+        String query = "SELECT * FROM ";
+        
+        
+        return pr; 
+    }
+    
 
     /**
      * ********************************************************************

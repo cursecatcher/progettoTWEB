@@ -1,5 +1,7 @@
 package web;
 
+import beans.Carrello;
+import beans.ElementoOrdine;
 import beans.Utente;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -8,6 +10,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
@@ -21,7 +24,6 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.json.JSONObject;
 import org.json.JSONException;
-
 
 /**
  *
@@ -63,7 +65,7 @@ public class GestoreCliente extends HttpServlet {
 
             if (action == null) {
                 rd = ctx.getRequestDispatcher("/index.jsp");
-            }  else {
+            } else {
                 rd = ctx.getRequestDispatcher("/error.jsp");
             }
 
@@ -106,9 +108,9 @@ public class GestoreCliente extends HttpServlet {
                         if (u.getPassword().equals(DigestUtils.sha1Hex(password))) {
                             HttpSession session = request.getSession();
                             session.setAttribute("idUtente", u.getId());
+                            session.setAttribute("user", u);
+                            session.setAttribute("carrello", new Carrello());
                             session.setAttribute("usertoken", "authenticated");
-
-                            request.setAttribute("user", u);
 
                             rd = ctx.getRequestDispatcher("/profilo.jsp");
                         } else {
@@ -140,6 +142,74 @@ public class GestoreCliente extends HttpServlet {
                     out.print("PASSWORD_MISMATCH");
                 }
 
+            } else if (action.equalsIgnoreCase("add-to-cart")) {
+                HttpSession session = request.getSession();
+                Carrello cart = (Carrello) session.getAttribute("carrello");
+                ArrayList<ElementoOrdine> ord = cart.getOrdine();
+                int idp = Integer.parseInt(request.getParameter("id_pizza"));
+                boolean found = false;
+
+                /* verifica presenza dell'elemento idp all'interno dell'ordine, 
+                 * e se è presente aggiunge un'unità del prodotto */
+                for (int i = 0; i < ord.size(); i++) {
+                    if (ord.get(i).getId() == idp) {
+                        ord.get(i).incrementQuantity();
+                        found = true;
+                        break;
+                    }
+                }
+
+                // inserisce il nuovo elemento nel carrello 
+                if (!found) {
+                    ElementoOrdine t = new ElementoOrdine();
+
+                    t.setId(idp);
+                    t.setNome((String) request.getParameter("nome"));
+                    t.setPrezzo(Float.parseFloat(request.getParameter("prezzo")));
+                    
+                    ord.add(t);
+                }
+
+                //aggiorna carrello 
+                cart.setOrdine(ord);
+                session.setAttribute("carrello", cart);
+
+                System.out.println("CARRELLO! -> " + idp);
+                
+                response.setContentType("application/json");
+                out.write(cart.getJSON().toString());
+                
+
+            } else if (action.equalsIgnoreCase("remove-to-cart")) {
+                HttpSession session = request.getSession();
+                Carrello cart = (Carrello) session.getAttribute("carrello");
+                ArrayList<ElementoOrdine> ord = cart.getOrdine();
+                int idp = Integer.parseInt(request.getParameter("id_pizza"));
+                boolean found = false;
+
+                for (int i = 0; i < ord.size(); i++) {
+                    ElementoOrdine e = ord.get(i);
+
+                    if (e.getId() == idp) {
+                        if (e.getQuantity() > 1) {
+                            ord.get(i).decrementQuantity();
+                        } else {
+                            ord.remove(i);
+                        }
+                        found = true; 
+                        break;
+                    }
+                }
+
+                if (!found) {
+                    System.out.println("WTF SITUATION");
+                }
+                //aggiorna carrello 
+                cart.setOrdine(ord);
+                session.setAttribute("carrello", cart);
+                response.setContentType("application/json");
+                out.write(cart.getJSON().toString());
+                
             } else {
                 rd = ctx.getRequestDispatcher("/error.jsp");
             }

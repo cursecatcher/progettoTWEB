@@ -28,8 +28,13 @@
                 integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   
         crossorigin="anonymous"></script>
         
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" 
+                integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" 
+        crossorigin="anonymous"></script>
+
         <script type="text/javascript" src="include/js/profilo.js"></script>
-        
+
     </head>
     <body>
 
@@ -64,15 +69,21 @@
             </div>
             <div class="col-md-6">
                 <h1>Le tue prenotazioni</h1>
-                
+
                 <c:forEach var="prenotazione" items="${user.prenotazioni}">
                     <div class="row">
                         Ordine<br/>
                         Data consegna: ${prenotazione.dataConsegna} <br/>
                         Orario consegna: ${prenotazione.orarioConsegna} <br/>
                         ${prenotazione.prezzo} &euro; 
-                        <a href="#0" class="btn btn-primary view-prenotazione" 
-                           data-id="${prenotazione.id}">Vedi dettagli</a>
+                        <a class="btn btn-primary view-prenotazione" role="button" 
+                           data-toggle="collapse" 
+                           data-id="${prenotazione.id}"
+                           href="#collapseExample" 
+                           aria-expanded="false" 
+                           aria-controls="collapseExample">
+                            Vedi dettagli
+                        </a>
                     </div>
                 </c:forEach>
             </div>

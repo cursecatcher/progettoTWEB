@@ -114,6 +114,14 @@ public class Controller extends HttpServlet {
                 rd = ctx.getNamedDispatcher("GestorePrenotazioni");
 
             }
+            else if (action.equalsIgnoreCase("add-to-cart")) {
+                rd = ctx.getNamedDispatcher("GestoreCliente");
+                
+            }
+            else if (action.equalsIgnoreCase("remove-to-cart")) {
+                rd = ctx.getNamedDispatcher("GestoreCliente");
+                
+            }
 
             rd.forward(request, response);
         }

@@ -37,7 +37,7 @@ public class Utente {
             st.close();
             conn.close(); 
         } catch (SQLException ex) {
-            ;
+            System.out.println("SMERDO  init utente- " +  ex.getMessage());
         }
     }
 
@@ -85,14 +85,13 @@ public class Utente {
                 
                 p.setDataConsegna(rs.getDate("data_consegna"));
                 p.setOrarioConsegna(rs.getTime("ora_consegna"));
-                p.setPrezzo(rs.getFloat("prezzo_totale")); 
                 p.setId(rs.getInt("id_prenotazione"));
                 
                 prenotazioniUtente.add(p);
             }
         }
         catch (SQLException ex) {
-            ;
+            System.out.println("SMERDO - getPrenotazioni" +  ex.getMessage());
         }
         
         return prenotazioniUtente; 

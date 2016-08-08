@@ -44,7 +44,7 @@
         <script type='text/javascript' src='include/js/gnammy-script.js'></script>
     </head>
     <body>
-        <jsp:include page="include/html/header.html"/>
+        <%@include file="include/header.jsp" %>
 
         <div class='container'>
             <div class="col-md-6">

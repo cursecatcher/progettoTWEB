@@ -47,21 +47,58 @@
                 <h1>Prenotazione</h1>
                 <div id="elenco-pizze">
                     <c:forEach var="pizza" items="${menu.pizze}">
+                        <p>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <span class="pizza-nome text-uppercase">
+                                    <strong><c:out value="${pizza.nome}"/></strong>
+                                </span>
+                            </div>
+                            <div class="col-md-6">
+                                <span class="pizza-prezzo pull-right">
+                                    <strong>&euro;&nbsp;<c:out value="${pizza.prezzo}"/></strong>
+                                    <a class="btn btn-success choose-pizza" href="#0"
+                                       data-id-pizza="${pizza.id}"
+                                       data-nome-pizza="${pizza.nome}"
+                                       data-prezzo-pizza="${pizza.prezzo}">
+                                        <span class="glyphicon glyphicon-plus"></span>
+                                    </a>
+
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-11">
+                                <span class="text-capitalize">
+                                    <c:out value="${pizza.listaIngredienti}"/>
+                                </span>
+                            </div>
+                        </div>
+                        </p>
+                    </c:forEach>
+
+                    <%--
+                    <c:forEach var="pizza" items="${menu.pizze}">
                         <div class="menu-pizza row">
                             <!-- link scelta pizza -->
+                            
+                            
                             <a class="choose-pizza" href="#0"
                                data-id-pizza="${pizza.id}"
-                               data-nome-pizza="${pizza.nome}">
+                               data-nome-pizza="${pizza.nome}"
+                               data-prezzo-pizza="${pizza.prezzo}">
                                 <span class="glyphicon glyphicon-plus"></span>
                             </a>
+                                
+                                
                             <span class="pizza-nome text-uppercase">
-                                <c:out value="${pizza.nome}"/>
+                                <strong><c:out value="${pizza.nome}"/></strong>
                             </span>
                             <span class="pizza-prezzo pull-right">
-                                <c:out value="${pizza.prezzo}"/>&nbsp;&euro;
+                                <strong><c:out value="${pizza.prezzo}"/>&nbsp;&euro;</strong>
                             </span>
                         </div> 
-                    </c:forEach> 
+                    </c:forEach> --%>
                 </div>
             </div>
             <div class="col-md-6">
@@ -107,7 +144,12 @@
                         </div>
                     </div> 
                     <!-- input create dinamicamente by jquery -->
+
                     <input type="submit" name="submit" value="Ordina!" class="btn btn-primary"/>
+                    <div>
+                        PAGAH:
+                        <span id="prezzo-tot">0.00</span>&euro;
+                    </div>
                 </form> 
 
                 <div id="result-container" class="alert alert-dismissible hidden" role="alert">

@@ -25,6 +25,9 @@
         crossorigin="anonymous"></script>
     </head>
     <body>
-        <h1>Elenco prenotazioni...</h1>
+        <%@include file="include/header.jsp" %>
+        
+        <h1>Prenotazioni utenti - solo admin</h1>
+        
     </body>
 </html>

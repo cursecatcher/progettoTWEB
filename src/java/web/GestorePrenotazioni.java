@@ -55,17 +55,88 @@ public class GestorePrenotazioni extends HttpServlet {
         }
     }
 
+  
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
+     * Handles the HTTP <code>GET</code> method.
      *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        ServletContext ctx = getServletContext();
+        RequestDispatcher rd = null;
+        String action = request.getParameter("action");
+
+        try (PrintWriter out = response.getWriter()) {
+            if (action == null) {
+                rd = ctx.getRequestDispatcher("/index.jsp"); 
+            } else if (action.equalsIgnoreCase("get-prenotazione")) {
+                JSONObject json = new JSONObject();
+                int id_prenotazione = Integer.parseInt(request.getParameter("id")); 
+
+                try {
+                    Prenotazione p = Query.getPrenotazione(id_prenotazione); 
+                    
+                    json.accumulate("data_consegna", p.getDataConsegna());
+                    json.accumulate("orario_consegna", p.getOrarioConsegna());
+                    json.accumulate("prezzo_totale", p.getPrezzo());
+                    json.accumulate("consegnato", p.isConsegnato());
+                    /* JSON ARRAY con Pizza, quantità */
+                    JSONArray pizze = new JSONArray();
+                    
+                    for (Pair<String, Integer> current: p.getOrdine()) {
+                        JSONObject temp = new JSONObject();
+                        
+                        temp.accumulate("nome_pizza", current.first); 
+                        temp.accumulate("quantita", current.second); 
+                        
+                        pizze.put(temp); 
+                    }
+                    
+                    json.accumulate("pizze", pizze);
+                    
+                } catch (JSONException ex) {
+                    System.out.println("SBRAAAAAAAAAAAA!!!" + ex.getMessage()); 
+                }
+
+                response.setContentType("application/json");
+                out.write(json.toString());
+            } else if (action.equalsIgnoreCase("get-all-prenotazioni")) {
+               JSONArray json_prenotazioni = new JSONArray();
+               
+               
+                
+               response.setContentType("application/json");
+               out.write(json_prenotazioni.toString());
+            }
+            
+            else {
+
+            }
+
+            if (rd != null) {
+                rd.forward(request, response);
+            }
+        }
+
+    }
+
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        
         response.setContentType("text/html;charset=UTF-8");
 
         ServletContext ctx = getServletContext();
@@ -170,81 +241,6 @@ public class GestorePrenotazioni extends HttpServlet {
 
             //      rd.forward(request, response);
         }
-    }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        ServletContext ctx = getServletContext();
-        RequestDispatcher rd = null;
-        String action = request.getParameter("action");
-
-        try (PrintWriter out = response.getWriter()) {
-            if (action == null) {
-                rd = ctx.getRequestDispatcher("/index.jsp"); 
-            } else if (action.equalsIgnoreCase("get-prenotazione")) {
-                JSONObject json = new JSONObject();
-                int id_prenotazione = Integer.parseInt(request.getParameter("id")); 
-
-                try {
-                    Prenotazione p = Query.getPrenotazione(id_prenotazione); 
-                    
-                    json.accumulate("data_consegna", p.getDataConsegna());
-                    json.accumulate("orario_consegna", p.getOrarioConsegna());
-                    json.accumulate("prezzo_totale", p.getPrezzo());
-                    json.accumulate("consegnato", p.isConsegnato());
-                    /* JSON ARRAY con Pizza, quantità */
-                    JSONArray pizze = new JSONArray();
-                    
-                    for (Pair<String, Integer> current: p.getOrdine()) {
-                        JSONObject temp = new JSONObject();
-                        
-                        temp.accumulate("nome_pizza", current.first); 
-                        temp.accumulate("quantita", current.second); 
-                        
-                        pizze.put(temp); 
-                    }
-                    
-                    json.accumulate("pizze", pizze);
-                    
-                } catch (JSONException ex) {
-                    System.out.println("SBRAAAAAAAAAAAA!!!" + ex.getMessage()); 
-                }
-
-                response.setContentType("application/json");
-                out.write(json.toString());
-            } else {
-
-            }
-
-            if (rd != null) {
-                rd.forward(request, response);
-            }
-        }
-
-    }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
     }
 
     /**
