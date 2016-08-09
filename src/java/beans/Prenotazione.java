@@ -4,6 +4,7 @@ import java.sql.Time;
 import java.sql.Date;
 import java.util.Collection;
 import com.google.gson.internal.Pair;
+import java.util.ArrayList;
 
 
 public class Prenotazione {
@@ -12,7 +13,8 @@ public class Prenotazione {
     private Date dataConsegna; 
     private Time orarioConsegna; 
     private float prezzo; 
-    private Collection<Pair<String, Integer>> ordine; //coppia <nome pizza, quantita>
+//    private Collection<Pair<String, Integer>> ordine; //coppia <nome pizza, quantita>
+    private ArrayList<ElementoOrdine> ordine; 
     private boolean consegnato; 
     
     
@@ -28,9 +30,17 @@ public class Prenotazione {
         return this.id;
     }
     
-    public Collection<Pair<String, Integer>> getOrdine() {
+    public ArrayList<ElementoOrdine> getOrdine() {
         return this.ordine;
     }
+    
+    public void setOrdine(ArrayList<ElementoOrdine> ordine) {
+        this.ordine = ordine; 
+    }
+    /*
+    public Collection<Pair<String, Integer>> getOrdine() {
+        return this.ordine;
+    }*/
 
     public Date getDataConsegna() {
         return this.dataConsegna;
@@ -59,10 +69,10 @@ public class Prenotazione {
     public void setOrarioConsegna(Time orarioConsegna) {
         this.orarioConsegna = orarioConsegna;
     }
-
+/*
     public void setOrdine(Collection<Pair<String, Integer>> ordine) {
         this.ordine = ordine;
-    }
+    }*/
 
     public void setPrezzo(float prezzo) {
         this.prezzo = prezzo;

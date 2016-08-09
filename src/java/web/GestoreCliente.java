@@ -145,7 +145,7 @@ public class GestoreCliente extends HttpServlet {
             } else if (action.equalsIgnoreCase("add-to-cart")) {
                 HttpSession session = request.getSession();
                 Carrello cart = (Carrello) session.getAttribute("carrello");
-                ArrayList<ElementoOrdine> ord = cart.getOrdine();
+                ArrayList<ElementoOrdine> ord = (ArrayList) cart.getOrdine();
                 int idp = Integer.parseInt(request.getParameter("id_pizza"));
                 boolean found = false;
 
@@ -164,7 +164,7 @@ public class GestoreCliente extends HttpServlet {
                     ElementoOrdine t = new ElementoOrdine();
 
                     t.setId(idp);
-                    t.setNome((String) request.getParameter("nome"));
+                    t.setNome(request.getParameter("nome").toUpperCase());
                     t.setPrezzo(Float.parseFloat(request.getParameter("prezzo")));
                     
                     ord.add(t);
@@ -179,11 +179,10 @@ public class GestoreCliente extends HttpServlet {
                 response.setContentType("application/json");
                 out.write(cart.getJSON().toString());
                 
-
             } else if (action.equalsIgnoreCase("remove-to-cart")) {
                 HttpSession session = request.getSession();
                 Carrello cart = (Carrello) session.getAttribute("carrello");
-                ArrayList<ElementoOrdine> ord = cart.getOrdine();
+                ArrayList<ElementoOrdine> ord = (ArrayList) cart.getOrdine();
                 int idp = Integer.parseInt(request.getParameter("id_pizza"));
                 boolean found = false;
 
@@ -218,13 +217,6 @@ public class GestoreCliente extends HttpServlet {
                 rd.forward(request, response);
             }
         }
-    }
-
-    private void createSession(HttpSession session, int id, String email, String ruolo) {
-        session.setAttribute("usertoken", "authenticated");
-        session.setAttribute("idUtente", id);
-        session.setAttribute("emailUtente", email);
-        session.setAttribute("ruoloUtente", ruolo);
     }
 
     /**

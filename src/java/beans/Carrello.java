@@ -18,7 +18,7 @@ public class Carrello {
         this.ordine = new ArrayList<>();
     }
 
-    public ArrayList<ElementoOrdine> getOrdine() {
+    public Collection<ElementoOrdine> getOrdine() {
         return ordine;
     }
 
@@ -27,33 +27,41 @@ public class Carrello {
     }
 
     public int getLength() {
-        int res = 0;
+        return this.ordine.stream().
+                map((e) -> e.getQuantity()).
+                reduce(0, Integer::sum);
+    }
+    
+    public boolean isEmpty() {
+        return this.ordine.size() == 0; 
+    }
 
-        for (ElementoOrdine e : this.ordine) {
-            res += e.getQuantity();
-        }
-
-        return res;
+    public float getPrezzoTotale() {
+        return this.ordine.stream().
+                map((e) -> e.getPrezzo() * e.getQuantity()).
+                reduce((float) 0, (accumulator, _item) -> accumulator + _item);
     }
 
     public JSONObject getJSON() {
-        JSONObject res = new JSONObject();        
-        JSONArray array = new JSONArray();
-
+        JSONObject res = new JSONObject();
+        
         try {
-            for (ElementoOrdine e: this.ordine) {
+            JSONArray array = new JSONArray();
+            
+            for (ElementoOrdine e : this.ordine) {
                 JSONObject je = new JSONObject();
-                
-                je.accumulate("id_pizza", e.getId()); 
-                je.accumulate("nome_pizza", e.getNome()); 
+
+                je.accumulate("id_pizza", e.getId());
+                je.accumulate("nome_pizza", e.getNome());
                 je.accumulate("quantity", e.getQuantity());
-                
-                array.put(je); 
+
+                array.put(je);
             }
-            
-            res.accumulate("ordine", array); 
-            res.accumulate("tot_pizze", this.getLength()); 
-            
+
+            res.accumulate("ordine", array);
+            res.accumulate("tot_pizze", this.getLength());
+            res.accumulate("prezzo_tot", this.getPrezzoTotale());
+
         } catch (JSONException jex) {
             System.out.println(jex.getMessage());
         }

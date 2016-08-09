@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import web.Query;
 
-
 public class Utente {
+
     private int id;
     private String email = null;
     private String password = null;
@@ -32,12 +32,12 @@ public class Utente {
                 this.ruolo = rs.getString("ruolo");
                 this.password = rs.getString("password");
             }
-            
+
             rs.close();
             st.close();
-            conn.close(); 
+            conn.close();
         } catch (SQLException ex) {
-            System.out.println("SMERDO  init utente- " +  ex.getMessage());
+            System.out.println("SMERDO  init utente- " + ex.getMessage());
         }
     }
 
@@ -72,13 +72,26 @@ public class Utente {
     public void setRuolo(String role) {
         this.ruolo = role;
     }
-    
-    public Collection<Prenotazione> getPrenotazioni()  {
-        Collection<Prenotazione> prenotazioniUtente = new ArrayList<>();
-        
+
+    public ArrayList<Prenotazione> getPrenotazioni() {
+        ArrayList<Prenotazione> prenotazioniUtente = new ArrayList<>();
+
         try (Connection conn = Query.getConnection();
                 Statement st = conn.createStatement();
-                ResultSet rs = Query.getPrenotazioniByUserId(st, this.id);) {
+                ResultSet rs = Query.getPrenotazioniByUserId(st, this.id)) {
+
+            while (rs.next()) {
+                prenotazioniUtente.add(Query.getPrenotazione(rs.getInt("id_prenotazione")));
+            }
+        } catch (SQLException ex) {
+            System.out.println("SMERDO - getPrenotazioni" + ex.getMessage());
+        }
+        
+        return prenotazioniUtente;
+        /*
+        try (Connection conn = Query.getConnection();
+                Statement st = conn.createStatement();
+                ResultSet rs = Query.getPrenotazioniByUserId(st, this.id)) {
             
             while (rs.next()) {
                 Prenotazione p = new Prenotazione(); 
@@ -92,9 +105,7 @@ public class Utente {
         }
         catch (SQLException ex) {
             System.out.println("SMERDO - getPrenotazioni" +  ex.getMessage());
-        }
-        
-        return prenotazioniUtente; 
+        }*/
     }
 
 }

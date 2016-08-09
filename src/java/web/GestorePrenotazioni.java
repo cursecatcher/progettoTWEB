@@ -5,6 +5,8 @@
  */
 package web;
 
+import beans.Carrello;
+import beans.ElementoOrdine;
 import beans.Prenotazione;
 import com.google.gson.internal.Pair;
 import java.io.IOException;
@@ -55,7 +57,6 @@ public class GestorePrenotazioni extends HttpServlet {
         }
     }
 
-  
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -73,48 +74,45 @@ public class GestorePrenotazioni extends HttpServlet {
 
         try (PrintWriter out = response.getWriter()) {
             if (action == null) {
-                rd = ctx.getRequestDispatcher("/index.jsp"); 
+                rd = ctx.getRequestDispatcher("/index.jsp");
             } else if (action.equalsIgnoreCase("get-prenotazione")) {
                 JSONObject json = new JSONObject();
-                int id_prenotazione = Integer.parseInt(request.getParameter("id")); 
+                int id_prenotazione = Integer.parseInt(request.getParameter("id"));
 
                 try {
-                    Prenotazione p = Query.getPrenotazione(id_prenotazione); 
-                    
+                    Prenotazione p = Query.getPrenotazione(id_prenotazione);
+
                     json.accumulate("data_consegna", p.getDataConsegna());
                     json.accumulate("orario_consegna", p.getOrarioConsegna());
-                    json.accumulate("prezzo_totale", p.getPrezzo());
+                    json.accumulate("prezzo_totale", p.getPrezzo()); //???
                     json.accumulate("consegnato", p.isConsegnato());
                     /* JSON ARRAY con Pizza, quantità */
                     JSONArray pizze = new JSONArray();
-                    
-                    for (Pair<String, Integer> current: p.getOrdine()) {
+
+//                    for (Pair<String, Integer> current : p.getOrdine()) {
+                    for (ElementoOrdine current : p.getOrdine()) {
                         JSONObject temp = new JSONObject();
-                        
-                        temp.accumulate("nome_pizza", current.first); 
-                        temp.accumulate("quantita", current.second); 
-                        
-                        pizze.put(temp); 
+
+                        temp.accumulate("nome_pizza", current.getNome());
+                        temp.accumulate("quantita", current.getQuantity());
+
+                        pizze.put(temp);
                     }
-                    
+
                     json.accumulate("pizze", pizze);
-                    
+
                 } catch (JSONException ex) {
-                    System.out.println("SBRAAAAAAAAAAAA!!!" + ex.getMessage()); 
+                    System.out.println("SBRAAAAAAAAAAAA!!!" + ex.getMessage());
                 }
 
                 response.setContentType("application/json");
                 out.write(json.toString());
             } else if (action.equalsIgnoreCase("get-all-prenotazioni")) {
-               JSONArray json_prenotazioni = new JSONArray();
-               
-               
-                
-               response.setContentType("application/json");
-               out.write(json_prenotazioni.toString());
-            }
-            
-            else {
+                JSONArray json_prenotazioni = new JSONArray();
+
+                response.setContentType("application/json");
+                out.write(json_prenotazioni.toString());
+            } else {
 
             }
 
@@ -136,7 +134,7 @@ public class GestorePrenotazioni extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         response.setContentType("text/html;charset=UTF-8");
 
         ServletContext ctx = getServletContext();
@@ -150,11 +148,12 @@ public class GestorePrenotazioni extends HttpServlet {
                 rd = ctx.getRequestDispatcher("/index.jsp");
 
             } else if (action.equalsIgnoreCase("add-prenotazione")) {
-                int num_pizze = Integer.parseInt(request.getParameter("num_pizze"));
+                //            int num_pizze = Integer.parseInt(request.getParameter("num_pizze"));
                 HttpSession session = request.getSession();
                 java.sql.Date date = null;
                 java.sql.Time time = null;
-                /* parsing data e orario */
+
+                // parsing data e orario
                 try {
                     SimpleDateFormat sdf = new SimpleDateFormat("dd-M-yyyy hh:mm");
                     String dataConsegna = request.getParameter("dataConsegna");
@@ -167,29 +166,12 @@ public class GestorePrenotazioni extends HttpServlet {
                     Logger.getLogger(GestorePrenotazioni.class.getName()).log(Level.SEVERE, null, ex);
                     out.println(ex.getMessage());
                 }
-                /* parsing pizze da inserire nell'ordine */
-                List<Pair<Integer, Integer>> ordine = new ArrayList<>();
-
-                out.println("Numero pizze:" + num_pizze);
-
-                /* inserisci record in Prenotazione */
-                for (int i = 0; i < num_pizze; i++) {
-                    String id = request.getParameter("id_pizza-" + i);
-                    String quantity = request.getParameter("quantity-" + i);
-                    ordine.add(new Pair<>(new Integer(id), new Integer(quantity)));
-                }
-
-                System.out.println("Sintesi ordine: ");
-                for (Pair p : ordine) {
-                    System.out.println("-" + p);
-                }
-
-                /* Inserisco record prenotazione nel db */
+                //inserisco record in Prenotazione e estraggo l'id del record
                 String query = "INSERT INTO Prenotazione(fk_utente, data_consegna, ora_consegna) "
                         + "VALUES (?, ?, ?)";
                 try (Connection conn = Query.getConnection();
                         PreparedStatement st = conn.prepareStatement(
-                                query, Statement.RETURN_GENERATED_KEYS);) {
+                                query, Statement.RETURN_GENERATED_KEYS)) {
                     st.setInt(1, (int) session.getAttribute("idUtente"));
                     st.setDate(2, date);
                     st.setTime(3, time);
@@ -198,23 +180,28 @@ public class GestorePrenotazioni extends HttpServlet {
                     if (affectedRows == 0) {
                         System.out.println("ERRORE BOOOH BOOH");
                     } else {
-                        /* ottengo ID del record appena inserito */
+                        // ottengo ID del record appena inserito 
                         try (ResultSet generatedKey = st.getGeneratedKeys()) {
                             if (generatedKey.next()) {
                                 long idPrenotazione = generatedKey.getLong(1);
                                 System.out.println("ID generato: " + idPrenotazione);
-                                /* inserisco nel db le varie componenti dell'ordine */
+
+                                // inserisco nel db le varie componenti dell'ordine 
                                 query = "INSERT INTO PrenotazionePizza (fk_prenotazione, fk_pizza, quantita) "
                                         + "VALUES(?, ?, ?)";
                                 try (PreparedStatement st2 = conn.prepareStatement(query)) {
-                                    for (Pair p : ordine) {
+                                    Carrello cart = (Carrello) session.getAttribute("carrello");
+
+                                    for (ElementoOrdine e : cart.getOrdine()) {
                                         st2.setInt(1, (int) idPrenotazione);
-                                        st2.setInt(2, (int) p.first);
-                                        st2.setInt(3, (int) p.second);
+                                        st2.setInt(2, e.getId());
+                                        st2.setInt(3, e.getQuantity());
                                         st2.addBatch();
                                     }
-                                    st2.executeBatch();
 
+                                    st2.executeBatch();
+                                    session.setAttribute("carrello", new Carrello());
+                                    rd = ctx.getRequestDispatcher("/mie-prenotazioni.jsp");
                                 }
                             } else {
                                 System.out.println("ERRORE  BOOH");
@@ -228,18 +215,11 @@ public class GestorePrenotazioni extends HttpServlet {
                     out.println("SQL EGGEZZIONALE");
                     System.out.println(ex.getMessage());
                 }
-
-                /*
-                try (Connection conn = Query.getConnection();
-                        Statement st = conn.createStatement()) {
-                    String query = "INSERT INTO Prenotazione(fk_utente, data_consegna, consegnato)";
-                }
-                catch (SQLException ex) {
-                    ;
-                }*/
             }
 
-            //      rd.forward(request, response);
+            if (rd != null) {
+                rd.forward(request, response);
+            }
         }
     }
 

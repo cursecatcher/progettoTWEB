@@ -1,5 +1,6 @@
 package web;
 
+import beans.ElementoOrdine;
 import beans.Ingrediente;
 import beans.Pizza;
 import beans.Prenotazione;
@@ -412,18 +413,23 @@ public class Query {
                 rs = pst.executeQuery();
                 
                 HashMap<Integer, Pizza> hashPizza = getHashPizza();
-                ArrayList<Pair<String, Integer>> ordine = new ArrayList();
+                ArrayList<ElementoOrdine> ordine = new ArrayList<>();
+                
+     //           ArrayList<Pair<String, Integer>> ordine = new ArrayList();
                 float tot = 0; 
 
                 while (rs.next()) {
-                    Pizza current = hashPizza.get(rs.getInt("fk_pizza")); 
+                    Pizza currentPizza = hashPizza.get(rs.getInt("fk_pizza")); 
+                    ElementoOrdine temp = new ElementoOrdine();
                     int quantity = rs.getInt("quantita"); 
                     
-                    ordine.add(new Pair(current.getId(), quantity)); 
-                    tot += quantity * current.getPrezzo();
-/*
-                    Pair<String, Integer> pcurrent
-                            = new Pair(hashpizza.get(idp), quantity);*/
+                    temp.setId(currentPizza.getId());
+                    temp.setNome(currentPizza.getNome().toUpperCase());
+                    temp.setPrezzo(currentPizza.getPrezzo());
+                    temp.setQuantity(quantity);
+                    
+                    ordine.add(temp); 
+                    tot += quantity * currentPizza.getPrezzo();
 
                 }
 

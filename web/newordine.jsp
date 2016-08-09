@@ -76,89 +76,44 @@
                         </div>
                         </p>
                     </c:forEach>
-
-                    <%--
-                    <c:forEach var="pizza" items="${menu.pizze}">
-                        <div class="menu-pizza row">
-                            <!-- link scelta pizza -->
-                            
-                            
-                            <a class="choose-pizza" href="#0"
-                               data-id-pizza="${pizza.id}"
-                               data-nome-pizza="${pizza.nome}"
-                               data-prezzo-pizza="${pizza.prezzo}">
-                                <span class="glyphicon glyphicon-plus"></span>
-                            </a>
-                                
-                                
-                            <span class="pizza-nome text-uppercase">
-                                <strong><c:out value="${pizza.nome}"/></strong>
-                            </span>
-                            <span class="pizza-prezzo pull-right">
-                                <strong><c:out value="${pizza.prezzo}"/>&nbsp;&euro;</strong>
-                            </span>
-                        </div> 
-                    </c:forEach> --%>
                 </div>
             </div>
             <div class="col-md-6">
                 <h1>Il tuo ordine</h1>
                 <div id="carrello">
-                    <!-- jquery -->
+                    <c:choose>
+                        <c:when test="${carrello.isEmpty()}">
+                            Carrello vuoto
+                        </c:when>
+                        <c:otherwise>
+                            <c:forEach var="el" items="${carrello.ordine}">
+                                <div class="row">
+                                    <a class="remove-pizza" href="#0" data-id-pizza="${el.id}">
+                                        <span class="glyphicon glyphicon-minus"></span>
+                                    </a>
+                                    <c:out value="${el.quantity}"/> x <strong><c:out value="${el.nome}"/></strong>
+                                </div>
+                            </c:forEach>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
-
-                <form id="form-carrello" action="Controller" method="POST">
-                    <input type="hidden" name="action" value="add-prenotazione"/>
-                    <input type="hidden" name="num_pizze" value='0'/>
-                    <!--
-                    <div id="datepicker" class="form-group">
-                        <label for="datepicker">Data consegna</label>
-                        <div class="input-group">
-                            <input name="dataConsegna" type="text" 
-                                   class="form-control" placeholder="gg-mm-yyyy">
-                            <span class="input-group-addon">
-                                <i class="glyphicon glyphicon-th"></i>
-                            </span>
-                        </div>
-                    </div> -->
-
-                    <div class="form-group">
-                        <label for="data">Data consegna</label>
-                        <div id="datepicker" class="input-group date">
-                            <input id="data" name="dataConsegna" type="text" 
-                                   class="form-control"/>
-                            <span class="input-group-addon">
-                                <i class="glyphicon glyphicon-th"></i>
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="orario">Ora di consegna</label>
-                        <div id="timepicker" class="input-group">
-                            <input id="orario" type="text" name="oraConsegna"
-                                   placeholder="hh:mm" class="form-control"/> 
-                            <span class="input-group-addon">
-                                <i class="glyphicon glyphicon-time"></i>
-                            </span>
-                        </div>
-                    </div> 
-                    <!-- input create dinamicamente by jquery -->
-
-                    <input type="submit" name="submit" value="Ordina!" class="btn btn-primary"/>
-                    <div>
-                        PAGAH:
-                        <span id="prezzo-tot">0.00</span>&euro;
-                    </div>
-                </form> 
+                <div>
+                    TOTALE DA PAGAHRE!!!
+                    <span id="prezzo-tot">
+                        <c:out value="${carrello.prezzoTotale}"/>
+                    </span>&nbsp;&euro;
+                </div>
+                    
+                <a href="confirm-order.jsp" class="btn btn-primary btn-block">
+                    Effettua ordine
+                </a>
 
                 <div id="result-container" class="alert alert-dismissible hidden" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                     <span id="result-message"></span>     
                 </div>
-
-
-
             </div>
         </div>
     </body>

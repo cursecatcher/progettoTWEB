@@ -10,12 +10,13 @@
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
-
                 <c:choose>
                     <c:when test="${usertoken == 'authenticated'}">
                         <li class="dropdown">
                             <a href="#0" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                Utente <span class="caret"></span>
+                                Sei loggato come 
+                                <strong><c:out value="${user.email}"/></strong>
+                                <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a href="profilo.jsp">Profilo</a></li>
@@ -28,13 +29,15 @@
                         <li>
                             <a href='#0'>
                                 <span class='glyphicon glyphicon-shopping-cart'></span>
-                                <span id="cart-badge" class='badge'>${carrello.length}</span>
+                                <span id="cart-badge" class='badge'>
+                                    <c:out value="${carrello.length}"/>
+                                </span>
                             </a>
                         </li>
                     </c:when>
-                    <c:when test="${usertoken != 'authenticated'}">
+                    <c:otherwise>
                         <li><a href='login.jsp'>Accedi</a></li>
-                        </c:when>
+                        </c:otherwise>
                     </c:choose> 
 
                 <li><a href="#0">Aiuto</a></li>
@@ -42,26 +45,3 @@
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
 </nav>
-
-
-
-<%--
-<nav class="navbar navbar-default">
-    <div class="collapse navbar-collapse">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="index.jsp">PiWeb</a>
-        </div>
-        <ul class="nav navbar-nav navbar-right">
-            <li>
-                <form action="Controller" method="GET">
-                    <input type="hidden" name="action" value="profilo"/>
-                    <input type="submit" class="btn btn-link" value="Il tuo profilo"/>
-                </form>
-            </li>
-            <li><a href="menu.jsp">Menu</a></li>
-            <li><a href="login.jsp">Login</a></li>
-            <li><a href="register.jsp">${sessionScope.usertoken}</a></li>
-            
-        </ul>
-    </div>
-</nav> --%>
