@@ -502,6 +502,47 @@ public class Query {
 
         return ret;
     }
+    
+    public static boolean confirmDeliver(int id_prenotazione) {
+        boolean res = false; 
+        String query = "UPDATE Prenotazione SET consegnato=true WHERE id_prenotazione=?"; 
+        
+        try (Connection conn = Query.getConnection(); 
+                PreparedStatement st = conn.prepareStatement(query)) {
+            st.setInt(1, id_prenotazione);
+            res = st.executeUpdate() == 1; 
+            
+        }
+        catch (SQLException ex) {
+            System.out.println("confirmDeliver exception: " + ex.getMessage()); 
+        }
+        
+        
+        return res; 
+    } 
+    
+    public static boolean deleteReservation(int id_prenotazione) {
+        String query1 = "DELETE FROM Prenotazione WHERE id_prenotazione=?"; 
+        String query2 = "DELETE FROM PrenotazionePizza WHERE fk_prenotazione=?"; 
+        boolean res = false; 
+        
+        try (Connection conn = Query.getConnection(); 
+                PreparedStatement st1 = conn.prepareStatement(query1); 
+                PreparedStatement st2 = conn.prepareStatement(query2)) {
+            //transazione???
+            st1.setInt(1, id_prenotazione);
+            st2.setInt(1, id_prenotazione);
+            
+            st2.executeUpdate(); 
+            res = st1.executeUpdate() == 1; 
+        }
+        catch (SQLException ex) {
+            System.out.println("deleteReservation exception: " + ex.getMessage()); 
+        }
+        
+        return res; 
+    }
+    
 
     /* ***************************************************************** *//*
     private static String quote(String s) {

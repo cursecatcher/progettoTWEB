@@ -31,6 +31,16 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" 
                 integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" 
         crossorigin="anonymous"></script>
+
+        <!-- bootbox -->
+        <script type="text/javascript" 
+        src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+        <!--jquery.growl -->
+        <script type="text/javascript" src="include/lib/jquery-growl/jquery.growl.js"></script>
+        <link rel="stylesheet" href="include/lib/jquery-growl/jquery.growl.css" type="text/css" />
+
+        <script type="text/javascript" src="include/js/archivio-prenotazioni.js"></script>
+        <script type="text/javascript" src="include/js/general.js"></script>
     </head>
     <body>
         <%@include file="include/header.jsp" %>
@@ -42,16 +52,20 @@
             <div class="col-md-6">
                 <div class="panel-group">
                     <c:forEach var="p" items="${user.prenotazioni}">
-
-                        <div class="panel panel-default">
+                        <div id="pren-${p.id}" class="panel panel-default">
                             <div class="panel-body">
                                 <p>
-                                    <!--jstl format date e time plzzz -->
-                                    
-                                    Consegna prevista il <strong><c:out value="${p.dataConsegna}"/></strong>
-                                    alle ore <strong><c:out value="${p.orarioConsegna}"/></strong>
+                                    Consegna prevista il 
+                                    <strong>
+                                        <fmt:formatDate value="${p.dataConsegna}" 
+                                                        pattern="dd-MM-yyyy" />
+                                    </strong>
+                                    alle ore 
+                                    <strong>
+                                        <fmt:formatDate value="${p.orarioConsegna}" 
+                                                        pattern="HH:mm" />
+                                    </strong>
                                 </p>
-
                                 <c:forEach var="el" items="${p.ordine}">
                                     <div>
                                         <c:out value="${el.quantity}"/>x&nbsp;
@@ -69,8 +83,12 @@
 
                             </div>
                             <div class="panel-footer">
-                                <a href="#0">Conferma consegna</a><br/>
-                                <a href="#0">Annulla prenotazione</a>
+                                <a href="#0" class="confirm-deliver" data-id="${p.id}">
+                                    Conferma consegna
+                                </a><br/>
+                                <a href="#0" class="delete-deliver" data-id="${p.id}" >
+                                    Annulla prenotazione
+                                </a>
                             </div>
                         </div>
                         <!-- 

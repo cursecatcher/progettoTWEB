@@ -1,4 +1,5 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <nav class="navbar navbar-default">
@@ -32,7 +33,10 @@
                                 <span id="cart-badge" class='badge'>
                                     <c:out value="${carrello.length}"/>
                                 </span>
-                            </a>
+                                <span>
+                                    <fmt:formatNumber type="number" value="${carrello.prezzoTotale}" minFractionDigits="2"/>&euro;
+                                </span>
+                            </a> 
                         </li>
                     </c:when>
                     <c:otherwise>

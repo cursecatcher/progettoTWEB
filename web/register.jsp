@@ -1,6 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
+<html> 
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Registrazione</title>
@@ -24,10 +24,14 @@
                 integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" 
         crossorigin="anonymous"></script>
         
+        <script type="text/javascript" src="include/lib/jquery-growl/jquery.growl.js"></script>
+        <link rel="stylesheet" href="include/lib/jquery-growl/jquery.growl.css" type="text/css" />
+        
         <script type="text/javascript" src="include/js/log-reg-checks.js"></script>
+        <script type="text/javascript" src="include/js/general.js"></script>
     </head>
     <body>
-        <jsp:include page="include/html/header.html"/>
+        <jsp:include page="include/header.jsp"/>
 
 
         <div class="container">

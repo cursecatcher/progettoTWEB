@@ -46,20 +46,34 @@ jQuery(document).ready(function ($) {
                 function (response) {
                     console.log("response -> " + response);
                     if (response === "OK") {
+                        $.growl.notice({
+                            title: "OK", 
+                            message: "Ingrediente <strong>" + name + "</strong> inserito con successo!"
+                        });
+                        /*
                         $div.removeClass();
                         $div.addClass("alert alert-success");
-                        $div.text("Ingrediente inserito!");
+                        $div.text("Ingrediente inserito!");*/
                     }
                     else if (response === "ERR_DUPLICATE") {
+                        $.growl.warning({
+                            title: "Ingrediente gi&agrave; presente", 
+                            message: "L'ingrediente <strong>" + name + "</strong> &egrave; gi&agrave; presente nel DB"
+                        });
+                        /*
                         $div.removeClass();
                         $div.addClass("alert alert-danger");
-                        $div.text("Ingrediente gia' presente!");
+                        $div.text("Ingrediente gia' presente!");*/
                     }
                     else if (response === "ERR_SQL_EXCEPTION") {
+                        $.growl.warning({
+                            title: "WTF", 
+                            message: "Macelli sul server! Contattare l'amministratore e gg"
+                        });/*
                         console.log("WTF");
                         $div.removeClass();
                         $div.addClass("alert alert-danger");
-                        $div.text("MACELLI SUL SERVER! SCAPPATEEEEE");
+                        $div.text("MACELLI SUL SERVER! SCAPPATEEEEE");*/
                     }
                     else {
                         console.log("???"); 
@@ -105,32 +119,52 @@ jQuery(document).ready(function ($) {
                     $div.removeClass("alert-success alert-warning alert-danger hidden"); 
                     
                     if (response == "OK") {
+                        $.growl.notice({
+                            title: "T'appost!", 
+                            message: "La pizza <strong>" + nome + "</strong> &egrave; stata inserita con successo nel DB"
+                        });
+                        /*
                         console.log("qui");
                         $div.addClass("alert-success"); 
                         $span.html("<h4>T'appost!</h4>" + 
                                 "<p>La pizza specificata &egrave; stata inserita con successo nel DB.</br>" + 
-                                "'Sta senza pensier.</p>"); 
+                                "'Sta senza pensier.</p>"); */
 
                     } else if (response == "ERR_DUPLICATE") {
+                        $.growl.warning({
+                            title: "Inserimento fallito", 
+                            message: "La pizza <strong>" + nome + "</strong> &egrave; gi&agrave; presente nel DB"
+                        });
+                        /*
                         console.log("quo");
                         $div.addClass("alert-warning"); 
                         $span.html("<h4>Inserimento non andato a buon fine</h4>" + 
                                 "<p>La pizza <strong>" + nome + "</strong> &egrave; gi&agrave; presente nel menu.</br>" +
-                                "Scegli un altro nome!</p>");  
+                                "Scegli un altro nome!</p>");  */
 
                     } else if (response == "ERR_NO_INGREDIENTI") {
+                        $.growl.error({
+                            title: "Errore!", 
+                            message: "Nessun ingrediente specificato!"
+                        });
+                        /*
                         console.log("qua");
                         $div.addClass("alert-danger"); 
                         $span.html("<h4>Inserimento non andato a buon fine</h4>" + 
-                                "<p></p>"); 
+                                "<p></p>"); */
 
                     } else if (response == "ERR_SQL_EXCEPTION") {
+                        $.growl.error({
+                            title: "Errore sul server", 
+                            message: "Si &egrave; verificato un errore inatteso sul server, boh!"
+                        });
+                        /*
                         console.log("WTF");
                         $div.addClass("alert-danger"); 
                         $span.html("<h4>Inserimento non andato a buon fine</h4>" + 
                                 "<p>Si &egrave; verificato un errore inatteso sul server.</br>" + 
                                 "Misteri dell'informatica</p>");  
-                        $span.text(response); 
+                        $span.text(response); */
                     }
                 }
         );

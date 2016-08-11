@@ -35,6 +35,7 @@
         <script type="text/javascript" src="include/lib/datepicker/bootstrap-datepicker.min.js"></script>
 
         <script type="text/javascript" src="include/js/prenotazioni.js"></script>
+        <script type="text/javascript" src="include/js/general.js"></script>
         
     </head>
     <body>

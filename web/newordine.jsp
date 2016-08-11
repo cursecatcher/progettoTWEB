@@ -37,7 +37,12 @@
         <link rel="stylesheet" href="include/lib/datepicker/bootstrap-datepicker3.min.css">
         <script type="text/javascript" src="include/lib/datepicker/bootstrap-datepicker.min.js"></script>
 
+        <!--jquery.growl -->
+        <script type="text/javascript" src="include/lib/jquery-growl/jquery.growl.js"></script>
+        <link rel="stylesheet" href="include/lib/jquery-growl/jquery.growl.css" type="text/css" />
+        
         <script type="text/javascript" src="include/js/prenotazioni.js"></script>
+        <script type="text/javascript" src="include/js/general.js"></script>
     </head>
     <body>
         <%@include file="include/header.jsp" %>

@@ -26,7 +26,12 @@
                 integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" 
         crossorigin="anonymous"></script>
         
+        <!--growl -->
+        <script type="text/javascript" src="include/lib/jquery-growl/jquery.growl.js"></script>
+        <link rel="stylesheet" href="include/lib/jquery-growl/jquery.growl.css" type="text/css" />
+        
         <script type="text/javascript" src="include/js/log-reg-checks.js"></script>
+        <script type="text/javascript" src="include/js/general.js"></script>
     </head>
     <body>
         <jsp:include page="include/header.jsp"/>
@@ -59,7 +64,7 @@
                 <div id="result-container" class="alert alert-danger alert-dismissible hidden" role="alert">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <span id="result-message">${message}</span>
-                </div>
+                </div> 
             </div>
         </div>
     </body>

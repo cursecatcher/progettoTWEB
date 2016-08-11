@@ -21,6 +21,7 @@ import javax.servlet.http.HttpSession;
  * @author nico
  */
 public class Controller extends HttpServlet {
+
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -44,8 +45,8 @@ public class Controller extends HttpServlet {
             rd = ctx.getRequestDispatcher("/index.jsp");
 
         } else if (action.equalsIgnoreCase("get-prenotazione")) {
-            rd = ctx.getNamedDispatcher("GestorePrenotazioni");             
-            
+            rd = ctx.getNamedDispatcher("GestorePrenotazioni");
+
         } else if (action.equalsIgnoreCase("newpizza")) {
             rd = ctx.getRequestDispatcher("/newpizza.jsp");
 
@@ -95,9 +96,6 @@ public class Controller extends HttpServlet {
             } else if (action.equalsIgnoreCase("user-login")) {
                 rd = ctx.getNamedDispatcher("GestoreCliente");
 
-            } else if (action.equalsIgnoreCase("login-googleplus")) {
-                rd = ctx.getNamedDispatcher("GestoreCliente");
-
             } else if (action.equalsIgnoreCase("user-registrazione")) {
                 rd = ctx.getNamedDispatcher("GestoreCliente");
 
@@ -113,14 +111,18 @@ public class Controller extends HttpServlet {
             } else if (action.equalsIgnoreCase("add-prenotazione")) {
                 rd = ctx.getNamedDispatcher("GestorePrenotazioni");
 
-            }
-            else if (action.equalsIgnoreCase("add-to-cart")) {
+            } else if (action.equalsIgnoreCase("add-to-cart")) {
                 rd = ctx.getNamedDispatcher("GestoreCliente");
-                
-            }
-            else if (action.equalsIgnoreCase("remove-to-cart")) {
+
+            } else if (action.equalsIgnoreCase("remove-to-cart")) {
                 rd = ctx.getNamedDispatcher("GestoreCliente");
-                
+
+            } else if (action.equalsIgnoreCase("confirm-deliver")) {
+                rd = ctx.getNamedDispatcher("GestorePrenotazioni");
+
+            } else if (action.equalsIgnoreCase("delete-deliver")) {
+                rd = ctx.getNamedDispatcher("GestorePrenotazioni");
+
             }
 
             rd.forward(request, response);

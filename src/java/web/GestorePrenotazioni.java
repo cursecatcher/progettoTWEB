@@ -112,7 +112,6 @@ public class GestorePrenotazioni extends HttpServlet {
 
                 response.setContentType("application/json");
                 out.write(json_prenotazioni.toString());
-            } else {
 
             }
 
@@ -138,7 +137,7 @@ public class GestorePrenotazioni extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
 
         ServletContext ctx = getServletContext();
-        RequestDispatcher rd = ctx.getRequestDispatcher("/error.jsp");
+        RequestDispatcher rd = null;//ctx.getRequestDispatcher("/error.jsp");
 
         try (PrintWriter out = response.getWriter()) {
             String action = request.getParameter("action");
@@ -215,6 +214,22 @@ public class GestorePrenotazioni extends HttpServlet {
                     out.println("SQL EGGEZZIONALE");
                     System.out.println(ex.getMessage());
                 }
+            } else if (action.equalsIgnoreCase("confirm-deliver")) {
+                int id_prenotazione = Integer.parseInt(request.getParameter("idp"));
+                String resp = Query.confirmDeliver(id_prenotazione) ? "OK" : "ERR";
+
+                System.out.println("Conferma ordine n. " + id_prenotazione + ": " + resp);
+
+                out.write(resp);
+
+            } else if (action.equalsIgnoreCase("delete-deliver")) {
+                int id_prenotazione = Integer.parseInt(request.getParameter("idp"));
+                String resp = Query.deleteReservation(id_prenotazione) ? "OK" : "ERR";
+
+                System.out.println("Cancellazione ordine n. " + id_prenotazione + ": " + resp);
+
+                out.write(resp);
+
             }
 
             if (rd != null) {

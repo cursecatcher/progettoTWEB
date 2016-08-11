@@ -33,7 +33,9 @@
                 integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" 
         crossorigin="anonymous"></script>
 
+        
         <script type="text/javascript" src="include/js/profilo.js"></script>
+        <script type="text/javascript" src="include/js/general.js"></script>
 
     </head>
     <body>
@@ -60,13 +62,18 @@
                     (solo amministratore)
                 </p>
                 <p>
-                    <a href="newordine.jsp">PRENOTAZIONE</a> 
+                    <a href="newordine.jsp">ORDINA</a> 
+                    (cliente && amministratore)
+                </p>
+                <p>
+                    <a href="mie-prenotazioni.jsp"> MIE PRENOTAZIONE</a> 
                     (cliente && amministratore)
                 </p>
                 <p>
                     <a href="gestione-prenotazioni.jsp">Archivio Prenotazioni</a>
                 </p>
             </div>
+                <%--
             <div class="col-md-6">
                 <h1>Le tue prenotazioni</h1>
 
@@ -86,7 +93,7 @@
                         </a>
                     </div>
                 </c:forEach>
-            </div>
+            </div> --%>
         </div>
     </body>
 </html>
