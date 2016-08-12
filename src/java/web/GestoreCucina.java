@@ -9,6 +9,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import static java.util.regex.Pattern.compile;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -88,8 +91,11 @@ public class GestoreCucina extends HttpServlet {
             } else if (action.equalsIgnoreCase("pizza-create")) {
                 String nome = request.getParameter("nome");
                 String id_ingredienti = request.getParameter("listaIngredienti");
+                //regex float number in Query 
+                
                 float prezzo = Float.parseFloat(request.getParameter("prezzo"));
-
+                boolean ok = true; 
+                
                 if (id_ingredienti.equalsIgnoreCase("")) {
                     System.out.println("L'admin e' un pirla -> pizza senza ingredienti");
                     out.print("ERR_NO_INGREDIENTI");

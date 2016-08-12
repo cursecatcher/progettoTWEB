@@ -27,16 +27,16 @@
                                 <li><a href="#0">Logout</a></li>
                             </ul>
                         </li>
-                        <li>
-                            <a href='#0'>
+                        <li class="dropdown">
+                            <a href="#" data-jq-dropdown="#jq-dropdown-1">
                                 <span class='glyphicon glyphicon-shopping-cart'></span>
                                 <span id="cart-badge" class='badge'>
                                     <c:out value="${carrello.length}"/>
                                 </span>
-                                <span>
-                                    <fmt:formatNumber type="number" value="${carrello.prezzoTotale}" minFractionDigits="2"/>&euro;
-                                </span>
-                            </a> 
+                                <span id="cart-euro">
+                                    <fmt:formatNumber type="number" value="${carrello.prezzoTotale}" minFractionDigits="2"/>
+                                </span>&euro;
+                            </a>
                         </li>
                     </c:when>
                     <c:otherwise>
@@ -49,3 +49,29 @@
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
 </nav>
+
+<c:if test="${usertoken == 'authenticated'}">
+    <div id="jq-dropdown-1" class="jq-dropdown jq-dropdown-tip">
+        <div class="jq-dropdown-panel">
+            <h4>Carrello</h4>
+            <div id="cart-content">
+                <c:choose>
+                    <c:when test="${carrello.isEmpty()}">
+                        Carrello vuoto
+                    </c:when>
+                    <c:otherwise>
+                        <c:forEach var="e" items="${carrello.ordine}">
+                            <div class="row" style="padding-left: 1em">
+                                <a class="remove-pizza" href="#0" 
+                                   data-id-pizza="${e.id}" data-nome-pizza="${e.nome}">
+                                    <span class="glyphicon glyphicon-minus"></span>
+                                </a>
+                                <c:out value="${e.quantity}"/>x <strong><c:out value="${e.nome}"/></strong>
+                            </div>
+                        </c:forEach>
+                    </c:otherwise>
+                </c:choose>   
+            </div>
+        </div>
+    </div>
+</c:if>

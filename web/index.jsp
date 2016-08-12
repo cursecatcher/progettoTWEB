@@ -26,9 +26,15 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" 
                 integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" 
         crossorigin="anonymous"></script>
+        <!--growl -->
+        <script type="text/javascript" src="include/lib/jquery-growl/jquery.growl.js"></script>
+        <link rel="stylesheet" href="include/lib/jquery-growl/jquery.growl.css" type="text/css" />
+        <!-- jQuery dropdown -->
+        <link type="text/css" rel="stylesheet" href="include/lib/jquery-dropdown/jquery.dropdown.min.css" />
+        <script type="text/javascript" src="include/lib/jquery-dropdown/jquery.dropdown.min.js"></script>
 
-        <script type="text/javascript" src="include/js/general.js"></script>
 
+        <script type="text/javascript" src="include/js/general.js"></script>        
     </head>
     <body>
         <jsp:include page="include/header.jsp"/>

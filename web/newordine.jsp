@@ -40,7 +40,10 @@
         <!--jquery.growl -->
         <script type="text/javascript" src="include/lib/jquery-growl/jquery.growl.js"></script>
         <link rel="stylesheet" href="include/lib/jquery-growl/jquery.growl.css" type="text/css" />
-        
+        <!-- jQuery dropdown -->
+        <link type="text/css" rel="stylesheet" href="include/lib/jquery-dropdown/jquery.dropdown.min.css" />
+        <script type="text/javascript" src="include/lib/jquery-dropdown/jquery.dropdown.min.js"></script>
+
         <script type="text/javascript" src="include/js/prenotazioni.js"></script>
         <script type="text/javascript" src="include/js/general.js"></script>
     </head>
@@ -83,8 +86,10 @@
                     </c:forEach>
                 </div>
             </div>
+            
             <div class="col-md-6">
                 <h1>Il tuo ordine</h1>
+                <%--
                 <div id="carrello">
                     <c:choose>
                         <c:when test="${carrello.isEmpty()}">
@@ -107,18 +112,16 @@
                     <span id="prezzo-tot">
                         <c:out value="${carrello.prezzoTotale}"/>
                     </span>&nbsp;&euro;
-                </div>
-                    
-                <a href="confirm-order.jsp" class="btn btn-primary btn-block">
-                    Effettua ordine
-                </a>
+                </div> --%>
 
-                <div id="result-container" class="alert alert-dismissible hidden" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <span id="result-message"></span>     
-                </div>
+                <form action="Controller" method="GET">
+                    <input type="hidden" name="action" value="proceed-to-order"/>
+                    <input type="submit" name="submit" value="Effettua ordine"
+                           class="btn btn-primary btn-block"/>   
+                    <span id="error" class="hide">
+                        <c:out value="${message}"/>
+                    </span>
+                </form>    
             </div>
         </div>
     </body>

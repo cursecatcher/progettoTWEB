@@ -17,13 +17,13 @@ import org.apache.commons.codec.digest.DigestUtils;
 import com.google.gson.internal.Pair;
 //import org.apache.commons.lang3.StringUtils;
 
-/* Fare in modo che i metodi restituiscano non ResultSet, ma direttamente oggetti
- -> incapsulare tutti i metodi del db in questa classe ??*/
-public class Query {
 
+public class Query {
     private static final String DB_URL = "jdbc:derby://localhost:1527/pizzeriaDB";
     private static final String DB_USER = "nicola";
     private static final String DB_PASSWORD = "asd123";
+    
+    public static final String float_regex = "[+-]([0-9]*[.])?[0-9]+"; 
 
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
@@ -182,7 +182,7 @@ public class Query {
     }
 
     public static Utente getUserById(Connection conn, int id) throws SQLException {
-        String query = "SELECT * FROM Utente WHERE id_utente = ?";
+        String query = "SELECT * FROM Utente WHERE id_utente=?";
         Utente u = null;
 
         try (PreparedStatement pst = conn.prepareStatement(query)) {

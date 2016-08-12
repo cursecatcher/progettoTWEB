@@ -5,6 +5,7 @@
  */
 package web;
 
+import beans.Carrello;
 import beans.Utente;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -65,6 +66,20 @@ public class Controller extends HttpServlet {
                 System.out.println("LOGIN REQUIRED");
             }
 
+        } else if (action.equalsIgnoreCase("proceed-to-order")) {
+            HttpSession session = request.getSession(); 
+            Carrello cart = (Carrello) session.getAttribute("carrello");
+            
+            if (cart.isEmpty()) {
+                request.setAttribute("message", "FAIL");
+                rd = ctx.getRequestDispatcher("/newordine.jsp"); 
+            }
+            else {
+                rd = ctx.getRequestDispatcher("/confirm-order.jsp"); 
+            }
+            
+           
+            
         }
 
         rd.forward(request, response);

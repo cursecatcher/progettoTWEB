@@ -43,6 +43,9 @@
         <!--jquery.growl -->
         <script type="text/javascript" src="include/lib/jquery-growl/jquery.growl.js"></script>
         <link rel="stylesheet" href="include/lib/jquery-growl/jquery.growl.css" type="text/css" />
+        <!-- jQuery dropdown -->
+        <link type="text/css" rel="stylesheet" href="include/lib/jquery-dropdown/jquery.dropdown.min.css" />
+        <script type="text/javascript" src="include/lib/jquery-dropdown/jquery.dropdown.min.js"></script>
 
         <script type='text/javascript' src='include/js/gnammy-script.js'></script>
         <script type="text/javascript" src="include/js/general.js"></script>
