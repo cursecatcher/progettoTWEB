@@ -22,6 +22,15 @@ public class Utente {
     public Utente(int id) {
         try {
             DriverManager.registerDriver(new org.apache.derby.jdbc.ClientDriver());
+            Utente temp = Query.getUserById(id); 
+            
+            if (temp != null) {
+                this.id = temp.getId();
+                this.email = temp.getEmail();
+                this.password = temp.getPassword();
+                this.ruolo = temp.getRuolo();
+            }
+            /*
             Connection conn = Query.getConnection();
             Statement st = conn.createStatement();
             ResultSet rs = Query.getUserById(st, id);
@@ -35,7 +44,7 @@ public class Utente {
 
             rs.close();
             st.close();
-            conn.close();
+            conn.close();*/
         } catch (SQLException ex) {
             System.out.println("SMERDO  init utente- " + ex.getMessage());
         }

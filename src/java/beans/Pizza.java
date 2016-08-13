@@ -5,6 +5,8 @@
  */
 package beans;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author nico
@@ -14,12 +16,14 @@ public class Pizza {
     private String nome;
     private float prezzo; 
     private String listaIngredienti; 
+    private ArrayList<Ingrediente> ingredienti; 
     
     public Pizza() {
         this.id = -1; 
         this.nome = ""; 
         this.prezzo = -1; 
         this.listaIngredienti = ""; 
+        this.ingredienti = null; 
     }
     
     public void setId(int id) {
@@ -38,6 +42,10 @@ public class Pizza {
         this.listaIngredienti = s;
     }
     
+    public void setIngredienti(ArrayList<Ingrediente> ingredienti) {
+        this.ingredienti = ingredienti;
+    }
+    
     public String getNome() {
         return this.nome; 
     }
@@ -53,5 +61,20 @@ public class Pizza {
     public String getListaIngredienti() {
         return this.listaIngredienti;
     }
+    
+    public ArrayList<Ingrediente> getIngredienti() {
+        return this.ingredienti; 
+    }
+    
+    public String getIDIngredienti() {
+        String ret = ""; 
+        
+        for (Ingrediente i: this.ingredienti) {
+            ret += i.getId() + " ";
+        }
+        
+        return ret.trim(); 
+    }
+    
     
 }

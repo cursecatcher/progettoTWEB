@@ -89,24 +89,36 @@ public class GestoreCucina extends HttpServlet {
                 rd = ctx.getRequestDispatcher("/index.jsp");
 
             } else if (action.equalsIgnoreCase("pizza-create")) {
-                String nome = request.getParameter("nome");
-                String id_ingredienti = request.getParameter("listaIngredienti");
-                //regex float number in Query 
-                
-                float prezzo = Float.parseFloat(request.getParameter("prezzo"));
-                boolean ok = true; 
-                
-                if (id_ingredienti.equalsIgnoreCase("")) {
-                    System.out.println("L'admin e' un pirla -> pizza senza ingredienti");
-                    out.print("ERR_NO_INGREDIENTI");
-                } else if (Query.insertPizza(nome, prezzo, id_ingredienti)) {
-                    System.out.println("OK");
-                    out.print("OK");
+                String nome = request.getParameter("nome").trim();
+                String id_ingredienti = request.getParameter("listaIngredienti").trim();
+                float prezzo = 0;  
+                String err = "";
+
+                // controllo input
+                if (nome.equalsIgnoreCase("")) {
+                    err = "ERR_MISSING_NAME";
+                } else if (id_ingredienti.equalsIgnoreCase("")) {
+                    err = "ERR_NO_INGREDIENTI";
                 } else {
-                    System.out.println("Pizza gia' presente");
-                    out.print("ERR_DUPLICATE");
-                } 
+                    try {
+                        prezzo = Float.parseFloat(request.getParameter("prezzo").trim());
+                        if (prezzo <= 0) {
+                            err = "ERR_PARSE_FLOAT"; 
+                        }
+                    } catch (NumberFormatException ex) {
+                        err = "ERR_PARSE_FLOAT";
+                        System.out.println("Eccezione -" + ex.getMessage()); 
+                    }
+                }
                 
+                if (err.equalsIgnoreCase("")) {
+                    err = Query.insertPizza(nome, prezzo, id_ingredienti) 
+                            ? "OK" : "ERR_DUPLICATE"; 
+                }
+
+                System.out.println("pizza-create - err: " + err);
+                out.print(err);
+
             } else if (action.equalsIgnoreCase("pizza-remove")) {
                 int id = Integer.parseInt(request.getParameter("id_pizza"));
 

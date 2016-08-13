@@ -17,63 +17,63 @@ import org.apache.commons.codec.digest.DigestUtils;
 import com.google.gson.internal.Pair;
 //import org.apache.commons.lang3.StringUtils;
 
-
 public class Query {
+
     private static final String DB_URL = "jdbc:derby://localhost:1527/pizzeriaDB";
     private static final String DB_USER = "nicola";
     private static final String DB_PASSWORD = "asd123";
-    
-    public static final String float_regex = "[+-]([0-9]*[.])?[0-9]+"; 
 
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
     }
 
     /**
+     * Restituisce una collection contenente tutte le pizze presenti nel DB
      *
-     * @return
+     * @return ArrayList di oggetti di tipo Pizza
      */
     public static Collection<Pizza> getPizze() {
         Collection<Pizza> res = new ArrayList<>();
         String query = "SELECT * FROM Pizza ORDER BY nome";
-        String iquery = "SELECT * FROM Ingrediente";
+//        String iquery = "SELECT * FROM Ingrediente";
         System.out.println("Eseguo query: " + query);
 
         try (Connection conn = getConnection();
                 Statement st = conn.createStatement()) {
-            ResultSet rs = st.executeQuery(iquery);
-            // carico hashmap <id ingrediente , nome ingrediente>
-            HashMap<String, String> ingredientiMap = new HashMap<>();
-            while (rs.next()) {
-                String key = String.valueOf(rs.getInt("id_ingrediente"));
-                ingredientiMap.put(key, rs.getString("nome"));
-            }
-            rs.close();
+            HashMap<Integer, Ingrediente> ingredientiMap = Query.getHashIngredienti();
 
             /* faccio le pizze */
-            rs = st.executeQuery(query);
+            try (ResultSet rs = st.executeQuery(query)) {
+                while (rs.next()) {
+                    String[] ingredienti = rs.getString("ingredienti").split(",");
+                    ArrayList<Ingrediente> ingredientiPizza = new ArrayList<>();
+                    String flatlist = "";
 
-            while (rs.next()) {
-                String[] ingredienti = rs.getString("ingredienti").split(",");
-                String flatlist = "";
+                    /* creo stringa ingredienti pizza */
+                    for (String key : ingredienti) {
+                        int ikey = Integer.parseInt(key);
+                        Ingrediente curr = ingredientiMap.get(ikey);
 
-                /* creo stringa ingredienti pizza */
-                for (String key : ingredienti) {
-                    flatlist += ingredientiMap.get(key) + ", ";
+                        flatlist += curr.getNome() + ", ";
+                        ingredientiPizza.add(curr);
+
+                        //        flatlist += ingredientiMap.get(key) + ", ";
+                    }
+                    flatlist = flatlist.substring(0, flatlist.length() - 2);
+
+                    Pizza p = new Pizza();
+
+                    p.setId(rs.getInt("id_pizza"));
+                    p.setNome(rs.getString("nome"));
+                    p.setPrezzo(rs.getFloat("prezzo"));
+                    p.setListIngredienti(flatlist);
+                    p.setIngredienti(ingredientiPizza);
+
+                    res.add(p);
                 }
-                flatlist = flatlist.substring(0, flatlist.length() - 2);
 
-                Pizza p = new Pizza();
-
-                p.setId(rs.getInt("id_pizza"));
-                p.setNome(rs.getString("nome"));
-                p.setPrezzo(rs.getFloat("prezzo"));
-                p.setListIngredienti(flatlist);
-
-                res.add(p);
+                //     rs.close();
             }
-
-            rs.close();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
             res = null;
@@ -83,12 +83,14 @@ public class Query {
     }
 
     /**
+     * Resituisce una collection contenente tutti gli ingredienti presenti nel
+     * DB
      *
-     * @return
+     * @return ArrayList di oggetti di tipo Ingrediente
      */
-    public static Collection<Ingrediente> getIngredienti() {
+    public static ArrayList<Ingrediente> getIngredienti() {
         String query = "SELECT * FROM Ingrediente ORDER BY nome";
-        Collection<Ingrediente> ingredienti = new ArrayList<>();
+        ArrayList<Ingrediente> ingredienti = new ArrayList<>();
         System.out.println("Eseguo query: " + query);
 
         try (Connection conn = getConnection();
@@ -155,6 +157,14 @@ public class Query {
         return st.executeQuery(query);
     }-*/
 
+    /**
+     *
+     * @param conn Oggetto Connection utilizzato per eseguire la query
+     * @param email email dell'utente da trovare
+     * @return Oggetto di tipo Utente valorizzato sull'utente trovato, o null se
+     * l'email <code>email</code> non è presente nel db
+     * @throws SQLException
+     */
     public static Utente getUserByEmail(Connection conn, String email) throws SQLException {
         String query = "SELECT * FROM Utente WHERE email = ?";
         Utente u = null;
@@ -175,12 +185,30 @@ public class Query {
         return u;
     }
 
-    public static ResultSet getUserById(Statement st, int id) throws SQLException {
-        String query = "SELECT * FROM Utente WHERE id_utente=" + id;
-        System.out.println("Eseguo query: " + query);
-        return st.executeQuery(query);
+    public static Utente getUserById(int id) {
+        String query = "SELECT * FROM Utente WHERE id_utente=?";
+        Utente u = null;
+
+        try (Connection conn = Query.getConnection();
+                PreparedStatement pst = conn.prepareStatement(query)) {
+            pst.setInt(1, id);
+
+            try (ResultSet rs = pst.executeQuery()) {
+                if (rs.next()) {
+                    u = new Utente();
+                    u.setId(rs.getInt("id_utente"));
+                    u.setEmail(rs.getString("email"));
+                    u.setPassword(rs.getString("password"));
+                    u.setRuolo(rs.getString("ruolo"));
+                }
+            }
+        } catch (SQLException ex) {
+        }
+
+        return u;
     }
 
+    /*
     public static Utente getUserById(Connection conn, int id) throws SQLException {
         String query = "SELECT * FROM Utente WHERE id_utente=?";
         Utente u = null;
@@ -200,8 +228,7 @@ public class Query {
         }
 
         return u;
-    }
-
+    }*/
     /**
      * Modifica la password di un certo utente di tipo cliente, dato il suo id
      *
@@ -226,21 +253,6 @@ public class Query {
         }
 
         return res;
-    }
-
-    /**
-     * Restituisce la tupla associata all'ingrediente identificato dal nome
-     *
-     * @param st
-     * @param nome Nome dell'ingrediente da cercare
-     * @return ResultSet associato all'ingrediente
-     * @throws SQLException
-     */
-    public static ResultSet getIngredientByName(Statement st, String nome)
-            throws SQLException {
-        String query = "SELECT * FROM Ingrediente WHERE nome='" + nome.toLowerCase() + "'";
-        System.out.println("Eseguo query: " + query);
-        return st.executeQuery(query);
     }
 
     /**
@@ -292,6 +304,48 @@ public class Query {
         return res;
     }
 
+    public static Pizza getPizzaById(int id) {
+        Pizza p = null;
+        String query = "SELECT * FROM Pizza WHERE id_pizza=?";
+
+        try (Connection conn = Query.getConnection();
+                PreparedStatement pst = conn.prepareStatement(query)) {
+            pst.setInt(1, id);
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                HashMap<Integer, Ingrediente> hi = getHashIngredienti();
+
+                ///////schifo
+                String[] ingredienti = rs.getString("ingredienti").split(",");
+                ArrayList<Ingrediente> ingredientiPizza = new ArrayList<>();
+                String flatlist = "";
+
+                /* creo stringa ingredienti pizza */
+                for (String key : ingredienti) {
+                    int ikey = Integer.parseInt(key);
+                    Ingrediente curr = hi.get(ikey);
+
+                    flatlist += curr.getNome() + ", ";
+                    ingredientiPizza.add(curr);
+                }
+                flatlist = flatlist.substring(0, flatlist.length() - 2);
+
+                p = new Pizza();
+                p.setId(rs.getInt("id_pizza"));
+                p.setNome(rs.getString("nome"));
+                p.setPrezzo(rs.getFloat("prezzo"));
+                p.setListIngredienti(flatlist);
+                p.setIngredienti(ingredientiPizza);
+                ///////schifo
+
+            }
+        } catch (SQLException ex) {
+        }
+
+        return p;
+    }
+
     /**
      *
      * @param st
@@ -302,6 +356,21 @@ public class Query {
     private static ResultSet getPizzaByName(Statement st, String nome)
             throws SQLException {
         String query = "SELECT * FROM Pizza WHERE nome='" + nome.toLowerCase() + "'";
+        System.out.println("Eseguo query: " + query);
+        return st.executeQuery(query);
+    }
+
+    /**
+     * Restituisce la tupla associata all'ingrediente identificato dal nome
+     *
+     * @param st
+     * @param nome Nome dell'ingrediente da cercare
+     * @return ResultSet associato all'ingrediente
+     * @throws SQLException
+     */
+    private static ResultSet getIngredientByName(Statement st, String nome)
+            throws SQLException {
+        String query = "SELECT * FROM Ingrediente WHERE nome='" + nome.toLowerCase() + "'";
         System.out.println("Eseguo query: " + query);
         return st.executeQuery(query);
     }
@@ -411,24 +480,24 @@ public class Query {
                 pst = conn.prepareStatement(query_dettagli);
                 pst.setInt(1, id);
                 rs = pst.executeQuery();
-                
+
                 HashMap<Integer, Pizza> hashPizza = getHashPizza();
                 ArrayList<ElementoOrdine> ordine = new ArrayList<>();
-                
-     //           ArrayList<Pair<String, Integer>> ordine = new ArrayList();
-                float tot = 0; 
+
+                //           ArrayList<Pair<String, Integer>> ordine = new ArrayList();
+                float tot = 0;
 
                 while (rs.next()) {
-                    Pizza currentPizza = hashPizza.get(rs.getInt("fk_pizza")); 
+                    Pizza currentPizza = hashPizza.get(rs.getInt("fk_pizza"));
                     ElementoOrdine temp = new ElementoOrdine();
-                    int quantity = rs.getInt("quantita"); 
-                    
+                    int quantity = rs.getInt("quantita");
+
                     temp.setId(currentPizza.getId());
                     temp.setNome(currentPizza.getNome().toUpperCase());
                     temp.setPrezzo(currentPizza.getPrezzo());
                     temp.setQuantity(quantity);
-                    
-                    ordine.add(temp); 
+
+                    ordine.add(temp);
                     tot += quantity * currentPizza.getPrezzo();
 
                 }
@@ -443,15 +512,13 @@ public class Query {
 
         return pr;
     }
-    
+
     public static ArrayList<Prenotazione> getPrenotazioni() {
         ArrayList<Prenotazione> pr = new ArrayList<>();
         String query = "SELECT * FROM ";
-        
-        
-        return pr; 
+
+        return pr;
     }
-    
 
     /**
      * ********************************************************************
@@ -469,80 +536,68 @@ public class Query {
 
             while (rs.next()) {
                 Pizza current = new Pizza();
-                
+
                 current.setId(rs.getInt("id_pizza"));
                 current.setNome(rs.getString("nome"));
                 current.setPrezzo(rs.getFloat("prezzo"));
                 current.setListIngredienti(rs.getString("ingredienti"));
-                
+
                 ret.put(rs.getInt("id_pizza"), current);
             }
         } catch (SQLException ex) {
-            System.out.println("... " + ex.getMessage()); 
+            System.out.println("... " + ex.getMessage());
         }
 
         return ret;
     }
 
-    private static HashMap<Integer, String> getHashIngredienti() {
-        HashMap<Integer, String> ret = new HashMap<>();
-        String query = "SELECT id_ingrediente, nome FROM Ingrediente";
+    private static HashMap<Integer, Ingrediente> getHashIngredienti() {
+        HashMap<Integer, Ingrediente> ret = new HashMap<>();
 
-        System.out.println("getHashPIngredienti!");
-
-        try (Connection conn = getConnection();
-                Statement st = conn.createStatement();
-                ResultSet rs = st.executeQuery(query)) {
-            while (rs.next()) {
-                ret.put(rs.getInt("id_ingrediente"), rs.getString("nome"));
-            }
-        } catch (SQLException ex) {
-            System.out.println("... " + ex.getMessage()); 
-        }
+        Query.getIngredienti().stream().forEach((i) -> {
+            ret.put(i.getId(), i);
+        });
 
         return ret;
     }
-    
+
     public static boolean confirmDeliver(int id_prenotazione) {
-        boolean res = false; 
-        String query = "UPDATE Prenotazione SET consegnato=true WHERE id_prenotazione=?"; 
-        
-        try (Connection conn = Query.getConnection(); 
+        boolean res = false;
+        String query = "UPDATE Prenotazione SET consegnato=true WHERE id_prenotazione=?";
+
+        try (Connection conn = Query.getConnection();
                 PreparedStatement st = conn.prepareStatement(query)) {
             st.setInt(1, id_prenotazione);
-            res = st.executeUpdate() == 1; 
-            
+            res = st.executeUpdate() == 1;
+
+        } catch (SQLException ex) {
+            System.out.println("confirmDeliver exception: " + ex.getMessage());
         }
-        catch (SQLException ex) {
-            System.out.println("confirmDeliver exception: " + ex.getMessage()); 
-        }
-        
-        
-        return res; 
-    } 
-    
+
+        return res;
+    }
+
     public static boolean deleteReservation(int id_prenotazione) {
-        String query1 = "DELETE FROM Prenotazione WHERE id_prenotazione=?"; 
-        String query2 = "DELETE FROM PrenotazionePizza WHERE fk_prenotazione=?"; 
-        boolean res = false; 
-        
-        try (Connection conn = Query.getConnection(); 
-                PreparedStatement st1 = conn.prepareStatement(query1); 
+        String query1 = "DELETE FROM Prenotazione WHERE id_prenotazione=?";
+        String query2 = "DELETE FROM PrenotazionePizza WHERE fk_prenotazione=?";
+        boolean res = false;
+
+        try (Connection conn = Query.getConnection();
+                PreparedStatement st1 = conn.prepareStatement(query1);
                 PreparedStatement st2 = conn.prepareStatement(query2)) {
             //transazione???
             st1.setInt(1, id_prenotazione);
             st2.setInt(1, id_prenotazione);
-            
-            st2.executeUpdate(); 
-            res = st1.executeUpdate() == 1; 
+
+            st2.executeUpdate();
+            res = st1.executeUpdate() == 1;
+        } catch (SQLException ex) {
+            System.out.println("deleteReservation exception: " + ex.getMessage());
         }
-        catch (SQLException ex) {
-            System.out.println("deleteReservation exception: " + ex.getMessage()); 
-        }
-        
-        return res; 
+
+        return res;
     }
-    
+
 
     /* ***************************************************************** *//*
     private static String quote(String s) {

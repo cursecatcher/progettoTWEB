@@ -6,6 +6,7 @@
 package web;
 
 import beans.Carrello;
+import beans.Pizza;
 import beans.Utente;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -67,19 +68,33 @@ public class Controller extends HttpServlet {
             }
 
         } else if (action.equalsIgnoreCase("proceed-to-order")) {
-            HttpSession session = request.getSession(); 
+            HttpSession session = request.getSession();
             Carrello cart = (Carrello) session.getAttribute("carrello");
-            
+
             if (cart.isEmpty()) {
                 request.setAttribute("message", "FAIL");
-                rd = ctx.getRequestDispatcher("/newordine.jsp"); 
+                rd = ctx.getRequestDispatcher("/newordine.jsp");
+            } else {
+                rd = ctx.getRequestDispatcher("/confirm-order.jsp");
             }
+
+        } else if (action.equalsIgnoreCase("edit-req")) {
+            int idp = Integer.parseInt(request.getParameter("id"));
+            Pizza p = Query.getPizzaById(idp);
+
+            if (idp < 0) {
+                rd = ctx.getRequestDispatcher("/error.jsp");
+                System.out.println("idp < 0");
+            } 
+            else if (p == null) {
+                rd = ctx.getRequestDispatcher("/error.jsp"); 
+                System.out.println("p == null");
+            }
+            
             else {
-                rd = ctx.getRequestDispatcher("/confirm-order.jsp"); 
+                request.setAttribute("pizza", p);
+                rd = ctx.getRequestDispatcher("/editpizza.jsp");
             }
-            
-           
-            
         }
 
         rd.forward(request, response);

@@ -24,6 +24,14 @@ CREATE TABLE Ingrediente (
 
 );
 
+CREATE TABLE IngredientiPizza (
+    id INT NOT NULL PRIMARY KEY 
+        GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), 
+    fk_pizza INT REFERENCES Pizza(id_pizza), 
+    fk_ingrediente INT REFERENCES Ingrediente(id_ingrediente)
+); 
+
+
 /* nuove */
 CREATE TABLE Prenotazione (
     id_prenotazione INT NOT NULL PRIMARY KEY 

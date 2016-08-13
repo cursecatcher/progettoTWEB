@@ -15,11 +15,11 @@
                     <c:when test="${usertoken == 'authenticated'}">
                         <li class="dropdown">
                             <a href="#0" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                Sei loggato come 
+                                Salve,&nbsp;
                                 <strong><c:out value="${user.email}"/></strong>
                                 <span class="caret"></span>
                             </a>
-                            <ul class="dropdown-menu">
+                            <ul class="dropdown-menu">                                
                                 <li><a href="profilo.jsp">Profilo</a></li>
                                 <li><a href="newordine.jsp">Ordina</a></li>
                                 <li><a href="#0">Qualcos'altro</a></li>
