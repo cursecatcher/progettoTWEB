@@ -1,33 +1,40 @@
 jQuery(document).ready(function ($) {
     $form_ingredienti = $('#form_newingr');
     $form_pizza = $('#form_newpi');
-    $edit_pizza = $('#form_editpi');
+    $edit_pizza = $('#editpi-form');
+
+    $edit_pizza.submit(function (event) {
+        var nome = $(this).find("input[name=nome]").val();
+        var prezzo = $(this).find("input[name=prezzo]").val();
+
+        if (nome.trim() === "") {
+            $.growl.error({
+                title: "Errore!", 
+                message: "Inserisci un nome da dare alla pizza!"
+            });
+            event.preventDefault();
+        } else if (prezzo.trim() === "") {
+            $.growl.error({
+                title: "Errore!", 
+                message: "Inserisci il campo prezzo!"
+            }); 
+            event.preventDefault();
+        } else if (!$("#select-ingredienti").val()) {
+            $.growl.error({
+                title: "Errore!", 
+                message: "Inserisci almeno un ingrediente!"
+            });
+            event.preventDefault(); 
+        }
+    });
 
 
     $(".edit-link").on('click', function () {
-        var nome = $(this).data('nome');
+        var $edit_form = $('#edit-req');
         var id = $(this).data('id');
-        var prezzo = $(this).data('prezzo');
-        var listaIngredienti = $(this).data('ingredienti');
 
-        console.log("Nome: " + nome);
-        console.log("id: " + id);
-        console.log("prezzo:" + prezzo);
-        console.log("ingredienti: " + listaIngredienti);
-
-        $('#id_pizza_edit').val(id);
-        $('#nome_pizza_edit').val(nome);
-        $('#prezzo_pizza_edit').val(prezzo);
-        
-        var $edit_form = $('#edit-req'); 
-        
-        $edit_form.find("input[name=id]").val(id); 
-        console.log("input->" + $edit_form.find("input[name=id]").val());
-        
-        $edit_form.submit(); 
-
-
-
+        $edit_form.find("input[name=id]").val(id);
+        $edit_form.submit();
     });
 
     $('#form_newingr').submit(function (event) {

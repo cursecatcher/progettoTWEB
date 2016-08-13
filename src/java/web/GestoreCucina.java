@@ -90,9 +90,11 @@ public class GestoreCucina extends HttpServlet {
 
             } else if (action.equalsIgnoreCase("pizza-create")) {
                 String nome = request.getParameter("nome").trim();
-                String id_ingredienti = request.getParameter("listaIngredienti").trim();
-                float prezzo = 0;  
+                float prezzo = 0;
+                String[] ingredienti = request.getParameterValues("ingredientiPizza");
                 String err = "";
+
+                String id_ingredienti = request.getParameter("listaIngredienti").trim();
 
                 // controllo input
                 if (nome.equalsIgnoreCase("")) {
@@ -103,17 +105,17 @@ public class GestoreCucina extends HttpServlet {
                     try {
                         prezzo = Float.parseFloat(request.getParameter("prezzo").trim());
                         if (prezzo <= 0) {
-                            err = "ERR_PARSE_FLOAT"; 
+                            err = "ERR_PARSE_FLOAT";
                         }
                     } catch (NumberFormatException ex) {
                         err = "ERR_PARSE_FLOAT";
-                        System.out.println("Eccezione -" + ex.getMessage()); 
+                        System.out.println("Eccezione -" + ex.getMessage());
                     }
                 }
-                
+
                 if (err.equalsIgnoreCase("")) {
-                    err = Query.insertPizza(nome, prezzo, id_ingredienti) 
-                            ? "OK" : "ERR_DUPLICATE"; 
+                    err = Query.insertPizza(nome, prezzo, id_ingredienti)
+                            ? "OK" : "ERR_DUPLICATE";
                 }
 
                 System.out.println("pizza-create - err: " + err);
@@ -138,26 +140,35 @@ public class GestoreCucina extends HttpServlet {
                 }
 
             } else if (action.equalsIgnoreCase("pizza-edit")) {
-                int id = Integer.parseInt(request.getParameter("id_pizza"));
-                String nome = request.getParameter("nome");
-                float prezzo = Float.parseFloat(request.getParameter("prezzo"));
-                String listaIngredienti = request.getParameter("lista_ingredienti");
+                int id = Integer.parseInt(request.getParameter("id"));
+                String nome = request.getParameter("nome").trim();
+                float prezzo = 0;
+                String[] ingredienti = request.getParameterValues("ingredientiPizza");
+                String err = "";
 
-                try (Connection conn = Query.getConnection();
-                        Statement st = conn.createStatement()) {
-                    /*
-                    if (Query.updatePizza(st, id, nome, prezzo, listaIngredienti)) {
-                        out.println("OK");
-                        System.out.print("OK");
-                    } else {
-                        out.print("ERR_DUPLICATE");
-                        System.out.println("ERR_DUPLICATE");
-                    } */
-                } catch (SQLException ex) {
-                    Logger.getLogger(GestoreCucina.class.getName()).log(Level.SEVERE, null, ex);
-                    System.out.println("Eccezione in ServletGnam->pizza-edit");
-                    out.print("ERR_SQL_EXCEPTION");
+                if (nome.equalsIgnoreCase("")) {
+                    err = "ERR_MISSING_NAME";
+                } else if (ingredienti.length == 0) {
+                    err = "ERR_NO_INGREDIENTI";
+                } else {
+                    try {
+                        prezzo = Float.parseFloat(request.getParameter("prezzo"));
+
+                        if (prezzo < 0) {
+                            err = "ERR_NEGATIVE_PRICE";
+                        }
+                    } catch (NumberFormatException ex) {
+                        err = "ERR_PARSE_FLOAT";
+                    }
                 }
+                
+                if (err.equalsIgnoreCase("")) {
+                    String ingrString = String.join(",", ingredienti);
+                    err = Query.updatePizza(id, nome, prezzo, ingrString); 
+                }
+                
+                System.out.println("Esito update: " + err);
+               
 
             } else if (action.equalsIgnoreCase("ingrediente-add")) {
                 String nome = request.getParameter("nome");

@@ -12,7 +12,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
-        
+
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" 
               integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" 
@@ -35,7 +35,7 @@
 
         <link rel='stylesheet' type='text/css' href='include/lib/sol/sol.css'>
         <script type='text/javascript' src='include/lib/sol/sol.js'></script>
-        
+
         <!--jquery.growl -->
         <script type="text/javascript" src="include/lib/jquery-growl/jquery.growl.js"></script>
         <link rel="stylesheet" href="include/lib/jquery-growl/jquery.growl.css" type="text/css" />
@@ -47,7 +47,7 @@
         <script type="text/javascript" src="include/js/general.js"></script>
     </head>
     <body>
- <%@include file="include/header.jsp" %>
+        <%@include file="include/header.jsp" %>
         <div class="container">
             <div id="modifica-pizza">
                 <h1>
@@ -76,7 +76,8 @@
 
                     <div>
                         <p><strong>Seleziona gli ingredienti da mettere sulla pizza </strong></p>
-                        <select id='select-random' name='ingredientiPizza' multiple="multiple">
+                        <select id='select-ingredienti' name='ingredientiPizza' multiple="multiple">
+                            <!-- imposta gli ingredienti presenti nella pizza come selezionati -->
                             <c:forEach var="ingrediente" items="${ingredienti.listaIngredienti}">
                                 <c:set var="contains" value="false"/>
                                 <c:forEach var="item" items="${requestScope.pizza.ingredienti}">
@@ -84,25 +85,17 @@
                                         <c:set var="contains" value="true"/>
                                     </c:if>
                                 </c:forEach>
-                                
-                                <c:choose>
-                                    <c:when test="${contains eq 'true'}">
-                                        <option value="${ingrediente.id}" selected>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <option value="${ingrediente.id}">
-                                    </c:otherwise>
-                                </c:choose>
-                                
-                                
-                                    ${ingrediente.nome}
+
+                                <option value="${ingrediente.id}"
+                                        <c:if test="${contains eq 'true'}">selected</c:if>>
+                                        ${ingrediente.nome}
                                 </option>
                             </c:forEach>
                         </select>
 
                         <script type='text/javascript'>
                             $(function () {
-                                $('#select-random').searchableOptionList({
+                                $('#select-ingredienti').searchableOptionList({
                                     maxHeight: '200px'
                                 });
                             });
@@ -112,6 +105,7 @@
                     <button id='submit-editpi' type="submit" class="btn btn-default">
                         Conferma modifiche
                     </button>
+                    <a href="newpizza.jsp" class="btn btn-default">Annulla modifiche</a>
                 </form>
             </div>
         </div>

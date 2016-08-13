@@ -386,14 +386,14 @@ public class Query {
      * @param ingredienti lista ingrendienti pizza
      * @return esito operazione (true/false)
      * @throws SQLException
-     */
+     *//*
     public static boolean updatePizza(int id, String nome, float prezzo, String ingredienti) {
         String query = "UPDATE Pizza SET nome=?, prezzo=?, ingredienti=? WHERE id_pizza=?";
         boolean res = false;
 
         try (Connection conn = getConnection();
                 PreparedStatement pst = conn.prepareStatement(query)) {
-            pst.setString(1, nome);
+            pst.setString(1, nome.toLowerCase());
             pst.setFloat(2, prezzo);
             pst.setString(3, ingredienti);
             pst.setInt(4, id);
@@ -403,6 +403,33 @@ public class Query {
         }
 
         return res;
+    }*/
+
+    public static String updatePizza(int id, String nome, float prezzo, String ingredienti) {
+        String query = "UPDATE Pizza SET nome=?, prezzo=?, ingredienti=? WHERE id_pizza=?";
+        String ret = "ERR_UNAVAIABLE_NAME";  
+
+        try (Connection conn = getConnection();
+                PreparedStatement pst = conn.prepareStatement(query);
+                Statement st = conn.createStatement();
+                ResultSet pizza = getPizzaByName(st, nome)) {
+            /* Verifica l'univocità del nome della pizza che stiamo andando a inserire: 
+            la pizza viene modificata se il nome non è presente nel db, o se è presente 
+            sul record che sta per essere aggiornato */
+            if (!pizza.next() || pizza.getInt("id_pizza") == id) {
+                pst.setString(1, nome.toLowerCase());
+                pst.setFloat(2, prezzo);
+                pst.setString(3, ingredienti);
+                pst.setInt(4, id);
+                
+                System.out.println("Eseguo update pizza!");
+                ret = pst.executeUpdate() == 1 ? "OK" : "ERR_BOH";
+            }
+        } catch (SQLException ex) {
+            ret = "ERR_SQL_EXCEPTION"; 
+        }
+
+        return ret;
     }
 
     public static boolean deletePizza(int idPizza) {
