@@ -123,21 +123,10 @@ public class GestoreCucina extends HttpServlet {
 
             } else if (action.equalsIgnoreCase("pizza-remove")) {
                 int id = Integer.parseInt(request.getParameter("id_pizza"));
-
-                try (Connection conn = Query.getConnection();
-                        Statement st = conn.createStatement()) {
-
-                    if (Query.deletePizza(id)) {
-                        System.out.println("OK");
-                        out.println("OK");
-                    } else {
-                        System.out.println("ERR");
-                        out.println("ERR");
-                    }
-                } catch (SQLException ex) {
-                    Logger.getLogger(GestoreCucina.class.getName()).log(Level.SEVERE, null, ex);
-                    System.out.println("Eccezione in ServletGnam->pizza-remove");
-                }
+                String res = Query.deletePizza(id);
+                out.print(res); 
+                
+                
 
             } else if (action.equalsIgnoreCase("pizza-edit")) {
                 int id = Integer.parseInt(request.getParameter("id"));
@@ -161,14 +150,13 @@ public class GestoreCucina extends HttpServlet {
                         err = "ERR_PARSE_FLOAT";
                     }
                 }
-                
+
                 if (err.equalsIgnoreCase("")) {
                     String ingrString = String.join(",", ingredienti);
-                    err = Query.updatePizza(id, nome, prezzo, ingrString); 
+                    err = Query.updatePizza(id, nome, prezzo, ingrString);
                 }
-                
+
                 System.out.println("Esito update: " + err);
-               
 
             } else if (action.equalsIgnoreCase("ingrediente-add")) {
                 String nome = request.getParameter("nome");

@@ -96,6 +96,11 @@ public class Controller extends HttpServlet {
                 rd = ctx.getRequestDispatcher("/editpizza.jsp");
             }
         }
+        else if (action.equalsIgnoreCase("logout")) {
+            HttpSession session = request.getSession();
+            session.invalidate();
+            rd = ctx.getRequestDispatcher("/index.jsp"); 
+        }
 
         rd.forward(request, response);
     }
@@ -153,6 +158,10 @@ public class Controller extends HttpServlet {
             } else if (action.equalsIgnoreCase("delete-deliver")) {
                 rd = ctx.getNamedDispatcher("GestorePrenotazioni");
 
+            }
+            else if (action.equalsIgnoreCase("pizza-remove")) {
+                rd = ctx.getNamedDispatcher("GestoreCucina");
+                
             }
 
             rd.forward(request, response);

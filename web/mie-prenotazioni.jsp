@@ -81,38 +81,23 @@
                                     <fmt:formatNumber type="number" value="${p.prezzo}" minFractionDigits="2"/>
                                     &euro;
                                 </strong>
-
-
-
                             </div>
                             <div class="panel-footer">
-                                <a href="#0" class="confirm-deliver" data-id="${p.id}">
-                                    Conferma consegna
-                                </a><br/>
-                                <a href="#0" class="delete-deliver" data-id="${p.id}" >
-                                    Annulla prenotazione
-                                </a>
+                                <c:choose>
+                                    <c:when test="${p.isConsegnato()}">
+                                        Ordine consegnato! Lascia un feedback se ti va! 
+                                    </c:when>
+                                    <c:otherwise>
+                                    <a href="#0" class="confirm-deliver" data-id="${p.id}">
+                                        Conferma consegna
+                                    </a><br/>
+                                    <a href="#0" class="delete-deliver" data-id="${p.id}" >
+                                        Annulla prenotazione
+                                    </a>
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
                         </div>
-                        <!-- 
-                        ----------------------------------------------v (dropdown)
-                        consegna prevista il giorno tale alle ore tali
-                        Importo da pagare: tali euri
-                        -->
-                        <%--
-                        Ordine<br/>
-                        Data consegna: ${prenotazione.dataConsegna} <br/>
-                        Orario consegna: ${prenotazione.orarioConsegna} <br/>
-                        ${prenotazione.prezzo} &euro; 
-                        <a class="btn btn-primary view-prenotazione" role="button" 
-                           data-toggle="collapse" 
-                           data-id="${prenotazione.id}"
-                           href="#collapseExample" 
-                           aria-expanded="false" 
-                           aria-controls="collapseExample">
-                            Vedi dettagli
-                        </a>
-                        --%>
                     </c:forEach>
                 </div>
             </div>

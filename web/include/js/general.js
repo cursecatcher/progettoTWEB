@@ -34,6 +34,15 @@ jQuery(document).ready(function ($) {
     var $prezzo = $('#prezzo-tot'); //costo complessivo dell'ordine corrente
     var $header_tot = $('#cart-euro'); //prezzo ordine presente nell'header 
     
+    var $form_action = $('#form-action');
+    
+    
+    $('#disconnect').on("click", function() {
+        $form_action.find("input[name=action]").val("logout");
+        $form_action.submit();
+        
+    }); 
+    
     
     $('.choose-pizza').on('click', function () {
         var idpizza = $(this).data("id-pizza");

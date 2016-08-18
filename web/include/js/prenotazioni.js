@@ -1,3 +1,4 @@
+/*  
 function renderJSONPizza(json) {
     return "<div class='row'>" +
             "<a class='remove-pizza' href='#0' " +
@@ -18,7 +19,7 @@ function renderJSONCart(json) {
     });
     
     return html; 
-}
+}*/
 
 jQuery(document).ready(function ($) {
     var $cart = $('#carrello');

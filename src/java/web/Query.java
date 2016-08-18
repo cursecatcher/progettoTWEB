@@ -15,6 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.codec.digest.DigestUtils;
 import com.google.gson.internal.Pair;
+import java.util.Iterator;
 //import org.apache.commons.lang3.StringUtils;
 
 public class Query {
@@ -142,21 +143,6 @@ public class Query {
         return res;
     }
 
-    /*
-     * Restituisce il record dell'utente con una determinata email
-     *
-     * @param st Statement
-     * @param email email dell'utente da cercare
-     * @return ResultSet contenente il record cercato, se presente
-     * @throws SQLException
-     *//*
-    public static ResultSet getUserByEmail(Statement st, String email)
-            throws SQLException {
-        String query = "SELECT * FROM Utente WHERE email = " + quote(email.toLowerCase());
-        System.out.println("Eseguo query: " + query);
-        return st.executeQuery(query);
-    }-*/
-
     /**
      *
      * @param conn Oggetto Connection utilizzato per eseguire la query
@@ -208,27 +194,6 @@ public class Query {
         return u;
     }
 
-    /*
-    public static Utente getUserById(Connection conn, int id) throws SQLException {
-        String query = "SELECT * FROM Utente WHERE id_utente=?";
-        Utente u = null;
-
-        try (PreparedStatement pst = conn.prepareStatement(query)) {
-            pst.setInt(1, id);
-
-            try (ResultSet rs = pst.executeQuery()) {
-                if (rs.next()) {
-                    u = new Utente();
-                    u.setId(rs.getInt("id_utente"));
-                    u.setEmail(rs.getString("email"));
-                    u.setPassword(rs.getString("password"));
-                    u.setRuolo(rs.getString("ruolo"));
-                }
-            }
-        }
-
-        return u;
-    }*/
     /**
      * Modifica la password di un certo utente di tipo cliente, dato il suo id
      *
@@ -375,98 +340,122 @@ public class Query {
         return st.executeQuery(query);
     }
 
-    /**
-     * Aggiorna il record specificato tramite ID della tabella Pizza con i dati
-     * passati come parametri
-     *
-     * @param st Statement
-     * @param id primary key della pizza da modificare
-     * @param nome nome pizza
-     * @param prezzo prezzo pizza
-     * @param ingredienti lista ingrendienti pizza
-     * @return esito operazione (true/false)
-     * @throws SQLException
-     *//*
-    public static boolean updatePizza(int id, String nome, float prezzo, String ingredienti) {
-        String query = "UPDATE Pizza SET nome=?, prezzo=?, ingredienti=? WHERE id_pizza=?";
-        boolean res = false;
-
-        try (Connection conn = getConnection();
-                PreparedStatement pst = conn.prepareStatement(query)) {
-            pst.setString(1, nome.toLowerCase());
-            pst.setFloat(2, prezzo);
-            pst.setString(3, ingredienti);
-            pst.setInt(4, id);
-            System.out.println("Eseguo update pizza!");
-            res = pst.executeUpdate() == 1;
-        } catch (SQLException ex) {
-        }
-
-        return res;
-    }*/
-
     public static String updatePizza(int id, String nome, float prezzo, String ingredienti) {
         String query = "UPDATE Pizza SET nome=?, prezzo=?, ingredienti=? WHERE id_pizza=?";
-        String ret = "ERR_UNAVAIABLE_NAME";  
+        String ret = "ERR_UNAVAIABLE_NAME";
 
         try (Connection conn = getConnection();
                 PreparedStatement pst = conn.prepareStatement(query);
                 Statement st = conn.createStatement();
                 ResultSet pizza = getPizzaByName(st, nome)) {
             /* Verifica l'univocità del nome della pizza che stiamo andando a inserire: 
-            la pizza viene modificata se il nome non è presente nel db, o se è presente 
+            il record viene modificato se il nome non è presente nel db, o se è presente 
             sul record che sta per essere aggiornato */
             if (!pizza.next() || pizza.getInt("id_pizza") == id) {
                 pst.setString(1, nome.toLowerCase());
                 pst.setFloat(2, prezzo);
                 pst.setString(3, ingredienti);
                 pst.setInt(4, id);
-                
+
                 System.out.println("Eseguo update pizza!");
                 ret = pst.executeUpdate() == 1 ? "OK" : "ERR_BOH";
             }
         } catch (SQLException ex) {
-            ret = "ERR_SQL_EXCEPTION"; 
+            ret = "ERR_SQL_EXCEPTION";
         }
 
         return ret;
     }
 
-    public static boolean deletePizza(int idPizza) {
-        String query = "DELETE FROM Pizza WHERE id=?";
-        boolean res = false;
+    public static String deletePizza(int idPizza) {
+        String query = "DELETE FROM Pizza WHERE id_pizza=?";
+        String res = "";
 
         try (Connection conn = Query.getConnection();
                 PreparedStatement pst = conn.prepareStatement(query)) {
             pst.setInt(1, idPizza);
-            res = pst.executeUpdate() == 1;
+            res = pst.executeUpdate() == 1 ? "OK" : "ERR_NO_RECORD";
 
+        } catch (SQLIntegrityConstraintViolationException ex) {
+            res = "ERR_SQL_ICV";
         } catch (SQLException ex) {
             Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
+            res = "ERR_SQL_EXCEPTION";
         }
 
         return res;
     }
 
     /**
-     * Inserisce una nuova prenotazione nel db
      *
-     * @param st Statement
-     * @param id_utente Id dell'utente a cui appartiene la prenotazione
-     * @param consegna
+     * @param id_utente
+     * @param data
+     * @param orario
+     * @param ordine
      * @return
      */
-    /*
-    public static int insertNewPrenotazione(Statement st, int id_utente, Date consegna) {
-        DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+    public static boolean prenotazioneInsert(int id_utente, java.sql.Date data, java.sql.Time orario, ArrayList<ElementoOrdine> ordine) {
+        long idp = prenotazioneCreateRecord(id_utente, data, orario);
+        boolean ret = false;
 
-        String query = "INSERT INTO Prenotazione(fk_utente, data_consegna) VALUES  "
-                + parentize(Integer.toString(id_utente), quote(df.format(consegna)));
+        if (idp != -1) {
+            ret = prenotazioneInsertPizze(idp, ordine);
+        }
 
-        System.out.println("Eseguo query: " + query);
+        return ret;
+    }
 
-        return 0;
-    }*/
+    private static long prenotazioneCreateRecord(int id_utente, java.sql.Date data, java.sql.Time orario) {
+        String query = "INSERT INTO Prenotazione(fk_utente, data_consegna, ora_consegna) "
+                + "VALUES (?, ?, ?)";
+        long idPrenotazione = -1;
+
+        try (Connection conn = getConnection();
+                PreparedStatement pst = conn.prepareStatement(
+                        query, Statement.RETURN_GENERATED_KEYS)) {
+            pst.setInt(1, id_utente);
+            pst.setDate(2, data);
+            pst.setTime(3, orario);
+
+            if (pst.executeUpdate() != 0) {
+                // ottengo ID del record appena inserito 
+                try (ResultSet generatedKey = pst.getGeneratedKeys()) {
+                    if (generatedKey.next()) {
+                        idPrenotazione = generatedKey.getLong(1);
+                    }
+                }
+            }
+        } catch (SQLException ex) {
+            System.out.println("Eccezione in prenotazioneCreateRecord: " + ex.getMessage());
+        }
+
+        return idPrenotazione;
+    }
+
+    private static boolean prenotazioneInsertPizze(long id_prenotazione, ArrayList<ElementoOrdine> ordine) {
+        String query = "INSERT INTO PrenotazionePizza (fk_prenotazione, fk_pizza, quantita) "
+                + "VALUES(?, ?, ?)";
+        boolean ret = false; 
+        
+
+        try (Connection conn = getConnection();
+                PreparedStatement pst = conn.prepareStatement(query)) {
+            for (ElementoOrdine e : ordine) {
+                pst.setInt(1, (int) id_prenotazione);
+                pst.setInt(2, e.getId());
+                pst.setInt(3, e.getQuantity());
+                pst.addBatch();
+            }
+            
+            pst.executeBatch();
+            ret = true; 
+        } catch (SQLException ex) {
+            System.out.println("Eccezione in prenotazioneInsertPizze: " + ex.getMessage());
+        }
+
+        return ret;
+    }
+
     public static ResultSet getPrenotazioniByUserId(Statement st, int userId)
             throws SQLException {
         String query = "SELECT * FROM Prenotazione WHERE fk_utente=" + userId;
@@ -540,12 +529,94 @@ public class Query {
         return pr;
     }
 
-    public static ArrayList<Prenotazione> getPrenotazioni() {
+    public static ArrayList<Prenotazione> prenotazioniGetAll() {
+        String query = "SELECT * FROM Prenotazione ORDER BY data_consegna, ora_consegna"; 
         ArrayList<Prenotazione> pr = new ArrayList<>();
-        String query = "SELECT * FROM ";
-
-        return pr;
+        
+        /*
+        - prendo tutte le singole prenotazioni dalla tabella Prenotazione
+        - per ogni prenotazione p, recupero le pizze che compongono l'ordine
+        dalla tabella PrenotazionePizza
+        */
+        try (Connection conn = getConnection();
+                Statement st = conn.createStatement();
+                ResultSet rs = st.executeQuery(query)) {
+            
+            HashMap<Integer, Pizza> hashPizze = getHashPizza();
+            HashMap<Integer, Utente> hashUtenti = getHashUtenti(); 
+            
+            while (rs.next()) {
+                Prenotazione p = new Prenotazione();
+                int idPrenotazione = rs.getInt("id_prenotazione");
+                
+                p.setId(idPrenotazione);
+                p.setDataConsegna(rs.getDate("data_consegna"));
+                p.setOrarioConsegna(rs.getTime("ora_consegna"));
+                p.setConsegnato(rs.getBoolean("consegnato"));
+                p.setProprietario(hashUtenti.get(rs.getInt("fk_utente"))); 
+                
+                ArrayList<ElementoOrdine> temp = prenotazioneGetOrdine(idPrenotazione, hashPizze); 
+                
+                //questa roba è null
+                System.out.println((temp == null ? "null" : "not null")); 
+                for (ElementoOrdine e: temp) {
+                    System.out.println(e.getId()); 
+                }
+                
+                
+                p.setOrdine(temp);
+                
+                pr.add(p); 
+                
+            }
+            
+        } catch (SQLException ex) {
+            System.out.println("PrenotazioniGetAll: " + ex.getMessage());
+        }
+         
+        return pr; 
     }
+    
+    
+    /**
+     * Restituisce il contenuto dell'ordine associata a una prenotazione 
+     * specificata tramite ID 
+     * @param id_prenotazione
+     * @param hashPizze
+     * @return 
+     */
+    private static ArrayList<ElementoOrdine> prenotazioneGetOrdine(int id_prenotazione, HashMap<Integer, Pizza> hashPizze) {
+        String query = "SELECT * FROM PrenotazionePizza WHERE fk_prenotazione=?";
+        ArrayList<ElementoOrdine> ordine = new ArrayList<>();
+        
+        try (Connection conn = getConnection(); 
+                PreparedStatement pst = conn.prepareStatement(query)) {
+            pst.setInt(1, id_prenotazione);
+            
+            try (ResultSet rs = pst.executeQuery()) {
+                while (rs.next()) {
+                    ElementoOrdine e = new ElementoOrdine();
+                    Pizza current = hashPizze.get(rs.getInt("fk_pizza")); 
+                  
+                    e.setId(current.getId());//cos'è?
+                    e.setNome(current.getNome()); //serve hashmap pizze
+                    e.setPrezzo(current.getPrezzo()); //idem
+                    e.setQuantity(rs.getInt("quantita"));
+                    
+                    ordine.add(e); 
+                }
+            }
+        }
+        catch (SQLException ex) {
+            ordine = null; 
+            System.out.println("eccezione in prenotazioneGetOrdine: " + ex.getMessage()); 
+        }
+        
+        return ordine; 
+    }
+    
+    
+    
 
     /**
      * ********************************************************************
@@ -581,13 +652,49 @@ public class Query {
     private static HashMap<Integer, Ingrediente> getHashIngredienti() {
         HashMap<Integer, Ingrediente> ret = new HashMap<>();
 
-        Query.getIngredienti().stream().forEach((i) -> {
-            ret.put(i.getId(), i);
+        Query.getIngredienti().stream().forEach((Ingrediente x) -> {
+            ret.put(x.getId(), x);
         });
 
         return ret;
     }
+    
+    private static HashMap<Integer, Utente> getHashUtenti() {
+        HashMap<Integer, Utente> ret = new HashMap<>(); 
+        
+        Query.utenteGetAll().stream().forEach((Utente x) -> {
+            ret.put(x.getId(), x);
+        });
+        
+        return ret; 
+    }
+    
+    private static ArrayList<Utente> utenteGetAll() {
+        ArrayList<Utente> ret = new ArrayList<>();
+        String query = "SELECT * FROM Utente"; 
+        
+        try (Connection conn = getConnection(); 
+                Statement st = conn.createStatement();
+                ResultSet rs = st.executeQuery(query)) {
+            while (rs.next()) {
+                Utente u = new Utente(); 
+                
+                u.setId(rs.getInt("id_utente"));
+                u.setEmail(rs.getString("email"));
+                u.setPassword(rs.getString("password"));
+                u.setRuolo(rs.getString("ruolo"));
+                
+                ret.add(u); 
+            }
+        } catch (SQLException ex) {
+            System.out.println("Eccezione in UtenteGetAll - " + ex.getMessage()); 
+        }
+        
+        return ret; 
+    }
+    
 
+    //prenotazioneConferma
     public static boolean confirmDeliver(int id_prenotazione) {
         boolean res = false;
         String query = "UPDATE Prenotazione SET consegnato=true WHERE id_prenotazione=?";
@@ -604,6 +711,7 @@ public class Query {
         return res;
     }
 
+    //prenotazioneCancella
     public static boolean deleteReservation(int id_prenotazione) {
         String query1 = "DELETE FROM Prenotazione WHERE id_prenotazione=?";
         String query2 = "DELETE FROM PrenotazionePizza WHERE fk_prenotazione=?";
@@ -625,22 +733,4 @@ public class Query {
         return res;
     }
 
-
-    /* ***************************************************************** *//*
-    private static String quote(String s) {
-        return "'" + s + "'";
-    }
-
-    private static String parentize(String... data) {
-        String res = "";
-
-        for (int i = 0; i < data.length; i++) {
-            res += data[i];
-            if (i != data.length - 1) {
-                res += ", ";
-            }
-        }
-
-        return "(" + res + ")";
-    }*/
 }

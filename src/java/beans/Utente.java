@@ -3,6 +3,7 @@ package beans;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import web.Query;
 
 public class Utente {
@@ -22,8 +23,8 @@ public class Utente {
     public Utente(int id) {
         try {
             DriverManager.registerDriver(new org.apache.derby.jdbc.ClientDriver());
-            Utente temp = Query.getUserById(id); 
-            
+            Utente temp = Query.getUserById(id);
+
             if (temp != null) {
                 this.id = temp.getId();
                 this.email = temp.getEmail();
@@ -66,6 +67,10 @@ public class Utente {
         return ruolo;
     }
 
+    public boolean isAdmin() {
+        return this.ruolo.equalsIgnoreCase("admin");
+    }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -95,26 +100,19 @@ public class Utente {
         } catch (SQLException ex) {
             System.out.println("SMERDO - getPrenotazioni" + ex.getMessage());
         }
-        
+
         return prenotazioniUtente;
-        /*
-        try (Connection conn = Query.getConnection();
-                Statement st = conn.createStatement();
-                ResultSet rs = Query.getPrenotazioniByUserId(st, this.id)) {
-            
-            while (rs.next()) {
-                Prenotazione p = new Prenotazione(); 
-                
-                p.setDataConsegna(rs.getDate("data_consegna"));
-                p.setOrarioConsegna(rs.getTime("ora_consegna"));
-                p.setId(rs.getInt("id_prenotazione"));
-                
-                prenotazioniUtente.add(p);
-            }
-        }
-        catch (SQLException ex) {
-            System.out.println("SMERDO - getPrenotazioni" +  ex.getMessage());
-        }*/
     }
+
+    
+    public ArrayList<Prenotazione> getAllPrenotazioni() {
+        ArrayList<Prenotazione> ret = null; 
+        
+        if (this.isAdmin()) {
+            ret = Query.prenotazioniGetAll(); 
+        }
+        
+        return ret; 
+    } 
 
 }

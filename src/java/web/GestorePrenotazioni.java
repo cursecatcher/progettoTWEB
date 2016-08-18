@@ -147,10 +147,9 @@ public class GestorePrenotazioni extends HttpServlet {
                 rd = ctx.getRequestDispatcher("/index.jsp");
 
             } else if (action.equalsIgnoreCase("add-prenotazione")) {
-                //            int num_pizze = Integer.parseInt(request.getParameter("num_pizze"));
-                HttpSession session = request.getSession();
                 java.sql.Date date = null;
                 java.sql.Time time = null;
+                boolean ok = false;
 
                 // parsing data e orario
                 try {
@@ -161,59 +160,27 @@ public class GestorePrenotazioni extends HttpServlet {
                     out.println("Data parsata: " + temp);
                     date = new java.sql.Date(temp.getTime());
                     time = new java.sql.Time(temp.getTime());
+
+                    ok = true;
                 } catch (ParseException ex) {
                     Logger.getLogger(GestorePrenotazioni.class.getName()).log(Level.SEVERE, null, ex);
                     out.println(ex.getMessage());
                 }
-                //inserisco record in Prenotazione e estraggo l'id del record
-                String query = "INSERT INTO Prenotazione(fk_utente, data_consegna, ora_consegna) "
-                        + "VALUES (?, ?, ?)";
-                try (Connection conn = Query.getConnection();
-                        PreparedStatement st = conn.prepareStatement(
-                                query, Statement.RETURN_GENERATED_KEYS)) {
-                    st.setInt(1, (int) session.getAttribute("idUtente"));
-                    st.setDate(2, date);
-                    st.setTime(3, time);
 
-                    int affectedRows = st.executeUpdate();
-                    if (affectedRows == 0) {
-                        System.out.println("ERRORE BOOOH BOOH");
-                    } else {
-                        // ottengo ID del record appena inserito 
-                        try (ResultSet generatedKey = st.getGeneratedKeys()) {
-                            if (generatedKey.next()) {
-                                long idPrenotazione = generatedKey.getLong(1);
-                                System.out.println("ID generato: " + idPrenotazione);
+                if (ok) {
+                    HttpSession session = request.getSession();
+                    int id_utente = (int) session.getAttribute("idUtente");
+                    Carrello cart = (Carrello) session.getAttribute("carrello");
+                    ArrayList<ElementoOrdine> ordine = new ArrayList<>(cart.getOrdine());
 
-                                // inserisco nel db le varie componenti dell'ordine 
-                                query = "INSERT INTO PrenotazionePizza (fk_prenotazione, fk_pizza, quantita) "
-                                        + "VALUES(?, ?, ?)";
-                                try (PreparedStatement st2 = conn.prepareStatement(query)) {
-                                    Carrello cart = (Carrello) session.getAttribute("carrello");
-
-                                    for (ElementoOrdine e : cart.getOrdine()) {
-                                        st2.setInt(1, (int) idPrenotazione);
-                                        st2.setInt(2, e.getId());
-                                        st2.setInt(3, e.getQuantity());
-                                        st2.addBatch();
-                                    }
-
-                                    st2.executeBatch();
-                                    session.setAttribute("carrello", new Carrello());
-                                    rd = ctx.getRequestDispatcher("/mie-prenotazioni.jsp");
-                                }
-                            } else {
-                                System.out.println("ERRORE  BOOH");
-                            }
-                        } catch (SQLException ex2) {
-                            System.out.println("E mo?");
-                            System.out.println(ex2.getMessage());
-                        }
+                    if (Query.prenotazioneInsert(id_utente, date, time, ordine)) {
+                        session.setAttribute("carrello", new Carrello());
+                        rd = ctx.getRequestDispatcher("/mie-prenotazioni.jsp");
                     }
-                } catch (SQLException ex) {
-                    out.println("SQL EGGEZZIONALE");
-                    System.out.println(ex.getMessage());
+                } else {
+                    //errrore parse date / time
                 }
+                
             } else if (action.equalsIgnoreCase("confirm-deliver")) {
                 int id_prenotazione = Integer.parseInt(request.getParameter("idp"));
                 String resp = Query.confirmDeliver(id_prenotazione) ? "OK" : "ERR";

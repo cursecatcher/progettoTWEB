@@ -9,22 +9,22 @@ jQuery(document).ready(function ($) {
 
         if (nome.trim() === "") {
             $.growl.error({
-                title: "Errore!", 
+                title: "Errore!",
                 message: "Inserisci un nome da dare alla pizza!"
             });
             event.preventDefault();
         } else if (prezzo.trim() === "") {
             $.growl.error({
-                title: "Errore!", 
+                title: "Errore!",
                 message: "Inserisci il campo prezzo!"
-            }); 
+            });
             event.preventDefault();
         } else if (!$("#select-ingredienti").val()) {
             $.growl.error({
-                title: "Errore!", 
+                title: "Errore!",
                 message: "Inserisci almeno un ingrediente!"
             });
-            event.preventDefault(); 
+            event.preventDefault();
         }
     });
 
@@ -36,6 +36,44 @@ jQuery(document).ready(function ($) {
         $edit_form.find("input[name=id]").val(id);
         $edit_form.submit();
     });
+
+    $(".delete-link").on('click', function () {
+        var id = $(this).data('id');
+
+        $.post(
+                "Controller",
+                {
+                    action: "pizza-remove",
+                    id_pizza: id
+                },
+                function (response) {
+                    console.log("response ->" + response);
+
+                    if (response === "OK") {
+                        $.growl.notice({
+                            title: "OK",
+                            message: "Pizza rimossa"
+                        });
+                        $('#pizza-' + id).addClass('hide');
+                    } else if (response === "ERR_NO_RECORD") {
+                        $.growl.error({
+                            title: "ERRORE",
+                            message: "Errore nell'elaborazione della richiesta"
+                        });
+                    } else if (response === "ERR_SQL_ICV") {
+
+                    } else if (response === "ERR_SQL_EXCEPTION") {
+                        $.growl.error({
+                            title: "ERRORE",
+                            message: "Errore nell'esecuzione della query"
+                        });
+                    }
+                }
+        );
+    });
+
+
+
 
     $('#form_newingr').submit(function (event) {
         console.log('submit!!!');

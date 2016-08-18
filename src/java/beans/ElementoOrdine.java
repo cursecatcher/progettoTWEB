@@ -2,7 +2,7 @@ package beans;
 
 
 public class ElementoOrdine {
-    private int id; 
+    private int id; //id pizza
     private String nome; 
     private float prezzo; 
     private int quantity; 

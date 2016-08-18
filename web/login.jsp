@@ -5,7 +5,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Login</title>
 
-        
+
 
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" 
@@ -20,19 +20,19 @@
         <script src="https://code.jquery.com/jquery-2.2.4.min.js"   
                 integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   
         crossorigin="anonymous"></script>
-        
+
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" 
                 integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" 
         crossorigin="anonymous"></script>
-        
+
         <!--growl -->
         <script type="text/javascript" src="include/lib/jquery-growl/jquery.growl.js"></script>
         <link rel="stylesheet" href="include/lib/jquery-growl/jquery.growl.css" type="text/css" />
         <!-- jQuery dropdown -->
         <link type="text/css" rel="stylesheet" href="include/lib/jquery-dropdown/jquery.dropdown.min.css" />
         <script type="text/javascript" src="include/lib/jquery-dropdown/jquery.dropdown.min.js"></script>
-        
+
         <script type="text/javascript" src="include/js/log-reg-checks.js"></script>
         <script type="text/javascript" src="include/js/general.js"></script>
     </head>
@@ -40,10 +40,9 @@
         <jsp:include page="include/header.jsp"/>
 
         <div class="container">
-            <h1>Login</h1>
-            
-
-            <div class="col-md-5">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <h1>Login</h1>
                 <form id="form_login" action="Controller" method="POST">
                     <input type="hidden" name="action" value="user-login"/>
                     <div class="form-group">
@@ -58,7 +57,7 @@
                     </div>
 
                     <!--<input id='submit-login' type="submit"/>-->
-                    <button id="submit-login" type="button" class="btn btn-primary">
+                    <button id="submit-login" type="button" class="btn btn-primary btn-block">
                         Accedi
                     </button>
                 </form>
@@ -70,6 +69,7 @@
                     <span id="result-message">${message}</span>
                 </div> 
             </div>
+            <div class="col-md-3"></div>
         </div>
     </body>
 </html>

@@ -18,7 +18,7 @@
         <script src="https://code.jquery.com/jquery-2.2.4.min.js"   
                 integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   
         crossorigin="anonymous"></script>
-        
+
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" 
                 integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" 
@@ -29,18 +29,17 @@
         <!-- jQuery dropdown -->
         <link type="text/css" rel="stylesheet" href="include/lib/jquery-dropdown/jquery.dropdown.min.css" />
         <script type="text/javascript" src="include/lib/jquery-dropdown/jquery.dropdown.min.js"></script>
-        
+
         <script type="text/javascript" src="include/js/log-reg-checks.js"></script>
         <script type="text/javascript" src="include/js/general.js"></script>
     </head>
     <body>
         <jsp:include page="include/header.jsp"/>
 
-
         <div class="container">
-            <h1>Registrazione</h1>
-
-            <div class="col-md-5">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <h1>Registrazione</h1>
                 <form id="form_reg" action="Controller" method="POST">
                     <div class="form-group">
                         <label for="email">Email</label>
@@ -57,7 +56,7 @@
                         <input id="confirm-password" type="password" name="password2" 
                                class="form-control" placeholder="Conferma password" required/>
                     </div>
-                    <input id='submit-reg' class="btn btn-primary" type="submit" value="Iscriviti"/>
+                    <input id='submit-reg' class="btn btn-primary btn-block" type="submit" value="Iscriviti"/>
 
                 </form>
 
@@ -68,8 +67,8 @@
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <span id="result-message"></span>
                 </div>
-
             </div>
+            <div class="col-md-3"></div>
         </div>
     </body>
 </html>

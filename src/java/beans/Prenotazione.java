@@ -3,23 +3,25 @@ package beans;
 import java.sql.Time;
 import java.sql.Date;
 import java.util.Collection;
-import com.google.gson.internal.Pair;
 import java.util.ArrayList;
 
 
 public class Prenotazione {
     private int id; 
     
+    private int fk_utente; 
     private Date dataConsegna; 
     private Time orarioConsegna; 
     private float prezzo; 
 //    private Collection<Pair<String, Integer>> ordine; //coppia <nome pizza, quantita>
     private ArrayList<ElementoOrdine> ordine; 
     private boolean consegnato; 
+    private Utente proprietario; 
     
     
     public Prenotazione() {
         this.id = -1;
+        this.fk_utente = -1; 
         this.dataConsegna = null; 
         this.orarioConsegna = null; 
         this.prezzo = 0; 
@@ -28,6 +30,10 @@ public class Prenotazione {
 
     public int getId() {
         return this.id;
+    }
+    
+    public int getFkUtente() {
+        return this.fk_utente; 
     }
     
     public ArrayList<ElementoOrdine> getOrdine() {
@@ -50,8 +56,19 @@ public class Prenotazione {
         return this.orarioConsegna;
     }
     
+    public Utente getProprietario() {
+        return this.proprietario; 
+    }
+    
     public float getPrezzo() {
-        return this.prezzo;
+ //       return this.prezzo;
+       float tot = 0; 
+       
+       for (ElementoOrdine e: this.ordine) {
+           tot += e.getPrezzo() * e.getQuantity();
+       }
+       
+       return tot; 
     }
     
     public boolean isConsegnato() {
@@ -60,6 +77,10 @@ public class Prenotazione {
 
     public void setId(int id) {
         this.id = id;
+    }
+    
+    public void setFkUtente(int fk_utente) {
+        this.fk_utente = fk_utente; 
     }
     
     public void setDataConsegna(Date dataConsegna) {
@@ -82,6 +103,7 @@ public class Prenotazione {
         this.consegnato = consegnato;
     }
     
-    
-    
+    public void setProprietario(Utente u) {
+        this.proprietario = u; 
+    }
 }

@@ -36,7 +36,7 @@
 
         <link rel='stylesheet' type='text/css' href='include/lib/sol/sol.css'>
         <script type='text/javascript' src='include/lib/sol/sol.js'></script>
-        
+
         <!--jquery.growl -->
         <script type="text/javascript" src="include/lib/jquery-growl/jquery.growl.js"></script>
         <link rel="stylesheet" href="include/lib/jquery-growl/jquery.growl.css" type="text/css" />
@@ -54,34 +54,44 @@
             <div class="col-md-6">
                 <h1>Catalogo pizze</h1>
                 <c:forEach var="pizza" items="${menu.pizze}">
-                    <div class="row-fluid">
-                        <span class="text-uppercase">
-                            <a href="#0" class="edit-link"
-                               data-id="${pizza.id}" data-nome="${pizza.nome}" 
-                               data-prezzo="${pizza.prezzo}" 
-                               data-ingredienti="${pizza.IDIngredienti}">
-                                <c:out value="${pizza.nome}"/>
-                            </a>
-                        </span>
-                        <span class="pull-right">
-                            <c:out value="${pizza.prezzo}"/>&nbsp;&euro;
-                        </span>
-                        <p class="text-capitalize">
-                            <c:out value="${pizza.listaIngredienti}"/>
-                        </p>
-                    </div> 
+                    <div id="pizza-${pizza.id}" class="row-fluid">
+                        <div class="row-fluid">
+                            <div class="col-md-8 text-uppercase">
+                                <h4><c:out value="${pizza.nome}"/></h4>
+                            </div>
+                            <div class="col-md-2">
+                                <h4><small><c:out value="${pizza.prezzo}"/>&nbsp;&euro;</small></h4>
+                            </div>
+                            <div class="col-md-2">
+                            </div>
+                        </div>
+                        <div class="row-fluid">
+                            <div class="col-md-9">
+                                <c:out value="${pizza.listaIngredienti}"/>
+                            </div>
+                            <div class="col-md-1"></div>
+                            <div class="col-md-2 pull-right">
+                                <c:if test="${user.isAdmin()}">
+                                    <a href="#0" class="edit-link btn btn-primary btn-xs" data-id="${pizza.id}">
+                                        <span class="glyphicon glyphicon-pencil"></span>
+                                    </a>
+                                    <a href="#0" class="delete-link btn btn-danger btn-xs" data-id="${pizza.id}">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </a>
+                                </c:if>
+                            </div>
+                        </div>
+                    </div>
+                    <hr/>
                 </c:forEach>
             </div>
 
-
             <div class="col-md-6">
-                
                 <form id="edit-req" action="Controller" method="GET">
                     <input type="hidden" name="action" value="edit-req"/>
                     <input type="hidden" name="id" value="-1"/>
                 </form>
-                
-                
+
                 <div id="inserimento-pizza">
                     <h1>Nuova pizza</h1>
 
@@ -135,7 +145,7 @@
 
                     Clicca <a href='newingrediente.jsp'>qui</a> per inserire un ingrediente mancante! 
                 </div> 
-                
+
             </div>
         </div>
     </body>

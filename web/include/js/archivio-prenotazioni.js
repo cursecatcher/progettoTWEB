@@ -82,6 +82,4 @@ jQuery(document).ready(function ($) {
                 }//end if
             }}); //end bootbox
     }); //end delete-deliver event listener
-
-
 });

@@ -1,10 +1,16 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+<c:if test="${usertoken != 'authenticated'}">
+    <c:redirect url="login.jsp"/>
+</c:if>
+
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
-        
+
         <script src="https://code.jquery.com/jquery-2.2.4.min.js"   
                 integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   
         crossorigin="anonymous"></script>
@@ -23,13 +29,64 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" 
                 integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" 
         crossorigin="anonymous"></script>
-        
+
+        <!--growl -->
+        <script type="text/javascript" src="include/lib/jquery-growl/jquery.growl.js"></script>
+        <link rel="stylesheet" href="include/lib/jquery-growl/jquery.growl.css" type="text/css" />
+        <!-- jQuery dropdown -->
+        <link type="text/css" rel="stylesheet" href="include/lib/jquery-dropdown/jquery.dropdown.min.css" />
+        <script type="text/javascript" src="include/lib/jquery-dropdown/jquery.dropdown.min.js"></script>
+
+
         <script type="text/javascript" src="include/js/general.js"></script>
     </head>
     <body>
         <%@include file="include/header.jsp" %>
-        
-        <h1>Prenotazioni utenti - solo admin</h1>
-        
+
+        <div class="container">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <h1>Prenotazioni utenti - solo admin</h1>
+
+                <c:forEach var="p" items="${user.allPrenotazioni}">
+                    <div id="pren-${p.id}" class="panel panel-default">
+                        <div class="panel-body">
+                            <p>
+                                Consegna prevista il 
+                                <strong>
+                                    <fmt:formatDate value="${p.dataConsegna}" 
+                                                    pattern="dd-MM-yyyy" />
+                                </strong>
+                                alle ore 
+                                <strong>
+                                    <fmt:formatDate value="${p.orarioConsegna}" 
+                                                    pattern="HH:mm" />
+                                </strong>
+                            </p>
+                            <c:forEach var="el" items="${p.ordine}">
+                                <div>
+                                    <c:out value="${el.quantity}"/>x&nbsp;
+                                    <strong><c:out value="${el.nome}"/></strong>
+                                </div>
+                            </c:forEach>
+
+                            Importo: 
+                            <strong>
+                                <fmt:formatNumber type="number" value="${p.prezzo}" minFractionDigits="2"/>
+                                &euro;
+                            </strong>
+
+
+
+                        </div>
+                        <div class="panel-footer">
+                            Utente: <c:out value="${p.proprietario.email}"/>
+                        </div>
+                    </div>
+                </c:forEach>
+
+            </div>
+            <div class="col-md-3"></div>
+        </div>
     </body>
 </html>

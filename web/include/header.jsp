@@ -24,7 +24,7 @@
                                 <li><a href="newordine.jsp">Ordina</a></li>
                                 <li><a href="#0">Qualcos'altro</a></li>
                                 <li role="separator" class="divider"></li>
-                                <li><a href="#0">Logout</a></li>
+                                <li><a href="#0" id="disconnect">Logout</a></li>
                             </ul>
                         </li>
                         <li class="dropdown">
@@ -75,3 +75,7 @@
         </div>
     </div>
 </c:if>
+
+<form action="Controller" method="GET" id="form-action">
+    <input type="hidden" name="action" value="random"/>
+</form>
