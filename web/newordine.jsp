@@ -51,7 +51,7 @@
         <%@include file="include/header.jsp" %>
 
         <div class="container">
-            <div class="col-md-6">
+            <div class="col-md-8">
                 <h1>Prenotazione</h1>
                 <div id="elenco-pizze">
                     <c:forEach var="pizza" items="${menu.pizze}">
@@ -86,9 +86,10 @@
                     </c:forEach>
                 </div>
             </div>
-            
-            <div class="col-md-6">
+            <div class="col-md-4">
+                <!-- https://stackoverflow.com/questions/15850271/how-to-make-div-fixed-after-you-scroll-to-that-div -->
                 <h1>Il tuo ordine</h1>
+                <div id="carrello"></div>
                 <%--
                 <div id="carrello">
                     <c:choose>
@@ -121,7 +122,7 @@
                     <span id="error" class="hide">
                         <c:out value="${message}"/>
                     </span>
-                </form>    
+                </form>   
             </div>
         </div>
     </body>

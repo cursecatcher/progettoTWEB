@@ -37,6 +37,9 @@
         <link rel='stylesheet' type='text/css' href='include/lib/sol/sol.css'>
         <script type='text/javascript' src='include/lib/sol/sol.js'></script>
 
+        <!-- bootbox -->
+        <script type="text/javascript" 
+        src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
         <!--jquery.growl -->
         <script type="text/javascript" src="include/lib/jquery-growl/jquery.growl.js"></script>
         <link rel="stylesheet" href="include/lib/jquery-growl/jquery.growl.css" type="text/css" />
@@ -102,14 +105,14 @@
                         <div class="form-group">
                             <label for="nome_pizza_create">Nome pizza</label>
                             <input id="nome_pizza_create" name="nome" type="text" class="form-control"
-                                   placeholder="Nome della pizza"/>
+                                   placeholder="Nome della pizza" required/>
                         </div>
                         <!-- prezzo -->
                         <div class="form-group">
                             <label for="prezzo_pizza_create">Prezzo pizza</label>
                             <div class="input-group">
                                 <input id="prezzo_pizza_create" name="prezzo" type="number" min="0.5" step="0.1"
-                                       class="form-control" placeholder="Prezzo della pizza..."/>
+                                       class="form-control" placeholder="Prezzo della pizza..." required/>
                                 <span class="input-group-addon">&euro;</span>
                             </div>
                         </div>

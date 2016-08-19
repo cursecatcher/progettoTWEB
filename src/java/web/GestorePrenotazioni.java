@@ -80,7 +80,7 @@ public class GestorePrenotazioni extends HttpServlet {
                 int id_prenotazione = Integer.parseInt(request.getParameter("id"));
 
                 try {
-                    Prenotazione p = Query.getPrenotazione(id_prenotazione);
+                    Prenotazione p = Query.prenotazioneGetByID(id_prenotazione);
 
                     json.accumulate("data_consegna", p.getDataConsegna());
                     json.accumulate("orario_consegna", p.getOrarioConsegna());
@@ -168,12 +168,16 @@ public class GestorePrenotazioni extends HttpServlet {
                 }
 
                 if (ok) {
+                    String nomeCompleto = request.getParameter("nominativo"); 
+                    String indirizzo = request.getParameter("indirizzo"); 
+                    
+                    
                     HttpSession session = request.getSession();
                     int id_utente = (int) session.getAttribute("idUtente");
                     Carrello cart = (Carrello) session.getAttribute("carrello");
                     ArrayList<ElementoOrdine> ordine = new ArrayList<>(cart.getOrdine());
 
-                    if (Query.prenotazioneInsert(id_utente, date, time, ordine)) {
+                    if (Query.prenotazioneInsert(id_utente, nomeCompleto, indirizzo, date, time, ordine)) {
                         session.setAttribute("carrello", new Carrello());
                         rd = ctx.getRequestDispatcher("/mie-prenotazioni.jsp");
                     }
@@ -183,7 +187,7 @@ public class GestorePrenotazioni extends HttpServlet {
                 
             } else if (action.equalsIgnoreCase("confirm-deliver")) {
                 int id_prenotazione = Integer.parseInt(request.getParameter("idp"));
-                String resp = Query.confirmDeliver(id_prenotazione) ? "OK" : "ERR";
+                String resp = Query.prenotazioneConfermaConsegna(id_prenotazione) ? "OK" : "ERR";
 
                 System.out.println("Conferma ordine n. " + id_prenotazione + ": " + resp);
 
@@ -191,7 +195,7 @@ public class GestorePrenotazioni extends HttpServlet {
 
             } else if (action.equalsIgnoreCase("delete-deliver")) {
                 int id_prenotazione = Integer.parseInt(request.getParameter("idp"));
-                String resp = Query.deleteReservation(id_prenotazione) ? "OK" : "ERR";
+                String resp = Query.prenotazioneDelete(id_prenotazione) ? "OK" : "ERR";
 
                 System.out.println("Cancellazione ordine n. " + id_prenotazione + ": " + resp);
 

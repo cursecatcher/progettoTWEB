@@ -21,7 +21,7 @@ public class Ingredienti {
     private ArrayList<Ingrediente> listaIngredienti;
 
     public Ingredienti() {
-        this.listaIngredienti = (ArrayList) Query.getIngredienti(); 
+        this.listaIngredienti = (ArrayList) Query.ingredienteGetAll(); 
     }
 
     public Collection<Ingrediente> getListaIngredienti() {

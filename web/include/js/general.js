@@ -1,6 +1,6 @@
 function renderJSONPizza(json) {
     return "<div class='row' style='padding-left: 1em'>" +
-            "<a class='remove-pizza' href='#0' " +
+            "<a class='remove-pizza btn btn-danger btn-xs' href='#0' " +
             "data-id-pizza='" + json.id_pizza + "'" + 
             "data-nome-pizza='" + json.nome_pizza + "'>" +
             "<span class='glyphicon glyphicon-minus'></span></a>" +
@@ -33,6 +33,8 @@ jQuery(document).ready(function ($) {
     var $badge = $('#cart-badge'); //contatore elementi presenti nel carrello
     var $prezzo = $('#prezzo-tot'); //costo complessivo dell'ordine corrente
     var $header_tot = $('#cart-euro'); //prezzo ordine presente nell'header 
+    //
+    var $ordine = $('#carrello');
     
     var $form_action = $('#form-action');
     
@@ -64,6 +66,7 @@ jQuery(document).ready(function ($) {
                     });
                     
                     $cart.html(renderJSONCart(responseJSON.ordine));
+                    $ordine.html(renderJSONCart(responseJSON.ordine));
                     $badge.text(responseJSON.tot_pizze);
                     $prezzo.text(responseJSON.prezzo_tot.toFixed(2));
                     $header_tot.text(responseJSON.prezzo_tot.toFixed(2));
@@ -91,6 +94,7 @@ jQuery(document).ready(function ($) {
                     });
                     
                     $cart.html(renderJSONCart(responseJSON.ordine));
+                    $ordine.html(renderJSONCart(responseJSON.ordine));
                     $badge.text(responseJSON.tot_pizze);
                     $prezzo.text(responseJSON.prezzo_tot.toFixed(2));
                     $header_tot.text(responseJSON.prezzo_tot.toFixed(2));

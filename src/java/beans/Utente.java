@@ -23,7 +23,7 @@ public class Utente {
     public Utente(int id) {
         try {
             DriverManager.registerDriver(new org.apache.derby.jdbc.ClientDriver());
-            Utente temp = Query.getUserById(id);
+            Utente temp = Query.utenteGetById(id);
 
             if (temp != null) {
                 this.id = temp.getId();
@@ -92,10 +92,10 @@ public class Utente {
 
         try (Connection conn = Query.getConnection();
                 Statement st = conn.createStatement();
-                ResultSet rs = Query.getPrenotazioniByUserId(st, this.id)) {
+                ResultSet rs = Query.prenotazioneGetByUserID(st, this.id)) {
 
             while (rs.next()) {
-                prenotazioniUtente.add(Query.getPrenotazione(rs.getInt("id_prenotazione")));
+                prenotazioniUtente.add(Query.prenotazioneGetByID(rs.getInt("id_prenotazione")));
             }
         } catch (SQLException ex) {
             System.out.println("SMERDO - getPrenotazioni" + ex.getMessage());

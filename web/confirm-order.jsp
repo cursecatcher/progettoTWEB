@@ -4,7 +4,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
-        
+
         <script src="https://code.jquery.com/jquery-2.2.4.min.js"   
                 integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   
         crossorigin="anonymous"></script>
@@ -42,60 +42,72 @@
 
         <script type="text/javascript" src="include/js/prenotazioni.js"></script>
         <script type="text/javascript" src="include/js/general.js"></script>
-        
+
     </head>
     <body>
         <%@include file="include/header.jsp" %>
 
         <div class="container">
-            <div class="col-md-3"></div>
-            <div class="col-md-6">
+            <div class="col-md-1"></div>
+            <div class="col-md-5">
                 <div>
-                    <h2>Il tuo ordine</h2>
-                    
+                    <h3>Indica l'indirizzo di consegna</h3>
+                    <form action="Controller" method="POST">
+                        <input type="hidden" name="action" value="add-prenotazione"/>
+
+                        <div class="form-group">
+                            <label for="nominativo">Nome completo</label>
+                            <input type="text" id="nominativo" name="nominativo" 
+                                   class="form-control" required
+                                   placeholder="es. Nicola Licheri"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="indirizzo">Indirizzo di consegna</label>
+                            <input type="text" id="indirizzo" name="indirizzo"
+                                   class="form-control" required
+                                   placeholder="es. Corso Francia, 13"/>
+                        </div>
+                        
+                        <h3>Quando devono essere consegnate?</h3>
+                        <div class="form-group">
+                            <label for="data">Data consegna</label>
+                            <div id="datepicker" class="input-group date">
+                                <input id="data" name="dataConsegna" type="text" 
+                                       class="form-control" required=""/>
+                                <span class="input-group-addon">
+                                    <i class="glyphicon glyphicon-th"></i>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="orario">Ora di consegna</label>
+                            <div id="timepicker" class="input-group">
+                                <input id="orario" type="text" name="oraConsegna"
+                                       placeholder="hh:mm" class="form-control" required/> 
+                                <span class="input-group-addon">
+                                    <i class="glyphicon glyphicon-time"></i>
+                                </span>
+                            </div>
+                        </div> 
+                        <input type="submit" name="submit" value="Ordina!" class="btn btn-primary btn-block"/>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-4">
+                <div>
+                    <h3>Riepilogo ordine</h3>
+
                     <c:forEach var="el" items="${carrello.ordine}">
                         <c:out value="${el.quantity}"/>x&nbsp;<strong><c:out value="${el.nome}"/></strong><br/>
                     </c:forEach>
-                    
+
                     <a href="newordine.jsp" class="btn btn-primary btn-block">
                         Modifica ordine
                     </a>
                 </div>
-            <div>
-                <h2>Dettagli consegna</h2>
-                <form action="Controller" method="POST">
-                    <input type="hidden" name="action" value="add-prenotazione"/>
-                    
-                    <div class="form-group">
-                        <label for="data">Data consegna</label>
-                        <div id="datepicker" class="input-group date">
-                            <input id="data" name="dataConsegna" type="text" 
-                                   class="form-control"/>
-                            <span class="input-group-addon">
-                                <i class="glyphicon glyphicon-th"></i>
-                            </span>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="orario">Ora di consegna</label>
-                        <div id="timepicker" class="input-group">
-                            <input id="orario" type="text" name="oraConsegna"
-                                   placeholder="hh:mm" class="form-control"/> 
-                            <span class="input-group-addon">
-                                <i class="glyphicon glyphicon-time"></i>
-                            </span>
-                        </div>
-                    </div> 
-                    
-                    <input type="submit" name="submit" value="Ordina!" class="btn btn-primary btn-block"/>
-                </form>
             </div>
-            </div>
-            <div class="col-md-3"></div>
-            
-            
         </div>
-
     </body>
 </html>

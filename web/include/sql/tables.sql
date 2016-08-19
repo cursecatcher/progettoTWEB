@@ -1,17 +1,18 @@
 CREATE TABLE Pizza (
     id_pizza INT NOT NULL PRIMARY KEY
         GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), 
-    nome VARCHAR(33) NOT NULL UNIQUE, 
+    nome VARCHAR(33) NOT NULL, 
     prezzo FLOAT NOT NULL, 
-    ingredienti VARCHAR(129) NOT NULL,
+    ingredienti VARCHAR(129),
+    disponibile BOOLEAN DEFAULT TRUE, 
     CHECK (prezzo > 0)
 ); 
 
 CREATE TABLE Utente (
     id_utente INT NOT NULL PRIMARY KEY 
         GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), 
-    email VARCHAR(65) NOT NULL UNIQUE, /* !!! */
-    password CHAR(40), /* Possibili valori null per il login tramite social */
+    email VARCHAR(65) NOT NULL UNIQUE, 
+    password CHAR(40) NOT NULL, 
     ruolo VARCHAR(10) NOT NULL 
 ); 
 
@@ -21,7 +22,6 @@ CREATE TABLE Ingrediente (
     nome VARCHAR(33) NOT NULL UNIQUE, 
     prezzo FLOAT NOT NULL, /* forse inutile */
     CHECK (prezzo >= 0) 
-
 );
 
 CREATE TABLE IngredientiPizza (
@@ -37,9 +37,13 @@ CREATE TABLE Prenotazione (
     id_prenotazione INT NOT NULL PRIMARY KEY 
         GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), 
     fk_utente INT REFERENCES Utente(id_utente),
+    /*******/
+    nominativo VARCHAR(41) NOT NULL, 
+    indirizzo VARCHAR(41) NOT NULL, 
+    /*******/
     data_consegna DATE, 
     ora_consegna TIME,
-    /*prezzo_totale FLOAT,*/
+
     consegnato BOOLEAN DEFAULT FALSE 
 ); 
 

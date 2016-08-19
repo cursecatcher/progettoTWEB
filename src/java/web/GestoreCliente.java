@@ -102,7 +102,7 @@ public class GestoreCliente extends HttpServlet {
                 String password = request.getParameter("password");
 
                 try (Connection conn = Query.getConnection()) {
-                    Utente u = Query.getUserByEmail(conn, email);
+                    Utente u = Query.utenteGetByEmail(conn, email);
 
                     if (u != null) {
                         if (u.getPassword().equals(DigestUtils.sha1Hex(password))) {

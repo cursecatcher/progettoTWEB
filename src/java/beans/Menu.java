@@ -25,7 +25,7 @@ public class Menu {
  //   private HashMap<String, String> ingredientiMap;
 
     public Menu() {
-        this.pizze = Query.getPizze();
+        this.pizze = Query.pizzaGetAll();
         
     //    this.ingredientiMap = new HashMap<String, String>();
         System.out.println("CREAZIONE BEAN");

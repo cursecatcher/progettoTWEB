@@ -80,26 +80,22 @@ public class Controller extends HttpServlet {
 
         } else if (action.equalsIgnoreCase("edit-req")) {
             int idp = Integer.parseInt(request.getParameter("id"));
-            Pizza p = Query.getPizzaById(idp);
+            Pizza p = Query.pizzaGetById(idp);
 
             if (idp < 0) {
                 rd = ctx.getRequestDispatcher("/error.jsp");
                 System.out.println("idp < 0");
-            } 
-            else if (p == null) {
-                rd = ctx.getRequestDispatcher("/error.jsp"); 
+            } else if (p == null) {
+                rd = ctx.getRequestDispatcher("/error.jsp");
                 System.out.println("p == null");
-            }
-            
-            else {
+            } else {
                 request.setAttribute("pizza", p);
                 rd = ctx.getRequestDispatcher("/editpizza.jsp");
             }
-        }
-        else if (action.equalsIgnoreCase("logout")) {
+        } else if (action.equalsIgnoreCase("logout")) {
             HttpSession session = request.getSession();
             session.invalidate();
-            rd = ctx.getRequestDispatcher("/index.jsp"); 
+            rd = ctx.getRequestDispatcher("/index.jsp");
         }
 
         rd.forward(request, response);
@@ -158,10 +154,9 @@ public class Controller extends HttpServlet {
             } else if (action.equalsIgnoreCase("delete-deliver")) {
                 rd = ctx.getNamedDispatcher("GestorePrenotazioni");
 
-            }
-            else if (action.equalsIgnoreCase("pizza-remove")) {
+            } else if (action.equalsIgnoreCase("pizza-remove")) {
                 rd = ctx.getNamedDispatcher("GestoreCucina");
-                
+
             }
 
             rd.forward(request, response);
