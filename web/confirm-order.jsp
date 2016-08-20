@@ -59,13 +59,13 @@
                             <label for="nominativo">Nome completo</label>
                             <input type="text" id="nominativo" name="nominativo" 
                                    class="form-control" required
-                                   placeholder="es. Nicola Licheri"/>
+                                   placeholder="Il nome sul citofono"/>
                         </div>
                         <div class="form-group">
                             <label for="indirizzo">Indirizzo di consegna</label>
                             <input type="text" id="indirizzo" name="indirizzo"
                                    class="form-control" required
-                                   placeholder="es. Corso Francia, 13"/>
+                                   placeholder="Indirizzo di consegna"/>
                         </div>
                         
                         <h3>Quando devono essere consegnate?</h3>

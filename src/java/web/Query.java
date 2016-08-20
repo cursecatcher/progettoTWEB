@@ -9,10 +9,9 @@ import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.codec.digest.DigestUtils;
 
 public class Query {
@@ -33,10 +32,9 @@ public class Query {
      *
      * @return ArrayList di oggetti di tipo Pizza
      */
-    public static Collection<Pizza> pizzaGetAll() {
-        Collection<Pizza> res = new ArrayList<>();
-        String query = "SELECT * FROM Pizza ORDER BY nome";
-//        String iquery = "SELECT * FROM Ingrediente";
+    public static ArrayList<Pizza> pizzaGetAll() {
+        ArrayList<Pizza> res = new ArrayList<>();
+        String query = "SELECT * FROM Pizza WHERE disponibile=true ORDER BY nome";
         System.out.println("Eseguo query: " + query);
 
         try (Connection conn = getConnection();
@@ -48,19 +46,16 @@ public class Query {
                 while (rs.next()) {
                     String[] ingredienti = rs.getString("ingredienti").split(",");
                     ArrayList<Ingrediente> ingredientiPizza = new ArrayList<>();
-                    String flatlist = "";
-
-                    /* creo stringa ingredienti pizza */
-                    for (String key : ingredienti) {
-                        int ikey = Integer.parseInt(key);
-                        Ingrediente curr = ingredientiMap.get(ikey);
-
-                        flatlist += curr.getNome() + ", ";
-                        ingredientiPizza.add(curr);
-
-                        //        flatlist += ingredientiMap.get(key) + ", ";
+                    
+                    for (String key: ingredienti) {
+                        int ikey = Integer.parseInt(key); 
+                        ingredientiPizza.add(ingredientiMap.get(ikey)); 
                     }
-                    flatlist = flatlist.substring(0, flatlist.length() - 2);
+                    
+                    String flatlist = ingredientiPizza.stream()
+                            .map(Ingrediente::getNome)
+                            .reduce((t, u) -> t + ", " + u)
+                            .get(); 
 
                     Pizza p = new Pizza();
 
@@ -72,58 +67,54 @@ public class Query {
 
                     res.add(p);
                 }
-
-                //     rs.close();
             }
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
             res = null;
         }
+        
 
         return res;
     }
 
-    /*
-    public static boolean pizzaInsert(String nome, float prezzo, String ingredienti) {
-        String query = "INSERT INTO Pizza(nome, prezzo, ingredienti) VALUES (?,?,?)";
-        boolean res = false;
+    public static boolean pizzaInsert(String nome, float prezzo, String[] ingredienti) {
+        boolean ret = false;
+        
+        //codice random per avere pomodoro e mozzarella come primi ingredienti
+        int[] temp = Arrays.asList(ingredienti).stream()
+                .mapToInt(Integer::parseInt)
+                .toArray();
+        Arrays.sort(temp); 
+        
+        for (int i = 0; i < ingredienti.length; i++) {
+            ingredienti[i] = String.valueOf(temp[i]);
+        }
+        
+        try (Connection conn = getConnection()) {
+            // verifica vincolo di unicità sul nome rispetto alle pizze disponibili 
+            if (pizzaGetIdFromName(conn, nome) == -1) {
+                int key = pizzaInsertRecord(conn, nome, prezzo, String.join(",", ingredienti));
 
-        try (Connection conn = getConnection();
-                Statement st = conn.createStatement();
-                ResultSet rs = pizzaGetByName(st, nome)) {
-            if (!rs.next()) {
-                try (PreparedStatement pst = conn.prepareStatement(query)) {
-                    pst.setString(1, nome.toLowerCase());
-                    pst.setFloat(2, prezzo);
-                    pst.setString(3, ingredienti);
-                    res = pst.executeUpdate() == 1;
+                if (key != -1) {
+                    ret = pizzaInsertIngredienti(conn, key, ingredienti);
                 }
             }
-        } catch (SQLException ex) {
-        }
 
-        return res;
-    }*/
-    public static boolean pizzaInsert(String nome, float prezzo, String[] ingredienti) {
-        int key = pizzaInsertRecord(nome, prezzo, String.join(",", ingredienti)); 
-        boolean ret = false; 
-        
-        if (key != -1) {
-            ret = pizzaInsertIngredienti(key, ingredienti); 
+        } catch (SQLException ex) {
+            System.out.println("eccezione in pizzaInsert: " + ex.getMessage());
         }
 
         return ret;
     }
 
-    private static int pizzaInsertRecord(String nome, float prezzo, String ingredientiFlat) {
+    private static int pizzaInsertRecord(Connection conn, String nome, float prezzo, String ingredientiFlat) {
         String query = "INSERT INTO Pizza(nome, prezzo, ingredienti) VALUES(?,?, ?)";
-        int idPizza = -1; 
-        
-        try (Connection conn = getConnection();
-                PreparedStatement pst
+        int idPizza = -1;
+
+        try (PreparedStatement pst
                 = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 
-            pst.setString(1, nome);
+            pst.setString(1, nome.toLowerCase());
             pst.setFloat(2, prezzo);
             pst.setString(3, ingredientiFlat);
 
@@ -138,16 +129,15 @@ public class Query {
         } catch (SQLException ex) {
             System.out.println("Eccezione in pizzaInsertRecord: " + ex.getMessage());
         }
-        
+
         return idPizza;
     }
-    
-    private static boolean pizzaInsertIngredienti(int idPizza, String[] ingredienti) {
+
+    private static boolean pizzaInsertIngredienti(Connection conn, int idPizza, String[] ingredienti) {
         String query = "INSERT INTO IngredientiPizza(fk_pizza, fk_ingrediente) VALUES (?, ?)";
         boolean ret = false;
 
-        try (Connection conn = getConnection(); 
-                PreparedStatement pst = conn.prepareStatement(query)) {
+        try (PreparedStatement pst = conn.prepareStatement(query)) {
 
             for (String ingrediente : ingredienti) {
                 pst.setInt(1, idPizza);
@@ -165,6 +155,31 @@ public class Query {
         return ret;
     }
 
+    private static boolean pizzaEditIngredienti(Connection conn, int idPizza, String[] ingredienti) {
+        boolean res = pizzaRemoveIngredienti(conn, idPizza);
+
+        if (res) {
+            res = pizzaInsertIngredienti(conn, idPizza, ingredienti);
+        }
+
+        return res;
+    }
+
+    private static boolean pizzaRemoveIngredienti(Connection conn, int idPizza) {
+        String query = "DELETE FROM IngredientiPizza WHERE fk_pizza=?";
+        boolean ret = false;
+
+        try (PreparedStatement pst = conn.prepareStatement(query)) {
+            pst.setInt(1, idPizza);
+            pst.executeUpdate();
+            ret = true;
+        } catch (SQLException ex) {
+            System.out.println("Eccezione in pizzaRemoveIngredienti: " + ex.getMessage());
+        }
+
+        return ret;
+    }
+
     public static Pizza pizzaGetById(int id) {
         Pizza p = null;
         String query = "SELECT * FROM Pizza WHERE id_pizza=?";
@@ -175,31 +190,20 @@ public class Query {
             ResultSet rs = pst.executeQuery();
 
             if (rs.next()) {
-                HashMap<Integer, Ingrediente> hi = ingredienteGethashMap();
+                ArrayList<Ingrediente> ingredientiPizza = pizzaGetIngredienti(id);
+                String flatlist = ingredientiPizza.stream()
+                        .map(Ingrediente::getNome)
+                        .reduce((t, u) -> t + "," + u)
+                        .get();
 
-                ///////schifo
-                String[] ingredienti = rs.getString("ingredienti").split(",");
-                ArrayList<Ingrediente> ingredientiPizza = new ArrayList<>();
-                String flatlist = "";
-
-                /* creo stringa ingredienti pizza */
-                for (String key : ingredienti) {
-                    int ikey = Integer.parseInt(key);
-                    Ingrediente curr = hi.get(ikey);
-
-                    flatlist += curr.getNome() + ", ";
-                    ingredientiPizza.add(curr);
-                }
-                flatlist = flatlist.substring(0, flatlist.length() - 2);
-
+                System.out.println("flatlist: " + flatlist); 
+                
                 p = new Pizza();
                 p.setId(rs.getInt("id_pizza"));
                 p.setNome(rs.getString("nome"));
                 p.setPrezzo(rs.getFloat("prezzo"));
                 p.setListIngredienti(flatlist);
                 p.setIngredienti(ingredientiPizza);
-                ///////schifo
-
             }
         } catch (SQLException ex) {
         }
@@ -207,39 +211,81 @@ public class Query {
         return p;
     }
 
-    /**
-     *
-     * @param st
-     * @param nome
-     * @return
-     * @throws SQLException
-     */
-    private static ResultSet pizzaGetByName(Statement st, String nome)
-            throws SQLException {
-        String query = "SELECT * FROM Pizza WHERE nome='" + nome.toLowerCase() + "'";
-        System.out.println("Eseguo query: " + query);
-        return st.executeQuery(query);
+    private static ArrayList<Ingrediente> pizzaGetIngredienti(int idPizza) {
+        String query = "SELECT I.id_ingrediente, I.nome, I.prezzo "
+                + "FROM Ingrediente AS I, IngredientiPizza AS IP "
+                + "WHERE IP.fk_ingrediente=I.id_ingrediente AND IP.fk_pizza=?";
+        ArrayList<Ingrediente> ret = new ArrayList<>();
+
+        try (Connection conn = getConnection();
+                PreparedStatement pst = conn.prepareStatement(query)) {
+
+            pst.setInt(1, idPizza);
+
+            try (ResultSet rs = pst.executeQuery()) {
+                while (rs.next()) {
+                    Ingrediente i = new Ingrediente();
+
+                    i.setId(rs.getInt("id_ingrediente"));
+                    i.setNome(rs.getString("nome"));
+                    i.setPrezzo(rs.getFloat("prezzo"));
+
+                    ret.add(i);
+                }
+            }
+
+        } catch (SQLException ex) {
+            System.out.println("Eccezione in pizzaGetIngredienti: " + ex.getMessage());
+        }
+
+        return ret;
     }
 
-    public static String pizzaUpdate(int id, String nome, float prezzo, String ingredienti) {
+    
+    private static int pizzaGetIdFromName(Connection conn, String nome) {
+        String query = "SELECT id_pizza FROM Pizza WHERE nome=? AND disponibile=true";
+        int key = -1;
+
+        try (PreparedStatement pst = conn.prepareStatement(query)) {
+            pst.setString(1, nome.toLowerCase());
+            try (ResultSet rs = pst.executeQuery()) {
+                if (rs.next()) {
+                    key = rs.getInt("id_pizza");
+                }
+            }
+        } catch (SQLException ex) {
+            System.out.println("eccezione in pizzaGetIdFromName: " + ex.getMessage());
+        }
+
+        return key;
+
+    }
+
+    public static String pizzaUpdate(int id, String nome, float prezzo, String[] ingredienti) {
         String query = "UPDATE Pizza SET nome=?, prezzo=?, ingredienti=? WHERE id_pizza=?";
         String ret = "ERR_UNAVAIABLE_NAME";
 
         try (Connection conn = getConnection();
-                PreparedStatement pst = conn.prepareStatement(query);
-                Statement st = conn.createStatement();
-                ResultSet pizza = pizzaGetByName(st, nome)) {
+                PreparedStatement pst = conn.prepareStatement(query)) {
+            int key_pr = pizzaGetIdFromName(conn, nome);
             /* Verifica l'univocità del nome della pizza che stiamo andando a inserire: 
             il record viene modificato se il nome non è presente nel db, o se è presente 
             sul record che sta per essere aggiornato */
-            if (!pizza.next() || pizza.getInt("id_pizza") == id) {
+            if (key_pr == -1 || key_pr == id) {
                 pst.setString(1, nome.toLowerCase());
                 pst.setFloat(2, prezzo);
-                pst.setString(3, ingredienti);
+                pst.setString(3, String.join(",", ingredienti));
                 pst.setInt(4, id);
 
                 System.out.println("Eseguo update pizza!");
-                ret = pst.executeUpdate() == 1 ? "OK" : "ERR_BOH";
+
+                if (pst.executeUpdate() == 1) {
+                    ret = pizzaEditIngredienti(conn, id, ingredienti)
+                            ? "OK" : "ERR_UPDATE_INGREDIENTI";
+                } else {
+                    ret = "ERR_UPDATE";
+                }
+
             }
         } catch (SQLException ex) {
             ret = "ERR_SQL_EXCEPTION";
@@ -250,21 +296,45 @@ public class Query {
 
     public static String pizzaDelete(int idPizza) {
         String query = "DELETE FROM Pizza WHERE id_pizza=?";
-        String res = "";
+        String res;
 
-        try (Connection conn = Query.getConnection();
-                PreparedStatement pst = conn.prepareStatement(query)) {
-            pst.setInt(1, idPizza);
-            res = pst.executeUpdate() == 1 ? "OK" : "ERR_NO_RECORD";
+        try (Connection conn = getConnection()) {
 
-        } catch (SQLIntegrityConstraintViolationException ex) {
-            res = "ERR_SQL_ICV";
+            try (PreparedStatement pst = conn.prepareStatement(query)) {
+                pizzaRemoveIngredienti(conn, idPizza);
+
+                pst.setInt(1, idPizza);
+                res = pst.executeUpdate() == 1 ? "OK" : "ERR_NO_RECORD";
+
+            } catch (SQLIntegrityConstraintViolationException ex) {
+                /*impossibile cancellare la pizza perchè viene referenziata da
+                uno o più record Prenotazione: rendo la pizza non disponibile */
+                System.out.println("SQL_ICV_Exception in pizzaDelete");
+                System.out.println("Risolvo");
+
+                pizzaRendiNonDisponibile(conn, idPizza);
+
+                res = "OK_PIZZA_UNAVAILABLE";
+            }
+
         } catch (SQLException ex) {
-            Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Eccezione in pizzaDelete: " + ex.getMessage());
             res = "ERR_SQL_EXCEPTION";
         }
 
         return res;
+    }
+
+    private static void pizzaRendiNonDisponibile(Connection conn, int idPizza) {
+        String query = "UPDATE Pizza SET disponibile=false WHERE id_pizza=?";
+
+        try (PreparedStatement pst = conn.prepareStatement(query)) {
+            pst.setInt(1, idPizza);
+            pst.executeUpdate();
+
+        } catch (SQLException ex) {
+            System.out.println("Eccezione in pizzaRendiNonDisponibile: " + ex.getMessage());
+        }
     }
 
     /**
@@ -377,8 +447,9 @@ public class Query {
      * social
      * @return true se l'inserimento va a buon fine, false altrimenti
      */
-    public static boolean insertNewClient(String email, String password) {
-        String query = "INSERT INTO Utente(email, password, ruolo) VALUES (?,?,'cliente')";
+    public static boolean insertNewClient(String email, String password, String nome, String cognome) {
+        String query = "INSERT INTO Utente(email, password, nome, cognome, ruolo) " +
+                "VALUES (?,?,?,?,'cliente')";
         boolean res = false;
 
         try (Connection conn = getConnection()) {
@@ -387,6 +458,8 @@ public class Query {
                 try (PreparedStatement pst = conn.prepareStatement(query);) {
                     pst.setString(1, email.toLowerCase());
                     pst.setString(2, DigestUtils.sha1Hex(password));
+                    pst.setString(3, nome);
+                    pst.setString(4, cognome);
                     res = pst.executeUpdate() == 1;
                 }
             }
@@ -419,6 +492,8 @@ public class Query {
                     u.setEmail(rs.getString("email"));
                     u.setPassword(rs.getString("password"));
                     u.setRuolo(rs.getString("ruolo"));
+                    u.setNome(rs.getString("nome")); 
+                    u.setCognome(rs.getString("cognome")); 
                 }
             }
         }
@@ -441,6 +516,8 @@ public class Query {
                     u.setEmail(rs.getString("email"));
                     u.setPassword(rs.getString("password"));
                     u.setRuolo(rs.getString("ruolo"));
+                    u.setNome(rs.getString("nome")); 
+                    u.setCognome(rs.getString("cognome")); 
                 }
             }
         } catch (SQLException ex) {
@@ -449,31 +526,22 @@ public class Query {
         return u;
     }
 
-    /**
-     * Modifica la password di un certo utente di tipo cliente, dato il suo id
-     *
-     * @param st
-     * @param id_cliente primary key utente interessato dal cambio password
-     * @param password nuova password dell'utente
-     * @return true se l'operazione viene effettuata correttamente, false
-     * altrimenti
-     * @throws SQLException
-     *//*
-    private static boolean updateUserPassword(int id_cliente, String password) {
-        String query = "UPDATE Utente SET password=? WHERE id_utente=?";
-        boolean res = false;
-
+    
+    public static boolean utenteUpdatePassword(int id_utente, String new_password) {
+        String query = "UPDATE Utente SET password=? WHERE id_utente=?"; 
+        boolean res = false; 
+        
         try (Connection conn = getConnection();
-                PreparedStatement pst = conn.prepareStatement(query);) {
-            pst.setString(1, DigestUtils.sha1Hex(password));
-            pst.setInt(2, id_cliente);
-            res = pst.executeUpdate() == 1;
+                PreparedStatement pst = conn.prepareStatement(query)) {
+            pst.setString(1, DigestUtils.sha1Hex(new_password));
+            pst.setInt(2, id_utente);
+            res = pst.executeUpdate() == 1; 
         } catch (SQLException ex) {
-            System.out.println("Eccezione in Query.updateUserPassword: " + ex.getMessage());
+            System.out.println("Eccezione in utenteUpdatePassword: " + ex.getMessage()); 
         }
-
-        return res;
-    }*/
+        
+        return res; 
+    }
 
     /**
      * Prenotazioni

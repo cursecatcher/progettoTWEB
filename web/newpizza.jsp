@@ -56,37 +56,39 @@
         <div class='container'>
             <div class="col-md-6">
                 <h1>Catalogo pizze</h1>
-                <c:forEach var="pizza" items="${menu.pizze}">
-                    <div id="pizza-${pizza.id}" class="row-fluid">
-                        <div class="row-fluid">
-                            <div class="col-md-8 text-uppercase">
-                                <h4><c:out value="${pizza.nome}"/></h4>
+                <div id="catalogo">
+                    <c:forEach var="pizza" items="${menu.pizze}">
+                        <div id="pizza-${pizza.id}" class="row-fluid">
+                            <div class="row-fluid">
+                                <div class="col-md-8 text-uppercase">
+                                    <h4><c:out value="${pizza.nome}"/></h4>
+                                </div>
+                                <div class="col-md-2">
+                                    <h4><small><c:out value="${pizza.prezzo}"/>&nbsp;&euro;</small></h4>
+                                </div>
+                                <div class="col-md-2">
+                                </div>
                             </div>
-                            <div class="col-md-2">
-                                <h4><small><c:out value="${pizza.prezzo}"/>&nbsp;&euro;</small></h4>
-                            </div>
-                            <div class="col-md-2">
+                            <div class="row-fluid">
+                                <div class="col-md-9">
+                                    <c:out value="${pizza.listaIngredienti}"/>
+                                </div>
+                                <div class="col-md-1"></div>
+                                <div class="col-md-2 pull-right">
+                                    <c:if test="${user.isAdmin()}">
+                                        <a href="#0" class="edit-link btn btn-primary btn-xs" data-id="${pizza.id}">
+                                            <span class="glyphicon glyphicon-pencil"></span>
+                                        </a>
+                                        <a href="#0" class="delete-link btn btn-danger btn-xs" data-id="${pizza.id}">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </a>
+                                    </c:if>
+                                </div>
                             </div>
                         </div>
-                        <div class="row-fluid">
-                            <div class="col-md-9">
-                                <c:out value="${pizza.listaIngredienti}"/>
-                            </div>
-                            <div class="col-md-1"></div>
-                            <div class="col-md-2 pull-right">
-                                <c:if test="${user.isAdmin()}">
-                                    <a href="#0" class="edit-link btn btn-primary btn-xs" data-id="${pizza.id}">
-                                        <span class="glyphicon glyphicon-pencil"></span>
-                                    </a>
-                                    <a href="#0" class="delete-link btn btn-danger btn-xs" data-id="${pizza.id}">
-                                        <span class="glyphicon glyphicon-remove"></span>
-                                    </a>
-                                </c:if>
-                            </div>
-                        </div>
-                    </div>
-                    <hr/>
-                </c:forEach>
+                        <hr/>
+                    </c:forEach>
+                </div>
             </div>
 
             <div class="col-md-6">

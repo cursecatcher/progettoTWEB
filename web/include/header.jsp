@@ -3,8 +3,11 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <nav class="navbar navbar-default">
+    
     <div class="container-fluid">
+        <div class="col-md-1"></div>
         <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="col-md-10">
         <div class="navbar-header">
             <a class="navbar-brand" href="index.jsp">PiWeb</a>
         </div>
@@ -16,8 +19,8 @@
                     <c:when test="${usertoken == 'authenticated'}">
                         <li class="dropdown">
                             <a href="#0" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                Salve,&nbsp;
-                                <strong><c:out value="${user.email}"/></strong>
+                                Ciao,&nbsp;
+                                <strong><c:out value="${user.nome}"/></strong>
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">                                
@@ -44,10 +47,10 @@
                         <li><a href='login.jsp'>Accedi</a></li>
                         </c:otherwise>
                     </c:choose> 
-
-                <li><a href="#0">Aiuto</a></li>
             </ul>
         </div><!-- /.navbar-collapse -->
+        </div>
+        <div class="col-md-1"></div>
     </div><!-- /.container-fluid -->
 </nav>
 

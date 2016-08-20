@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <c:if test="${usertoken != 'authenticated'}">
@@ -10,7 +11,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Profilo</title>
 
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" 
@@ -41,70 +42,87 @@
 
     </head>
     <body>
-
         <%@include file="include/header.jsp" %>
 
         <div class="container">
-            <div class="col-md-6">
-                <h1>Profilo utente </h1>
-
-                ${user.id} <br/>
-                Sei loggato come: ${user.email}<br/>
-                Ruolo utente: ${user.ruolo}<br/>
-
-                <p>
-                <form action="Controller" method="GET">
-                    <input type="hidden" name="action" value="newpizza"/>
-                    <input type="submit" class="btn btn-link" value="NUOVA PIZZA"/>  
-                </form>
-                </p>
-
-                <p>
-                    <a href="newpizza.jsp">NUOVA PIZZA</a>. 
-                    (solo amministratore)
-                </p>
-                <p>
-                    <a href="newordine.jsp">ORDINA</a> 
-                    (cliente && amministratore)
-                </p>
-
-                <c:if test="${user.isAdmin()}">
-                    <p>
-                        <a href="gestione-prenotazioni.jsp">Prenotazioni utenti</a>
-                    </p>
-                </c:if>
-                <p>
-                    <a href="mie-prenotazioni.jsp"> MIE PRENOTAZIONE</a> 
-                    (cliente && amministratore)
-                </p>
-
-
-
-                <p>
-                    <a href="gestione-prenotazioni.jsp">Archivio Prenotazioni</a>
-                </p>
-            </div>
-            <%--
-        <div class="col-md-6">
-            <h1>Le tue prenotazioni</h1>
-
-                <c:forEach var="prenotazione" items="${user.prenotazioni}">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <h4 class="text-center text-uppercase">Il mio profilo</h4>
+                <hr>
+                <h5>INFORMAZIONI</h5>
+                <div class="info-profile">
                     <div class="row">
-                        Ordine<br/>
-                        Data consegna: ${prenotazione.dataConsegna} <br/>
-                        Orario consegna: ${prenotazione.orarioConsegna} <br/>
-                        ${prenotazione.prezzo} &euro; 
-                        <a class="btn btn-primary view-prenotazione" role="button" 
-                           data-toggle="collapse" 
-                           data-id="${prenotazione.id}"
-                           href="#collapseExample" 
-                           aria-expanded="false" 
-                           aria-controls="collapseExample">
-                            Vedi dettagli
+                        <div class="col-md-4">
+                            <strong>Nome</strong>
+                        </div>
+                        <div class="col-md-4 text-capitalize">
+                            <c:out value="${user.nome}"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <strong>Cognome</strong>
+                        </div>
+                        <div class="col-md-4 text-capitalize">
+                            <c:out value="${user.cognome}"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <strong>Email</strong>
+                        </div>
+                        <div class="col-md-4 text-lowercase">
+                            <c:out value="${user.email}"/>
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+
+                <h5>PASSWORD</h5>
+                <div class="change-pwd">
+                    <div class="form-group">       
+                        <form id="form-change-pwd" method="POST" action="Controller">
+                            <input type="hidden" name="action" value="user-change-pwd"/>
+
+                            <div class="form-group">
+                                <input type="password" name="old-password" class="form-control" 
+                                       placeholder="Password attuale" required/>
+                            </div>
+                            <div class="form-group">
+                                <input type="password" name="new-password" class="form-control"
+                                       placeholder="Nuova password" required/>
+                            </div>
+                            <div class="form-group">
+                                <input type="password" name="confirm-password" class="form-control"
+                                       placeholder="Conferma password" required/>
+                            </div>
+
+                            <input type="submit" name="submit" value="Aggiorna password"
+                                   class="btn btn-primary btn-block"/>
+                        </form>
+                    </div>
+                </div>
+                <hr>
+
+                <h5>PRENOTAZIONI</h5>
+                <div class="row">
+                    <div class="col-md-4">
+                        <strong>n. prenotazioni effettuate</strong>
+                    </div>
+                    <div class="col-md-4">
+                        ${fn:length(user.prenotazioni)}
+                    </div>
+                    <div class="col-md-4">
+                        <a href="mie-prenotazioni.jsp" class="btn btn-primary btn-block">
+                            Gestisci prenotazioni
                         </a>
                     </div>
-                </c:forEach>
-            </div> --%>
+                </div>
+            </div>
+            <div class="col-md-2"></div>
+
+
         </div>
     </body>
 </html>

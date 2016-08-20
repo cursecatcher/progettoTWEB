@@ -1,29 +1,27 @@
 function renderJSONPizza(json) {
     return "<div class='row' style='padding-left: 1em'>" +
             "<a class='remove-pizza btn btn-danger btn-xs' href='#0' " +
-            "data-id-pizza='" + json.id_pizza + "'" + 
+            "data-id-pizza='" + json.id_pizza + "'" +
             "data-nome-pizza='" + json.nome_pizza + "'>" +
             "<span class='glyphicon glyphicon-minus'></span></a>" +
             json.quantity + "x <strong>" + json.nome_pizza + "</strong></div>";
 }
 
 function renderJSONCart(json) {
-    var html = ""; 
-    var i = 0; 
-    
+    var html = "";
+    var i = 0;
     $.each(json, function () {
         $.each(this, function (index, el) {
             console.log("Selezionata ->" + JSON.stringify(el));
             html += renderJSONPizza(el);
-            i++; 
+            i++;
         });
     });
-    
     if (i === 0) {
-        html = "Carrello vuoto!"; 
+        html = "Carrello vuoto!";
     }
-    
-    return html; 
+
+    return html;
 }
 
 
@@ -35,22 +33,51 @@ jQuery(document).ready(function ($) {
     var $header_tot = $('#cart-euro'); //prezzo ordine presente nell'header 
     //
     var $ordine = $('#carrello');
-    
     var $form_action = $('#form-action');
-    
-    
-    $('#disconnect').on("click", function() {
+    $('#disconnect').on("click", function () {
         $form_action.find("input[name=action]").val("logout");
         $form_action.submit();
-        
-    }); 
-    
-    
+    });
+    $('#form-change-pwd').submit(function (event) {
+        event.preventDefault(); //ajax 
+
+        var p1 = $(this).find("input[name=new-password]").val();
+        var p2 = $(this).find("input[name=confirm-password]").val();
+        if (p1 === p2) {
+            $.post("Controller", $(this).serialize(), function (response) {
+                if (response === "OK") {
+                    $.growl.notice({
+                        title: "Password modificata",
+                        message: "La password &egrave; stata aggiornata con successo!"
+                    });
+                } else if (response === "ERR_OLD_PWD") {
+                    $.growl.error({
+                        title: "Errore",
+                        message: "La vecchia password &egrave; incorretta!"
+                    });
+                } else if (response === "ERR_MISMATCH") {
+                    $.growl.error({
+                        title: "Errore",
+                        message: "Le password inserite non coincidono!"
+                    });
+                } else if (response === "ERR_UPDATE_FAILED") {
+                    $.growl.error({
+                        title: "Errore",
+                        message: "Si &egrave; verificato un errore random!"
+                    });
+                }
+            });
+        } else {
+            $.growl.error({
+                title: "Errore",
+                message: "Le password inserite non coincidono!"
+            });
+        }
+    });
     $('.choose-pizza').on('click', function () {
         var idpizza = $(this).data("id-pizza");
         var nomePizza = $(this).data("nome-pizza");
         var prezzo = $(this).data("prezzo-pizza");
-
         $.post("Controller",
                 {
                     action: "add-to-cart",
@@ -60,27 +87,21 @@ jQuery(document).ready(function ($) {
                 },
                 function (responseJSON) {
                     $.growl.notice({
-                       title: "Pizza aggiunta al carrello!", 
-                       message: "<strong>+1x " + nomePizza + "</strong>",
-                       location: "br"
+                        title: "Pizza aggiunta al carrello!",
+                        message: "<strong>+1x " + nomePizza + "</strong>",
+                        location: "br"
                     });
-                    
                     $cart.html(renderJSONCart(responseJSON.ordine));
                     $ordine.html(renderJSONCart(responseJSON.ordine));
                     $badge.text(responseJSON.tot_pizze);
                     $prezzo.text(responseJSON.prezzo_tot.toFixed(2));
                     $header_tot.text(responseJSON.prezzo_tot.toFixed(2));
                 });
-
-
         console.log("Scelta pizza -  id: " + idpizza);
-
     });
-    
     $(document).on('click', '.remove-pizza', function () {
         var idpizza = $(this).data("id-pizza");
-        var nomePizza = $(this).data("nome-pizza"); 
-
+        var nomePizza = $(this).data("nome-pizza");
         $.post("Controller",
                 {
                     action: "remove-to-cart",
@@ -88,11 +109,10 @@ jQuery(document).ready(function ($) {
                 },
                 function (responseJSON) {
                     $.growl.warning({
-                       title: "Pizza rimossa dal carrello!", 
-                       message: "<strong>-1x " + nomePizza + "</strong>",
-                       location: "br" //basso a destra
+                        title: "Pizza rimossa dal carrello!",
+                        message: "<strong>-1x " + nomePizza + "</strong>",
+                        location: "br" //basso a destra
                     });
-                    
                     $cart.html(renderJSONCart(responseJSON.ordine));
                     $ordine.html(renderJSONCart(responseJSON.ordine));
                     $badge.text(responseJSON.tot_pizze);
@@ -100,6 +120,4 @@ jQuery(document).ready(function ($) {
                     $header_tot.text(responseJSON.prezzo_tot.toFixed(2));
                 });
     });
-    
-    
 }); 

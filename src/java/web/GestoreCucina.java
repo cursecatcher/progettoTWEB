@@ -1,5 +1,6 @@
 package web;
 
+import beans.Pizza;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -7,6 +8,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -56,6 +58,40 @@ public class GestoreCucina extends HttpServlet {
 
             if (action == null) {
                 rd = ctx.getRequestDispatcher("/index.jsp");
+            } else if (action.equalsIgnoreCase("ajax-update-admin-pizzas")) {
+                ArrayList<Pizza> pizze = Query.pizzaGetAll();
+
+                for (Pizza p : pizze) {
+                    out.write("<div id=\"pizza-" + p.getId() + "\" class=\"row-fluid\">");
+                    out.write("<div class=\"row-fluid\">\n"
+                            + "<div class=\"col-md-8 text-uppercase\">\n"
+                            + "<h4>" + p.getNome() + "</h4>\n"
+                            + "</div>\n"
+                            + "<div class=\"col-md-2\">\n"
+                            + "<h4><small>" + p.getPrezzo() + "&nbsp;&euro;</small></h4>\n"
+                            + "</div>\n"
+                            + "<div class=\"col-md-2\">\n"
+                            + "</div>\n"
+                            + "</div>");
+
+                    out.write("<div class=\"row-fluid\">\n"
+                            + "<div class=\"col-md-9\">\n"
+                            + p.getListaIngredienti()
+                            + "</div>\n"
+                            + "<div class=\"col-md-1\"></div>\n"
+                            + "<div class=\"col-md-2 pull-right\">");
+                    
+                    out.write("<a href=\"#0\" class=\"edit-link btn btn-primary btn-xs\" data-id=\"" + p.getId() +"\">\n"
+                            + "<span class=\"glyphicon glyphicon-pencil\"></span>\n"
+                            + "</a>\n"
+                            + "<a href=\"#0\" class=\"delete-link btn btn-danger btn-xs\" data-id=\"" + p.getId() +"\">\n"
+                            + "<span class=\"glyphicon glyphicon-remove\"></span>\n"
+                            + "</a>");
+                    
+                    out.write("</div></div></div></hr>");
+
+                }
+
             } else {
                 rd = ctx.getRequestDispatcher("/error.jsp");
             }
@@ -146,11 +182,12 @@ public class GestoreCucina extends HttpServlet {
                 }
 
                 if (err.equalsIgnoreCase("")) {
-                    String ingrString = String.join(",", ingredienti);
-                    err = Query.pizzaUpdate(id, nome, prezzo, ingrString);
+                    //                 String ingrString = String.join(",", ingredienti);
+                    err = Query.pizzaUpdate(id, nome, prezzo, ingredienti);
 
                 }
 
+                out.print(err);
                 System.out.println("Esito update: " + err);
 
             } else if (action.equalsIgnoreCase("ingrediente-add")) {
@@ -166,15 +203,15 @@ public class GestoreCucina extends HttpServlet {
 
                 if (res.equalsIgnoreCase("")) {
                     if (Query.ingredienteInsert(nome, prezzo)) {
-                        res = "OK"; 
+                        res = "OK";
                     } else {
                         System.out.println("Ingrediente gia' presente :v");
-                        res = "ERR_DUPLICATE"; 
+                        res = "ERR_DUPLICATE";
                     }
                 }
 
                 out.print(res);
-                
+
             } else {
                 rd = ctx.getRequestDispatcher("/error.jsp");
             }

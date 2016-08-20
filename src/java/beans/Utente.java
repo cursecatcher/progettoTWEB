@@ -11,6 +11,8 @@ public class Utente {
     private int id;
     private String email = null;
     private String password = null;
+    private String nome = null; 
+    private String cognome = null; 
     private String ruolo = null;
 
     public Utente() {
@@ -31,24 +33,26 @@ public class Utente {
                 this.password = temp.getPassword();
                 this.ruolo = temp.getRuolo();
             }
-            /*
-            Connection conn = Query.getConnection();
-            Statement st = conn.createStatement();
-            ResultSet rs = Query.getUserById(st, id);
-
-            if (rs.next()) {
-                this.id = id;
-                this.email = rs.getString("email");
-                this.ruolo = rs.getString("ruolo");
-                this.password = rs.getString("password");
-            }
-
-            rs.close();
-            st.close();
-            conn.close();*/
+            
         } catch (SQLException ex) {
             System.out.println("SMERDO  init utente- " + ex.getMessage());
         }
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setCognome(String cognome) {
+        this.cognome = cognome;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public String getCognome() {
+        return cognome;
     }
 
     public int getId() {

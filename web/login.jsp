@@ -57,9 +57,8 @@
                     </div>
 
                     <!--<input id='submit-login' type="submit"/>-->
-                    <button id="submit-login" type="button" class="btn btn-primary btn-block">
-                        Accedi
-                    </button>
+                    <input id="submit-login" type="submit" value="Accedi"
+                           class="btn btn-primary btn-block" />
                 </form>
                 <p>
                     Non hai ancora un account? Registrati <a href="register.jsp">qui</a>!

@@ -96,6 +96,9 @@ public class Controller extends HttpServlet {
             HttpSession session = request.getSession();
             session.invalidate();
             rd = ctx.getRequestDispatcher("/index.jsp");
+
+        } else if (action.equalsIgnoreCase("ajax-update-admin-pizzas")) {
+            rd = ctx.getNamedDispatcher("GestoreCucina");
         }
 
         rd.forward(request, response);
@@ -128,6 +131,9 @@ public class Controller extends HttpServlet {
                 rd = ctx.getNamedDispatcher("GestoreCliente");
 
             } else if (action.equalsIgnoreCase("user-registrazione")) {
+                rd = ctx.getNamedDispatcher("GestoreCliente");
+
+            } else if (action.equalsIgnoreCase("user-change-pwd")) {
                 rd = ctx.getNamedDispatcher("GestoreCliente");
 
             } else if (action.equalsIgnoreCase("ingrediente-add")) {

@@ -23,6 +23,10 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" 
                 integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" 
         crossorigin="anonymous"></script>
+        
+        <!-- bootbox -->
+        <script type="text/javascript" 
+        src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
         <!--growl -->
         <script type="text/javascript" src="include/lib/jquery-growl/jquery.growl.js"></script>
         <link rel="stylesheet" href="include/lib/jquery-growl/jquery.growl.css" type="text/css" />
@@ -41,6 +45,20 @@
             <div class="col-md-6">
                 <h1>Registrazione</h1>
                 <form id="form_reg" action="Controller" method="POST">
+                    <input type="hidden" name="action" value="user-registrazione"/>
+                    
+                    <div class="form-group">
+                        <label for="nome">Il tuo nome</label>
+                        <input id="nome" type="text" name="nome" class="form-control"
+                               placeholder="Il tuo nome" required/>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="cognome">Il tuo cognome</label>
+                        <input id="cognome" type="text" name="cognome" class="form-control"
+                               placeholder="Il tuo cognome" required=""/>
+                    </div>
+                    
                     <div class="form-group">
                         <label for="email">Email</label>
                         <input id="email" type="email" name="email" 
@@ -49,12 +67,12 @@
                     <div class="form-group">
                         <label for="password">Password</label>
                         <input id="password" type="password" name="password" 
-                               class="form-control" placeholder="Password..." required/>
+                               class="form-control" placeholder="Password" required/>
                     </div>
                     <div class="form-group">
                         <label for="confirm-password">Conferma password</label>
                         <input id="confirm-password" type="password" name="password2" 
-                               class="form-control" placeholder="Conferma password" required/>
+                               class="form-control" placeholder="Reinserisci la password" required/>
                     </div>
                     <input id='submit-reg' class="btn btn-primary btn-block" type="submit" value="Iscriviti"/>
 
