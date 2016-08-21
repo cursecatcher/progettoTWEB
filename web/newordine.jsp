@@ -52,13 +52,45 @@
 
         <div class="container">
             <div class="col-md-8">
-                <h1>Prenotazione</h1>
+                <div class="page-header">
+                    <h1>Le nostre pizze</h1>
+                </div>
                 <div id="elenco-pizze">
                     <c:forEach var="pizza" items="${menu.pizze}">
+                        <div class="row-fluid">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <span class="pizza-nome text-uppercase">
+                                        <strong><c:out value="${pizza.nome}"/></strong>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <c:out value="${pizza.listaIngredienti}"/>
+                                </div>
+                                <div class="col-md-2 text-muted">
+                                    <strong>
+                                        <fmt:formatNumber type="number" value="${pizza.prezzo}" minFractionDigits="2"/>
+                                        &nbsp;&euro;
+                                    </strong>
+                                </div>
+                                <div class="col-md-2">
+                                    <a class="btn btn-success btn-xs choose-pizza" href="#0"
+                                       data-id-pizza="${pizza.id}"
+                                       data-nome-pizza="${pizza.nome}"
+                                       data-prezzo-pizza="${pizza.prezzo}">
+                                        <span class="glyphicon glyphicon-plus"></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <%--
                         <p>
                         <div class="row">
                             <div class="col-md-6">
-                                <span class="pizza-nome text-uppercase">
+                                <span class="pizza-nome text-capitalize">
                                     <strong><c:out value="${pizza.nome}"/></strong>
                                 </span>
                             </div>
@@ -82,47 +114,26 @@
                                 </span>
                             </div>
                         </div>
-                        </p>
+                        </p> --%>
                     </c:forEach>
                 </div>
             </div>
             <div class="col-md-4">
-                <!-- https://stackoverflow.com/questions/15850271/how-to-make-div-fixed-after-you-scroll-to-that-div -->
-                <h1>Il tuo ordine</h1>
-                <div id="carrello"></div>
-                <%--
-                <div id="carrello">
-                    <c:choose>
-                        <c:when test="${carrello.isEmpty()}">
-                            Carrello vuoto
-                        </c:when>
-                        <c:otherwise>
-                            <c:forEach var="el" items="${carrello.ordine}">
-                                <div class="row">
-                                    <a class="remove-pizza" href="#0" data-id-pizza="${el.id}">
-                                        <span class="glyphicon glyphicon-minus"></span>
-                                    </a>
-                                    <c:out value="${el.quantity}"/> x <strong><c:out value="${el.nome}"/></strong>
-                                </div>
-                            </c:forEach>
-                        </c:otherwise>
-                    </c:choose>
+                <div class="fixme">
+                    <!-- https://stackoverflow.com/questions/15850271/how-to-make-div-fixed-after-you-scroll-to-that-div -->
+                    <div class="page-header">
+                        <h1>Il tuo ordine</h1>
+                    </div>
+                    <div id="carrello"></div>
+                    <form action="Controller" method="GET">
+                        <input type="hidden" name="action" value="proceed-to-order"/>
+                        <input type="submit" name="submit" value="Effettua ordine"
+                               class="btn btn-primary btn-block"/>   
+                        <span id="error" class="hide">
+                            <c:out value="${message}"/>
+                        </span>
+                    </form>  
                 </div>
-                <div>
-                    TOTALE DA PAGAHRE!!!
-                    <span id="prezzo-tot">
-                        <c:out value="${carrello.prezzoTotale}"/>
-                    </span>&nbsp;&euro;
-                </div> --%>
-
-                <form action="Controller" method="GET">
-                    <input type="hidden" name="action" value="proceed-to-order"/>
-                    <input type="submit" name="submit" value="Effettua ordine"
-                           class="btn btn-primary btn-block"/>   
-                    <span id="error" class="hide">
-                        <c:out value="${message}"/>
-                    </span>
-                </form>   
             </div>
         </div>
     </body>

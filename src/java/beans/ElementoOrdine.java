@@ -29,6 +29,10 @@ public class ElementoOrdine {
     public int getQuantity() {
         return quantity;
     }
+    
+    public float getPrezzoParziale() {
+        return quantity * prezzo; 
+    }
 
     public void setId(int id) {
         this.id = id;

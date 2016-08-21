@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <jsp:useBean id='ingredienti' scope="page" class="beans.Ingredienti"/>
@@ -21,12 +22,12 @@
         <script src="https://code.jquery.com/jquery-2.2.4.min.js"   
                 integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   
         crossorigin="anonymous"></script>
-        
+
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" 
                 integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" 
         crossorigin="anonymous"></script>
-        
+
         <!--jquery.growl -->
         <script type="text/javascript" src="include/lib/jquery-growl/jquery.growl.js"></script>
         <link rel="stylesheet" href="include/lib/jquery-growl/jquery.growl.css" type="text/css" />
@@ -42,27 +43,32 @@
 
         <div class='container'>
             <div class="col-md-6">
-                <h1>Catalogo ingredienti</h1>
-                <ul>
-                    <c:forEach var="ingrediente" items="${ingredienti.listaIngredienti}">
-                        <li>
-                            <span class="text-capitalize">
-                                <c:out value="${ingrediente.nome}"/>
-                            </span>
-                        </li>
-                    </c:forEach>
-                </ul>
+                <div class="page-header">
+                    <h1>Catalogo ingredienti</h1>
+                </div>
+                
+                <c:forEach var="ingrediente" items="${ingredienti.listaIngredienti}">
+                    <div class="row">
+                        <div class="col-md-8 text-capitalize">
+                            <c:out value="${ingrediente.nome}"/>
+                        </div>
+                        <div class="col-md-4">
+                            <fmt:formatNumber type="number" value="${ingrediente.prezzo}" minFractionDigits="2"/>
+                            &nbsp;&euro;
+                        </div>
+                    </div>
+                </c:forEach>
             </div>
             <div class="col-md-6">
                 <h1>Inserimento ingredienti</h1>
                 <form id="form_newingr" action="Controller" method="POST">
                     <div class='form-group'>
-                         <input type="hidden" name="action" value="ingrediente-add"/>
+                        <input type="hidden" name="action" value="ingrediente-add"/>
                     </div>
                     <div class="form-group">
                         <label for='nome-ingrediente'>Nome ingrediente</label>
                         <input id='nome-ingrediente' type="text" name="nome" class="form-control"
-                               maxlength="32" placeholder="Nome ingrediente..."/>
+                               maxlength="32" placeholder="Nome ingrediente..." required/>
                     </div>
                     <div class="form-group">
                         <label for='prezzo-ingrediente'>Prezzo</label>

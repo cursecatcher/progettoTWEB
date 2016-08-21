@@ -33,13 +33,13 @@ public class Carrello {
     }
     
     public boolean isEmpty() {
-        return this.ordine.size() == 0; 
+        return this.ordine.isEmpty();
     }
 
     public float getPrezzoTotale() {
-        return this.ordine.stream().
-                map((e) -> e.getPrezzo() * e.getQuantity()).
-                reduce((float) 0, (accumulator, _item) -> accumulator + _item);
+        return (float) this.ordine.stream()
+                .mapToDouble(ElementoOrdine::getPrezzoParziale)
+                .reduce( 0, (accumulator, _item) -> accumulator + _item);
     }
 
     public JSONObject getJSON() {

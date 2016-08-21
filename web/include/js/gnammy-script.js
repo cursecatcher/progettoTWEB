@@ -110,10 +110,10 @@ jQuery(document).ready(function ($) {
 
         });
     });
+    
+    
+    
     $('#form_newingr').submit(function (event) {
-        console.log('submit!!!');
-    });
-    $('#submit-newingr').on('click', function (event) {
         event.preventDefault();
         var name = $form_ingredienti.find("input[name=nome]").val().trim();
         var price = $form_ingredienti.find("input[name=prezzo]").val();

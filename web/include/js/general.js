@@ -24,6 +24,10 @@ function renderJSONCart(json) {
     return html;
 }
 
+function getCartHTML($div) {
+    $div.load("Controller?action=ajax-html-cart");
+}
+
 
 jQuery(document).ready(function ($) {
     /* aggiornamento dropdown carrello */
@@ -34,10 +38,17 @@ jQuery(document).ready(function ($) {
     //
     var $ordine = $('#carrello');
     var $form_action = $('#form-action');
+
+    $(function () {
+        //init 
+        getCartHTML($ordine);
+    });
+
     $('#disconnect').on("click", function () {
         $form_action.find("input[name=action]").val("logout");
         $form_action.submit();
     });
+
     $('#form-change-pwd').submit(function (event) {
         event.preventDefault(); //ajax 
 
@@ -74,10 +85,12 @@ jQuery(document).ready(function ($) {
             });
         }
     });
+
     $('.choose-pizza').on('click', function () {
         var idpizza = $(this).data("id-pizza");
         var nomePizza = $(this).data("nome-pizza");
         var prezzo = $(this).data("prezzo-pizza");
+
         $.post("Controller",
                 {
                     action: "add-to-cart",
@@ -91,14 +104,17 @@ jQuery(document).ready(function ($) {
                         message: "<strong>+1x " + nomePizza + "</strong>",
                         location: "br"
                     });
-                    $cart.html(renderJSONCart(responseJSON.ordine));
-                    $ordine.html(renderJSONCart(responseJSON.ordine));
+                    //                $cart.html(renderJSONCart(responseJSON.ordine));
+                    //                $ordine.html(renderJSONCart(responseJSON.ordine));
+                    //   $ordine.load("Controller?action=ajax-html-cart");
+                    getCartHTML($ordine);
                     $badge.text(responseJSON.tot_pizze);
                     $prezzo.text(responseJSON.prezzo_tot.toFixed(2));
                     $header_tot.text(responseJSON.prezzo_tot.toFixed(2));
                 });
         console.log("Scelta pizza -  id: " + idpizza);
     });
+
     $(document).on('click', '.remove-pizza', function () {
         var idpizza = $(this).data("id-pizza");
         var nomePizza = $(this).data("nome-pizza");
@@ -113,11 +129,13 @@ jQuery(document).ready(function ($) {
                         message: "<strong>-1x " + nomePizza + "</strong>",
                         location: "br" //basso a destra
                     });
-                    $cart.html(renderJSONCart(responseJSON.ordine));
-                    $ordine.html(renderJSONCart(responseJSON.ordine));
+                    //         $cart.html(renderJSONCart(responseJSON.ordine));
+                    //        $ordine.html(renderJSONCart(responseJSON.ordine));
+                    getCartHTML($ordine);
                     $badge.text(responseJSON.tot_pizze);
                     $prezzo.text(responseJSON.prezzo_tot.toFixed(2));
                     $header_tot.text(responseJSON.prezzo_tot.toFixed(2));
                 });
     });
+
 }); 

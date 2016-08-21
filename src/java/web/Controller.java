@@ -99,6 +99,10 @@ public class Controller extends HttpServlet {
 
         } else if (action.equalsIgnoreCase("ajax-update-admin-pizzas")) {
             rd = ctx.getNamedDispatcher("GestoreCucina");
+            
+        } else if (action.equalsIgnoreCase("ajax-html-cart")) {
+            rd = ctx.getNamedDispatcher("GestoreCliente"); 
+            
         }
 
         rd.forward(request, response);

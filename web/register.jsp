@@ -23,7 +23,7 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" 
                 integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" 
         crossorigin="anonymous"></script>
-        
+
         <!-- bootbox -->
         <script type="text/javascript" 
         src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
@@ -41,24 +41,26 @@
         <jsp:include page="include/header.jsp"/>
 
         <div class="container">
-            <div class="col-md-3"></div>
-            <div class="col-md-6">
-                <h1>Registrazione</h1>
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                <div class="page-header">
+                    <h1>Registrazione</h1>
+                </div>
                 <form id="form_reg" action="Controller" method="POST">
                     <input type="hidden" name="action" value="user-registrazione"/>
-                    
+
                     <div class="form-group">
                         <label for="nome">Il tuo nome</label>
                         <input id="nome" type="text" name="nome" class="form-control"
                                placeholder="Il tuo nome" required/>
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="cognome">Il tuo cognome</label>
                         <input id="cognome" type="text" name="cognome" class="form-control"
                                placeholder="Il tuo cognome" required=""/>
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="email">Email</label>
                         <input id="email" type="email" name="email" 
@@ -74,19 +76,19 @@
                         <input id="confirm-password" type="password" name="password2" 
                                class="form-control" placeholder="Reinserisci la password" required/>
                     </div>
-                    <input id='submit-reg' class="btn btn-primary btn-block" type="submit" value="Iscriviti"/>
+                    <input id='submit-reg' class="btn btn-primary btn-block" type="submit" value="Registrati"/>
 
                 </form>
 
                 <p>
-                    Hai gi&agrave; un account? Effettua il <a href="login.jsp">login</a>!
+                    Hai gi&agrave; un account? <a href="login.jsp">Accedi</a>!
                 </p>
                 <div id="result-container" class="alert alert-dismissible hidden" role="alert">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <span id="result-message"></span>
                 </div>
             </div>
-            <div class="col-md-3"></div>
+            <div class="col-md-4"></div>
         </div>
     </body>
 </html>

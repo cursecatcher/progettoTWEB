@@ -51,6 +51,64 @@
                 <c:forEach var="p" items="${user.allPrenotazioni}">
                     <div id="pren-${p.id}" class="panel panel-default">
                         <div class="panel-body">
+                            <div class="row">
+                                <!-- colonna ordine -->
+                                <div class="col-md-6">
+                                    <div class="page-header">
+                                        <h4>Riepilogo ordine</h4>
+                                    </div>
+                                    <c:forEach var="el" items="${p.ordine}">
+                                        <div>
+                                            <c:out value="${el.quantity}"/>x&nbsp;
+                                            <strong class="text-uppercase">
+                                                <c:out value="${el.nome}"/>
+                                            </strong>
+                                        </div>
+                                    </c:forEach>
+                                    <hr>
+                                    <div>
+                                        <strong>Totale:</strong> 
+                                        <fmt:formatNumber type="number" value="${p.prezzo}" minFractionDigits="2"/>
+                                        &euro;
+                                    </div>
+                                </div>
+                                <!-- colonna dati consegna -->
+                                <div class="col-md-6">
+                                    <div class="page-header">
+                                        <h4>Info di consegna</h4>
+                                    </div>
+                                    <address class="text-capitalize">
+                                        <c:out value="${p.citofono}"/><br/>
+                                        <c:out value="${p.indirizzo}"/><br/>
+                                    </address>
+                                    <hr>
+                                    <p>
+                                        Consegna per il giorno
+                                        <strong>
+                                            <fmt:formatDate value="${p.dataConsegna}" 
+                                                            pattern="dd-MM-yyyy" />
+                                        </strong>
+                                        alle  
+                                        <strong>
+                                            <fmt:formatDate value="${p.orarioConsegna}" 
+                                                            pattern="HH:mm" />
+                                        </strong>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-footer">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    Utente: <c:out value="${p.proprietario.email}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <%--
+                    <div id="pren-${p.id}" class="panel panel-default">
+                        <div class="panel-body">
                             <p>
                                 Consegna prevista il 
                                 <strong>
@@ -82,7 +140,7 @@
                         <div class="panel-footer">
                             Utente: <c:out value="${p.proprietario.email}"/>
                         </div>
-                    </div>
+                    </div> --%>
                 </c:forEach>
 
             </div>

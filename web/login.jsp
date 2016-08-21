@@ -26,6 +26,9 @@
                 integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" 
         crossorigin="anonymous"></script>
 
+
+        <link rel="stylesheet" href="include/css/header.css">
+
         <!--growl -->
         <script type="text/javascript" src="include/lib/jquery-growl/jquery.growl.js"></script>
         <link rel="stylesheet" href="include/lib/jquery-growl/jquery.growl.css" type="text/css" />
@@ -40,9 +43,11 @@
         <jsp:include page="include/header.jsp"/>
 
         <div class="container">
-            <div class="col-md-3"></div>
-            <div class="col-md-6">
-                <h1>Login</h1>
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                <div class="page-header">
+                    <h1>Accedi</h1>
+                </div>
                 <form id="form_login" action="Controller" method="POST">
                     <input type="hidden" name="action" value="user-login"/>
                     <div class="form-group">
@@ -56,19 +61,18 @@
                                class="form-control" required/>
                     </div>
 
-                    <!--<input id='submit-login' type="submit"/>-->
                     <input id="submit-login" type="submit" value="Accedi"
                            class="btn btn-primary btn-block" />
                 </form>
                 <p>
-                    Non hai ancora un account? Registrati <a href="register.jsp">qui</a>!
+                    Non hai un account? <a href="register.jsp">Registrati</a>!
                 </p>
                 <div id="result-container" class="alert alert-danger alert-dismissible hidden" role="alert">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <span id="result-message">${message}</span>
                 </div> 
             </div>
-            <div class="col-md-3"></div>
+            <div class="col-md-4"></div>
         </div>
     </body>
 </html>

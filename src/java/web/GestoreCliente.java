@@ -63,6 +63,27 @@ public class GestoreCliente extends HttpServlet {
 
             if (action == null) {
                 rd = ctx.getRequestDispatcher("/index.jsp");
+            } else if (action.equalsIgnoreCase("ajax-html-cart")) {
+                HttpSession session = request.getSession();
+                Carrello cart = (Carrello) session.getAttribute("carrello");
+
+                if (cart.isEmpty()) {
+                    out.println("Il tuo carrello &egrave; vuoto!<hr>");
+                } else {
+                    for (ElementoOrdine e : cart.getOrdine()) {
+                        out.println("<div class='row' style='padding-left: 1em'>"
+                                + "<a class='remove-pizza btn btn-danger btn-xs' href='#0' "
+                                + "data-id-pizza='" + e.getId() + "'"
+                                + "data-nome-pizza='" + e.getNome() + "'>"
+                                + "<span class='glyphicon glyphicon-minus'></span></a>"
+                                + e.getQuantity() + " x <strong>" + e.getNome() + "</strong></div>");
+                    }
+                    out.println("<hr><div class='page-header'>"
+                            + "<h3>Totale: <small>"
+                            + String.format("%.2f", cart.getPrezzoTotale())
+                            + "&nbsp;&euro;</small></h3></div>");
+                }
+
             } else {
                 rd = ctx.getRequestDispatcher("/error.jsp");
             }
@@ -127,8 +148,8 @@ public class GestoreCliente extends HttpServlet {
                 }
 
             } else if (action.equalsIgnoreCase("user-registrazione")) {
-                String nome = request.getParameter("nome"); 
-                String cognome = request.getParameter("cognome"); 
+                String nome = request.getParameter("nome");
+                String cognome = request.getParameter("cognome");
                 String email = request.getParameter("email");
                 String password = request.getParameter("password");
 
@@ -145,28 +166,26 @@ public class GestoreCliente extends HttpServlet {
             } else if (action.equalsIgnoreCase("user-change-pwd")) {
                 HttpSession session = request.getSession();
                 Utente user = (Utente) session.getAttribute("user");
-                
-                String old_p = request.getParameter("old-password"); 
-                String new_p = request.getParameter("new-password"); 
-                String confirm_p = request.getParameter("confirm-password"); 
+
+                String old_p = request.getParameter("old-password");
+                String new_p = request.getParameter("new-password");
+                String confirm_p = request.getParameter("confirm-password");
                 String res = "ERR_MISMATCH";
-                
+
                 if (confirm_p.equalsIgnoreCase(new_p)) {
                     if (DigestUtils.sha1Hex(old_p).equalsIgnoreCase(user.getPassword())) {
-                        res = Query.utenteUpdatePassword(user.getId(), new_p) 
+                        res = Query.utenteUpdatePassword(user.getId(), new_p)
                                 ? "OK" : "ERR_UPDATE_FAILED";
                     } else {
                         res = "ERR_OLD_PWD";
                     }
-                    
+
                 }
-                
+
                 out.print(res);
-                
+
                 //aggiornare utente in sessione !!
-            }
-            
-            else if (action.equalsIgnoreCase("add-to-cart")) {
+            } else if (action.equalsIgnoreCase("add-to-cart")) {
                 HttpSession session = request.getSession();
                 Carrello cart = (Carrello) session.getAttribute("carrello");
                 ArrayList<ElementoOrdine> ord = (ArrayList) cart.getOrdine();
@@ -190,7 +209,7 @@ public class GestoreCliente extends HttpServlet {
                     t.setId(idp);
                     t.setNome(request.getParameter("nome").toUpperCase());
                     t.setPrezzo(Float.parseFloat(request.getParameter("prezzo")));
-                    
+
                     ord.add(t);
                 }
 
@@ -199,10 +218,10 @@ public class GestoreCliente extends HttpServlet {
                 session.setAttribute("carrello", cart);
 
                 System.out.println("CARRELLO! -> " + idp);
-                
+
                 response.setContentType("application/json");
                 out.write(cart.getJSON().toString());
-                
+
             } else if (action.equalsIgnoreCase("remove-to-cart")) {
                 HttpSession session = request.getSession();
                 Carrello cart = (Carrello) session.getAttribute("carrello");
@@ -219,7 +238,7 @@ public class GestoreCliente extends HttpServlet {
                         } else {
                             ord.remove(i);
                         }
-                        found = true; 
+                        found = true;
                         break;
                     }
                 }
@@ -232,7 +251,7 @@ public class GestoreCliente extends HttpServlet {
                 session.setAttribute("carrello", cart);
                 response.setContentType("application/json");
                 out.write(cart.getJSON().toString());
-                
+
             } else {
                 rd = ctx.getRequestDispatcher("/error.jsp");
             }

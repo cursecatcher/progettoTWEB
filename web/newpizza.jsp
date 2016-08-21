@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:useBean id="ingredienti" scope="page" class="beans.Ingredienti" />
 <jsp:useBean id="menu" scope="page" class="beans.Menu" />
@@ -23,6 +24,8 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" 
               integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" 
               crossorigin="anonymous">
+
+        <link rel="stylesheet" href="include/css/footer.css">
 
         <!-- jQuery -->
         <script src="https://code.jquery.com/jquery-2.2.4.min.js"   
@@ -55,16 +58,56 @@
 
         <div class='container'>
             <div class="col-md-6">
-                <h1>Catalogo pizze</h1>
+                <div class="page-header">
+                    <h1>Catalogo pizze</h1>
+                </div>
                 <div id="catalogo">
                     <c:forEach var="pizza" items="${menu.pizze}">
+                        <div id="pizza-${pizza.id}" class="row-fluid">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <span class="pizza-nome text-uppercase">
+                                        <h4>
+                                            <c:out value="${pizza.nome}"/>
+                                        </h4>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8 text-lowercase">
+                                    <c:out value="${pizza.listaIngredienti}"/>
+                                </div>
+                                <div class="col-md-2 text-muted">
+                                    <strong>
+                                        <fmt:formatNumber type="number" value="${pizza.prezzo}" minFractionDigits="2"/>
+                                        &nbsp;&euro;
+                                    </strong>
+                                </div>
+                                <div class="col-md-2">
+                                    <a href="#0" class="edit-link btn btn-primary btn-xs" data-id="${pizza.id}">
+                                        <span class="glyphicon glyphicon-pencil"></span>
+                                    </a>
+                                    <a href="#0" class="delete-link btn btn-danger btn-xs" data-id="${pizza.id}">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        
+                        <%--
                         <div id="pizza-${pizza.id}" class="row-fluid">
                             <div class="row-fluid">
                                 <div class="col-md-8 text-uppercase">
                                     <h4><c:out value="${pizza.nome}"/></h4>
                                 </div>
                                 <div class="col-md-2">
-                                    <h4><small><c:out value="${pizza.prezzo}"/>&nbsp;&euro;</small></h4>
+                                    <h4>
+                                        <small>
+                                            <fmt:formatNumber type="number" value="${pizza.prezzo}" minFractionDigits="2"/>
+                                            &nbsp;&euro;
+                                        </small>
+                                    </h4>
                                 </div>
                                 <div class="col-md-2">
                                 </div>
@@ -75,18 +118,15 @@
                                 </div>
                                 <div class="col-md-1"></div>
                                 <div class="col-md-2 pull-right">
-                                    <c:if test="${user.isAdmin()}">
-                                        <a href="#0" class="edit-link btn btn-primary btn-xs" data-id="${pizza.id}">
-                                            <span class="glyphicon glyphicon-pencil"></span>
-                                        </a>
-                                        <a href="#0" class="delete-link btn btn-danger btn-xs" data-id="${pizza.id}">
-                                            <span class="glyphicon glyphicon-remove"></span>
-                                        </a>
-                                    </c:if>
+                                    <a href="#0" class="edit-link btn btn-primary btn-xs" data-id="${pizza.id}">
+                                        <span class="glyphicon glyphicon-pencil"></span>
+                                    </a>
+                                    <a href="#0" class="delete-link btn btn-danger btn-xs" data-id="${pizza.id}">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </a>
                                 </div>
                             </div>
-                        </div>
-                        <hr/>
+                        </div>  --%>
                     </c:forEach>
                 </div>
             </div>
@@ -98,7 +138,9 @@
                 </form>
 
                 <div id="inserimento-pizza">
-                    <h1>Nuova pizza</h1>
+                    <div class="page-header">
+                        <h1>Nuova pizza</h1>
+                    </div>
 
                     <form id="form_newpi" action="Controller" method="POST">
                         <!--action-->
@@ -153,5 +195,7 @@
 
             </div>
         </div>
+
+        <%@include file="include/footer.html" %>
     </body>
 </html>

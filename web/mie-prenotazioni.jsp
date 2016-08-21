@@ -1,9 +1,3 @@
-<%-- 
-    Document   : mie-prenotazioni
-    Created on : 9-ago-2016, 16.16.24
-    Author     : nico
---%>
-
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -49,53 +43,88 @@
         <%@include file="include/header.jsp" %>
 
         <div class="container">
-            <h1>Le mie prenotazioni</h1>
 
             <div class="col-md-3"></div>
             <div class="col-md-6">
+                <div class="page-header text-center">
+                    <h1>Le mie prenotazioni</h1>
+                </div>
+                
                 <div class="panel-group">
                     <c:forEach var="p" items="${user.prenotazioni}">
                         <div id="pren-${p.id}" class="panel panel-default">
                             <div class="panel-body">
-                                <p>
-                                    Consegna prevista il 
-                                    <strong>
-                                        <fmt:formatDate value="${p.dataConsegna}" 
-                                                        pattern="dd-MM-yyyy" />
-                                    </strong>
-                                    alle ore 
-                                    <strong>
-                                        <fmt:formatDate value="${p.orarioConsegna}" 
-                                                        pattern="HH:mm" />
-                                    </strong>
-                                </p>
-                                <c:forEach var="el" items="${p.ordine}">
-                                    <div>
-                                        <c:out value="${el.quantity}"/>x&nbsp;
-                                        <strong><c:out value="${el.nome}"/></strong>
+                                <div class="row">
+                                    <!-- colonna ordine -->
+                                    <div class="col-md-6">
+                                        <div class="page-header">
+                                            <h4>Riepilogo ordine</h4>
+                                        </div>
+                                        <c:forEach var="el" items="${p.ordine}">
+                                            <div>
+                                                <c:out value="${el.quantity}"/>x&nbsp;
+                                                <strong class="text-uppercase">
+                                                    <c:out value="${el.nome}"/>
+                                                </strong>
+                                            </div>
+                                        </c:forEach>
+                                        <hr>
+                                        <div>
+                                            <strong>Totale:</strong> 
+                                            <fmt:formatNumber type="number" value="${p.prezzo}" minFractionDigits="2"/>
+                                            &euro;
+                                        </div>
                                     </div>
-                                </c:forEach>
-
-                                Importo: 
-                                <strong>
-                                    <fmt:formatNumber type="number" value="${p.prezzo}" minFractionDigits="2"/>
-                                    &euro;
-                                </strong>
+                                    <!-- colonna dati consegna -->
+                                    <div class="col-md-6">
+                                        <div class="page-header">
+                                            <h4>Info di consegna</h4>
+                                        </div>
+                                        <address class="text-capitalize">
+                                            <c:out value="${p.citofono}"/><br/>
+                                            <c:out value="${p.indirizzo}"/><br/>
+                                        </address>
+                                        <hr>
+                                        <p>
+                                            Consegna per il giorno
+                                            <strong>
+                                                <fmt:formatDate value="${p.dataConsegna}" 
+                                                                pattern="dd-MM-yyyy" />
+                                            </strong>
+                                            alle  
+                                            <strong>
+                                                <fmt:formatDate value="${p.orarioConsegna}" 
+                                                                pattern="HH:mm" />
+                                            </strong>
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
                             <div class="panel-footer">
-                                <c:choose>
-                                    <c:when test="${p.isConsegnato()}">
-                                        Ordine consegnato! Lascia un feedback se ti va! 
-                                    </c:when>
-                                    <c:otherwise>
-                                    <a href="#0" class="confirm-deliver" data-id="${p.id}">
-                                        Conferma consegna
-                                    </a><br/>
-                                    <a href="#0" class="delete-deliver" data-id="${p.id}" >
-                                        Annulla prenotazione
-                                    </a>
-                                    </c:otherwise>
-                                </c:choose>
+                                <div class="row">
+                                    <c:choose>
+                                        <c:when test="${p.isConsegnato()}">
+                                            <div class="col-md-12">
+                                                Ordine consegnato! 
+                                                Lascia un feedback se ti va! 
+                                            </div>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <div class="col-md-6">
+                                                <a href="#0" data-id="${p.id}" 
+                                                   class="delete-deliver btn btn-warning btn-block">
+                                                    Annulla prenotazione
+                                                </a>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <a href="#0" data-id="${p.id}" 
+                                                   class="confirm-deliver btn btn-success btn-block">
+                                                    Conferma consegna
+                                                </a>
+                                            </div>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </div>
                             </div>
                         </div>
                     </c:forEach>

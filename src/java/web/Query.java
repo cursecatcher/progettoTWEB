@@ -651,6 +651,8 @@ public class Query {
                 pr.setOrarioConsegna(rs.getTime("ora_consegna"));
                 pr.setId(rs.getInt("id_prenotazione"));
                 pr.setConsegnato(rs.getBoolean("consegnato"));
+                pr.setCitofono(rs.getString("nominativo"));
+                pr.setIndirizzo(rs.getString("indirizzo"));
 
                 rs.close();
                 /* preleva dati delle pizze ordinate */
@@ -711,11 +713,16 @@ public class Query {
                 int idPrenotazione = rs.getInt("id_prenotazione");
 
                 p.setId(idPrenotazione);
+                
+                p.setCitofono(rs.getString("nominativo"));
+                p.setIndirizzo(rs.getString("indirizzo"));
+                
                 p.setDataConsegna(rs.getDate("data_consegna"));
                 p.setOrarioConsegna(rs.getTime("ora_consegna"));
                 p.setConsegnato(rs.getBoolean("consegnato"));
+                
                 p.setProprietario(hashUtenti.get(rs.getInt("fk_utente")));
-
+                
                 ArrayList<ElementoOrdine> temp = prenotazioneGetOrdine(idPrenotazione, hashPizze);
 
                 //questa roba è null

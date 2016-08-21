@@ -25,14 +25,16 @@
                             </a>
                             <ul class="dropdown-menu">                                
                                 <li><a href="profilo.jsp">Profilo</a></li>
+                                <li role="separator" class="divider"></li>
                                 <li><a href="newordine.jsp">Ordina</a></li>
-                                <li><a href="#0">Qualcos'altro</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="mie-prenotazioni.jsp">Le mie prenotazioni</a></li>
                                 <li role="separator" class="divider"></li>
                                 <li><a href="#0" id="disconnect">Logout</a></li>
                             </ul>
                         </li>
-                        <li class="dropdown">
-                            <a href="#" data-jq-dropdown="#jq-dropdown-1">
+                        <li>
+                            <a href="newordine.jsp">
                                 <span class='glyphicon glyphicon-shopping-cart'></span>
                                 <span id="cart-badge" class='badge'>
                                     <c:out value="${carrello.length}"/>
@@ -41,7 +43,7 @@
                                     <fmt:formatNumber type="number" value="${carrello.prezzoTotale}" minFractionDigits="2"/>
                                 </span>&euro;
                             </a>
-                        </li>
+                        </li> 
                     </c:when>
                     <c:otherwise>
                         <li><a href='login.jsp'>Accedi</a></li>
@@ -54,6 +56,7 @@
     </div><!-- /.container-fluid -->
 </nav>
 
+<%--
 <c:if test="${usertoken == 'authenticated'}">
     <div id="jq-dropdown-1" class="jq-dropdown jq-dropdown-tip">
         <div class="jq-dropdown-panel">
@@ -78,7 +81,7 @@
             </div>
         </div>
     </div>
-</c:if>
+</c:if> --%>
 
 <form action="Controller" method="GET" id="form-action">
     <input type="hidden" name="action" value="random"/>
