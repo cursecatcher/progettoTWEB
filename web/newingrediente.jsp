@@ -7,7 +7,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>New ingredients are coming! </title>
+        <title>Ingredienti </title>
 
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" 
@@ -46,21 +46,31 @@
                 <div class="page-header">
                     <h1>Catalogo ingredienti</h1>
                 </div>
-                
-                <c:forEach var="ingrediente" items="${ingredienti.listaIngredienti}">
-                    <div class="row">
-                        <div class="col-md-8 text-capitalize">
-                            <c:out value="${ingrediente.nome}"/>
+
+                <div id="container-ingredienti">
+                    <c:forEach var="ingrediente" items="${ingredienti.listaIngredienti}">
+                        <div class="row">
+                            <div class="col-md-8 text-uppercase">
+                                <h4>
+                                    <c:out value="${ingrediente.nome}"/>
+                                </h4>
+                            </div>
+                            <div class="col-md-4">
+                                <h4>
+                                    <small>
+                                        <fmt:formatNumber type="number" value="${ingrediente.prezzo}" minFractionDigits="2"/>
+                                        &nbsp;&euro;
+                                    </small>
+                                </h4>
+                            </div>
                         </div>
-                        <div class="col-md-4">
-                            <fmt:formatNumber type="number" value="${ingrediente.prezzo}" minFractionDigits="2"/>
-                            &nbsp;&euro;
-                        </div>
-                    </div>
-                </c:forEach>
+                    </c:forEach>
+                </div>
             </div>
             <div class="col-md-6">
-                <h1>Inserimento ingredienti</h1>
+                <div class="page-header">
+                    <h1>Inserimento ingrediente</h1>
+                </div>
                 <form id="form_newingr" action="Controller" method="POST">
                     <div class='form-group'>
                         <input type="hidden" name="action" value="ingrediente-add"/>
@@ -73,7 +83,7 @@
                     <div class="form-group">
                         <label for='prezzo-ingrediente'>Prezzo</label>
                         <input id='prezzo-ingrediente' type="number" name="prezzo" class="form-control"
-                               min="0.1" step="0.1"/>
+                               min="0.1" step="0.1" required/>
                     </div>
                     <button type="submit" class='btn btn-default' 
                             id="submit-newingr">Inserisci</button>

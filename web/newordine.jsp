@@ -21,6 +21,8 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" 
               integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" 
               crossorigin="anonymous">
+        
+        <link rel="stylesheet" href="include/css/ordinazioni.css">
 
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" 
@@ -76,7 +78,7 @@
                                     </strong>
                                 </div>
                                 <div class="col-md-2">
-                                    <a class="btn btn-success btn-xs choose-pizza" href="#0"
+                                    <a class="choose-pizza" href="#0"
                                        data-id-pizza="${pizza.id}"
                                        data-nome-pizza="${pizza.nome}"
                                        data-prezzo-pizza="${pizza.prezzo}">
@@ -86,40 +88,11 @@
                             </div>
                         </div>
                         <hr>
-                        <%--
-                        <p>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <span class="pizza-nome text-capitalize">
-                                    <strong><c:out value="${pizza.nome}"/></strong>
-                                </span>
-                            </div>
-                            <div class="col-md-6">
-                                <span class="pizza-prezzo pull-right">
-                                    <strong>&euro;&nbsp;<c:out value="${pizza.prezzo}"/></strong>
-                                    <a class="btn btn-success choose-pizza" href="#0"
-                                       data-id-pizza="${pizza.id}"
-                                       data-nome-pizza="${pizza.nome}"
-                                       data-prezzo-pizza="${pizza.prezzo}">
-                                        <span class="glyphicon glyphicon-plus"></span>
-                                    </a>
-
-                                </span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-11">
-                                <span class="text-capitalize">
-                                    <c:out value="${pizza.listaIngredienti}"/>
-                                </span>
-                            </div>
-                        </div>
-                        </p> --%>
                     </c:forEach>
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="fixme">
+                <div id="cart-fixme">
                     <!-- https://stackoverflow.com/questions/15850271/how-to-make-div-fixed-after-you-scroll-to-that-div -->
                     <div class="page-header">
                         <h1>Il tuo ordine</h1>
@@ -128,7 +101,7 @@
                     <form action="Controller" method="GET">
                         <input type="hidden" name="action" value="proceed-to-order"/>
                         <input type="submit" name="submit" value="Effettua ordine"
-                               class="btn btn-primary btn-block"/>   
+                               class="btn btn-success btn-block"/>   
                         <span id="error" class="hide">
                             <c:out value="${message}"/>
                         </span>

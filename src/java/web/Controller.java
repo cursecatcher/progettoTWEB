@@ -104,6 +104,10 @@ public class Controller extends HttpServlet {
             rd = ctx.getNamedDispatcher("GestoreCliente"); 
             
         }
+        else if (action.equalsIgnoreCase("ajax-html-ingr")) {
+            rd = ctx.getNamedDispatcher("GestoreCucina");
+            
+        }
 
         rd.forward(request, response);
     }

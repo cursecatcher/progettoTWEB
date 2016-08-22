@@ -1,5 +1,6 @@
 package web;
 
+import beans.Ingrediente;
 import beans.Pizza;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -80,16 +81,39 @@ public class GestoreCucina extends HttpServlet {
                             + "</div>\n"
                             + "<div class=\"col-md-1\"></div>\n"
                             + "<div class=\"col-md-2 pull-right\">");
-                    
-                    out.write("<a href=\"#0\" class=\"edit-link btn btn-primary btn-xs\" data-id=\"" + p.getId() +"\">\n"
+
+                    out.write("<a href=\"#0\" class=\"edit-link btn btn-primary btn-xs\" data-id=\"" + p.getId() + "\">\n"
                             + "<span class=\"glyphicon glyphicon-pencil\"></span>\n"
                             + "</a>\n"
-                            + "<a href=\"#0\" class=\"delete-link btn btn-danger btn-xs\" data-id=\"" + p.getId() +"\">\n"
+                            + "<a href=\"#0\" class=\"delete-link btn btn-danger btn-xs\" data-id=\"" + p.getId() + "\">\n"
                             + "<span class=\"glyphicon glyphicon-remove\"></span>\n"
                             + "</a>");
-                    
+
                     out.write("</div></div></div></hr>");
 
+                }
+
+            } else if (action.equalsIgnoreCase("ajax-html-ingr")) {
+                ArrayList<Ingrediente> ingredienti = Query.ingredienteGetAll();
+
+                for (Ingrediente i : ingredienti) {
+                    out.println("<div class='row'>"
+                            + "<div class='col-md-8 text-uppercase'>"
+                            + "<h4>"
+                            + i.getNome()
+          //                  + "<c:out value='${ingrediente.nome}'/>"
+                            + "</h4>"
+                            + "</div>"
+                            + "<div class='col-md-4'>"
+                            + "<h4>"
+                            + "<small>"
+                            + String.format("%.2f", i.getPrezzo())
+//                            + "<fmt:formatNumber type='number' value='${ingrediente.prezzo}' minFractionDigits='2'/>"
+                            + "&nbsp;&euro;"
+                            + "</small>"
+                            + "</h4>"
+                            + "</div>"
+                            + "</div>");
                 }
 
             } else {

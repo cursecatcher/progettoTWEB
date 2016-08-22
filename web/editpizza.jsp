@@ -64,14 +64,15 @@
                     <div class="form-group">
                         <label for="nome_pizza_edit">Nome pizza</label>
                         <input id="nome_pizza_edit" name="nome" type="text" class="form-control"
-                               placeholder="Nome della pizza" value="${requestScope.pizza.nome}"/>
+                               value="${requestScope.pizza.nome}" required
+                               placeholder="Nome della pizza" />
                     </div>
 
                     <div class="form-group">
                         <label for="prezzo_pizza_edit">Prezzo pizza</label>
                         <div class="input-group">
-                            <input id="prezzo_pizza_edit" name="prezzo" type="number" min="0.5" step="0.1"
-                                   class="form-control" placeholder="Prezzo della pizza..."
+                            <input id="prezzo_pizza_edit" name="prezzo" type="number" min="0.1" step="0.1"
+                                   class="form-control" placeholder="Prezzo della pizza..." required=""
                                    value="${requestScope.pizza.prezzo}"/>
                             <span class="input-group-addon">&euro;</span>
                         </div>

@@ -94,39 +94,6 @@
                             </div>
                         </div>
                         <hr>
-                        
-                        <%--
-                        <div id="pizza-${pizza.id}" class="row-fluid">
-                            <div class="row-fluid">
-                                <div class="col-md-8 text-uppercase">
-                                    <h4><c:out value="${pizza.nome}"/></h4>
-                                </div>
-                                <div class="col-md-2">
-                                    <h4>
-                                        <small>
-                                            <fmt:formatNumber type="number" value="${pizza.prezzo}" minFractionDigits="2"/>
-                                            &nbsp;&euro;
-                                        </small>
-                                    </h4>
-                                </div>
-                                <div class="col-md-2">
-                                </div>
-                            </div>
-                            <div class="row-fluid">
-                                <div class="col-md-9">
-                                    <c:out value="${pizza.listaIngredienti}"/>
-                                </div>
-                                <div class="col-md-1"></div>
-                                <div class="col-md-2 pull-right">
-                                    <a href="#0" class="edit-link btn btn-primary btn-xs" data-id="${pizza.id}">
-                                        <span class="glyphicon glyphicon-pencil"></span>
-                                    </a>
-                                    <a href="#0" class="delete-link btn btn-danger btn-xs" data-id="${pizza.id}">
-                                        <span class="glyphicon glyphicon-remove"></span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>  --%>
                     </c:forEach>
                 </div>
             </div>
@@ -155,7 +122,7 @@
                         <div class="form-group">
                             <label for="prezzo_pizza_create">Prezzo pizza</label>
                             <div class="input-group">
-                                <input id="prezzo_pizza_create" name="prezzo" type="number" min="0.5" step="0.1"
+                                <input id="prezzo_pizza_create" name="prezzo" type="number" min="0.1" step="0.1"
                                        class="form-control" placeholder="Prezzo della pizza..." required/>
                                 <span class="input-group-addon">&euro;</span>
                             </div>

@@ -132,6 +132,7 @@ jQuery(document).ready(function ($) {
                             title: "OK",
                             message: "Ingrediente <strong>" + name + "</strong> inserito con successo!"
                         });
+                        $('#container-ingredienti').load("Controller?action=ajax-html-ingr");
                         /*
                          $div.removeClass();
                          $div.addClass("alert alert-success");

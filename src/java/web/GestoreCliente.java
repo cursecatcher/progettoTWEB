@@ -68,20 +68,51 @@ public class GestoreCliente extends HttpServlet {
                 Carrello cart = (Carrello) session.getAttribute("carrello");
 
                 if (cart.isEmpty()) {
-                    out.println("Il tuo carrello &egrave; vuoto!<hr>");
+                    out.println("Non ci sono prodotti nel carrello<hr>");
                 } else {
                     for (ElementoOrdine e : cart.getOrdine()) {
-                        out.println("<div class='row' style='padding-left: 1em'>"
-                                + "<a class='remove-pizza btn btn-danger btn-xs' href='#0' "
+                        //  (icon) | (quantità) x (nome prodotto) | (prezzo) 
+
+                        out.println("<div class='row'>");
+
+                        out.println("<div class='col-md-1'>");
+                        out.println("<a class='remove-pizza' href='#0' "
                                 + "data-id-pizza='" + e.getId() + "'"
                                 + "data-nome-pizza='" + e.getNome() + "'>"
-                                + "<span class='glyphicon glyphicon-minus'></span></a>"
-                                + e.getQuantity() + " x <strong>" + e.getNome() + "</strong></div>");
+                                + "<span class='glyphicon glyphicon-minus'></span></a>");
+                        out.println("</div>"); //col-md-1
+
+                        out.println("<div class='col-md-8'>");
+                        out.println("<span class='quantity'>" + e.getQuantity() + "</span>");
+                        out.println(" x ");
+                        out.println("<span class='name'><strong>"
+                                + e.getNome().toUpperCase()
+                                + "</strong></span>");
+                        out.println("</div>"); //col-md-8
+
+                        //         out.println(e.getQuantity() + " x <strong>" + e.getNome() + "</strong>");
+                        out.println("<div class='col-md-3 text-muted'>");
+                        out.println(String.format("%.2f", e.getPrezzoParziale()) + "&nbsp;&euro;");
+                        out.println("</div>"); //col-md-3
+                        out.println("</div>"); //row
                     }
+                    // totale
+                    out.println("<hr><div class='row'>"); 
+                    
+                    out.println("<div class='col-md-9'>"); 
+                    out.println("<h3>Totale</h3>"); 
+                    out.println("</div>"); 
+                    
+                    out.println("<div class=col-md-3'>"); 
+                    out.println("<h3><small>" + String.format("%.2f", cart.getPrezzoTotale()) + "&nbsp;&euro;</small></h3>");
+                    out.println("</div>"); 
+                    
+                    out.println("</div><hr>");  //row
+                    /*
                     out.println("<hr><div class='page-header'>"
-                            + "<h3>Totale: <small>"
+                            + "<h3>Totale: <small class='text-left'>"
                             + String.format("%.2f", cart.getPrezzoTotale())
-                            + "&nbsp;&euro;</small></h3></div>");
+                            + "&nbsp;&euro;</small></h3></div>");*/
                 }
 
             } else {
