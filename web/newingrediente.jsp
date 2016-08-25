@@ -58,7 +58,7 @@
                             <div class="col-md-4">
                                 <h4>
                                     <small>
-                                        <fmt:formatNumber type="number" value="${ingrediente.prezzo}" minFractionDigits="2"/>
+                                           <fmt:formatNumber type="number" value="${ingrediente.prezzo}" minFractionDigits="2"/>
                                         &nbsp;&euro;
                                     </small>
                                 </h4>

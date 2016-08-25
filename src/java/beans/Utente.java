@@ -19,7 +19,7 @@ public class Utente {
         id = -1;
         email = null;
         password = null;
-        ruolo = "null";
+        ruolo = "nd";
     }
 
     public Utente(int id) {
@@ -32,10 +32,12 @@ public class Utente {
                 this.email = temp.getEmail();
                 this.password = temp.getPassword();
                 this.ruolo = temp.getRuolo();
+                this.nome = temp.getNome();
+                this.cognome = temp.getCognome();
             }
             
         } catch (SQLException ex) {
-            System.out.println("SMERDO  init utente- " + ex.getMessage());
+            System.out.println("Eccezione in init utente- " + ex.getMessage());
         }
     }
 

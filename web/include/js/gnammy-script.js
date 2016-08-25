@@ -89,6 +89,7 @@ jQuery(document).ready(function ($) {
                                 title: "OK",
                                 message: "Pizza rimossa"
                             });
+                            
                             $('#pizza-' + id).addClass('hide');
                         } else if (response === "ERR_NO_RECORD") {
                             $.growl.error({
@@ -103,16 +104,14 @@ jQuery(document).ready(function ($) {
                                 message: "Errore nell'esecuzione della query"
                             });
                         }
-                    }
-                    );
+                    });
                 }
             }
-
         });
     });
-    
-    
-    
+
+
+
     $('#form_newingr').submit(function (event) {
         event.preventDefault();
         var name = $form_ingredienti.find("input[name=nome]").val().trim();
@@ -142,19 +141,11 @@ jQuery(document).ready(function ($) {
                             title: "Ingrediente gi&agrave; presente",
                             message: "L'ingrediente <strong>" + name + "</strong> &egrave; gi&agrave; presente nel DB"
                         });
-                        /*
-                         $div.removeClass();
-                         $div.addClass("alert alert-danger");
-                         $div.text("Ingrediente gia' presente!");*/
                     } else if (response === "ERR_SQL_EXCEPTION") {
                         $.growl.warning({
                             title: "WTF",
                             message: "Macelli sul server! Contattare l'amministratore e gg"
-                        }); /*
-                         console.log("WTF");
-                         $div.removeClass();
-                         $div.addClass("alert alert-danger");
-                         $div.text("MACELLI SUL SERVER! SCAPPATEEEEE");*/
+                        });
                     } else {
                         console.log("???");
                     }
@@ -162,55 +153,58 @@ jQuery(document).ready(function ($) {
                 }
         );
     });
+
     $form_pizza.submit(function (event) {
         event.preventDefault(); //uso ajax
         var nome = $(this).find("input[name=nome]").val().trim();
+
         if (!$("#select-ingredienti").val()) {
             $.growl.error({
                 title: "Errore!",
                 message: "Nessun ingrediente specificato!"
             });
         } else {
-            $.post(
-                    $form_pizza.attr('action'),
-                    $form_pizza.serialize(),
-                    function (response) {
-                        //                   $div.removeClass("alert-success alert-warning alert-danger hidden"); 
-                        console.log("Response: " + response);
-                        if (response === "OK") {
-                            $.growl.notice({
-                                title: "T'appost!",
-                                message: "La pizza <strong>" + nome + "</strong> &egrave; stata inserita con successo nel DB",
-                                location: "br"
-                            });
-                            $('#catalogo').load("Controller?action=ajax-update-admin-pizzas");
-                        } else if (response === "ERR_MISSING_NAME") {
-                            $.growl.error({
-                                title: "Errore nei dati inseriti",
-                                message: "Inserisci un nome da dare alla pizza!"
-                            });
-                        } else if (response === "ERR_PARSE_FLOAT") {
-                            $.growl.error({
-                                title: "Errore nel campo prezzo",
-                                message: "Il prezzo dev'essere un valore numerico maggiore di zero!"
-                            });
-                        } else if (response === "ERR_DUPLICATE") {
-                            $.growl.warning({
-                                title: "Inserimento fallito",
-                                message: "La pizza <strong>" + nome + "</strong> &egrave; gi&agrave; presente nel DB"
-                            });
-                        } else if (response === "ERR_NO_INGREDIENTI") {
-                            $.growl.error({
-                                title: "Errore!",
-                                message: "Nessun ingrediente specificato!"
-                            });
-                        } else if (response == "ERR_SQL_EXCEPTION") {
-                            $.growl.error({
-                                title: "Errore sul server",
-                                message: "Si &egrave; verificato un errore inatteso sul server, boh!"
-                            });
-                        }
-                    }
+            $.post("Controller", $(this).serialize(), function (response) {
+                console.log("Response: " + response);
+                if (response === "OK") {
+                    $.growl.notice({
+                        title: "Operazione eseguita con successo",
+                        message: "La pizza <strong>" + nome + "</strong> &egrave; stata inserita con successo nel DB",
+                        location: "br"
+                    });
+                    $('#catalogo').load("Controller?action=ajax-update-admin-pizzas");
+
+                    $('#nome_pizza_create').val("");
+                    $('#prezzo_pizza_create').val("");
+                    $('#select-ingredienti').searchableOptionList().deselectAll();
+
+                } else if (response === "ERR_MISSING_NAME") {
+                    $.growl.error({
+                        title: "Errore nei dati inseriti",
+                        message: "Inserisci un nome da dare alla pizza!"
+                    });
+                } else if (response === "ERR_PARSE_FLOAT") {
+                    $.growl.error({
+                        title: "Errore nel campo prezzo",
+                        message: "Il prezzo dev'essere un valore numerico maggiore di zero!"
+                    });
+                } else if (response === "ERR_DUPLICATE") {
+                    $.growl.warning({
+                        title: "Inserimento fallito",
+                        message: "La pizza <strong>" + nome + "</strong> &egrave; gi&agrave; presente nel DB"
+                    });
+                } else if (response === "ERR_NO_INGREDIENTI") {
+                    $.growl.error({
+                        title: "Errore!",
+                        message: "Nessun ingrediente specificato!"
+                    });
+                } else if (response == "ERR_SQL_EXCEPTION") {
+                    $.growl.error({
+                        title: "Errore sul server",
+                        message: "Si &egrave; verificato un errore inatteso sul server, boh!"
+                    });
+                }
+            }
             );
         }
     });

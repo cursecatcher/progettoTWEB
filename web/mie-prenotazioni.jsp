@@ -49,85 +49,96 @@
                 <div class="page-header text-center">
                     <h1>Le mie prenotazioni</h1>
                 </div>
-                
+
                 <div class="panel-group">
-                    <c:forEach var="p" items="${user.prenotazioni}">
-                        <div id="pren-${p.id}" class="panel panel-default">
-                            <div class="panel-body">
-                                <div class="row">
-                                    <!-- colonna ordine -->
-                                    <div class="col-md-6">
-                                        <div class="page-header">
-                                            <h4>Riepilogo ordine</h4>
-                                        </div>
-                                        <c:forEach var="el" items="${p.ordine}">
-                                            <div>
-                                                <c:out value="${el.quantity}"/>x&nbsp;
-                                                <strong class="text-uppercase">
-                                                    <c:out value="${el.nome}"/>
-                                                </strong>
+                    <c:set var="listaPrenotazioni" value="${user.prenotazioni}"/>
+                    <c:choose>
+                        <c:when test="${empty listaPrenotazioni}">
+                            Al momento non hai effettuato ancora nessuna prenotazione!
+                        </c:when>
+                        <c:otherwise>
+                            <c:forEach var="p" items="${listaPrenotazioni}">
+                                <div id="pren-${p.id}" class="panel panel-default">
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <!-- colonna ordine -->
+                                            <div class="col-md-6">
+                                                <div class="page-header">
+                                                    <h4>Riepilogo ordine</h4>
+                                                </div>
+                                                <c:forEach var="el" items="${p.ordine}">
+                                                    <div>
+                                                        <c:out value="${el.quantity}"/>x&nbsp;
+                                                        <strong class="text-uppercase">
+                                                            <c:out value="${el.nome}"/>
+                                                        </strong>
+                                                    </div>
+                                                </c:forEach>
+                                                <hr>
+                                                <div>
+                                                    <strong>Totale:</strong> 
+                                                    <fmt:formatNumber type="number" value="${p.prezzo}" minFractionDigits="2"/>
+                                                    &euro;
+                                                </div>
                                             </div>
-                                        </c:forEach>
-                                        <hr>
-                                        <div>
-                                            <strong>Totale:</strong> 
-                                            <fmt:formatNumber type="number" value="${p.prezzo}" minFractionDigits="2"/>
-                                            &euro;
+                                            <!-- colonna dati consegna -->
+                                            <div class="col-md-6">
+                                                <div class="page-header">
+                                                    <h4>Info di consegna</h4>
+                                                </div>
+                                                <address class="text-capitalize">
+                                                    <c:out value="${p.citofono}"/><br/>
+                                                    <c:out value="${p.indirizzo}"/><br/>
+                                                </address>
+                                                <hr>
+                                                <p>
+                                                    Consegna per il giorno
+                                                    <strong>
+                                                        <fmt:formatDate value="${p.dataConsegna}" 
+                                                                        pattern="dd-MM-yyyy" />
+                                                    </strong>
+                                                    alle  
+                                                    <strong>
+                                                        <fmt:formatDate value="${p.orarioConsegna}" 
+                                                                        pattern="HH:mm" />
+                                                    </strong>
+                                                </p>
+                                            </div>
                                         </div>
                                     </div>
-                                    <!-- colonna dati consegna -->
-                                    <div class="col-md-6">
-                                        <div class="page-header">
-                                            <h4>Info di consegna</h4>
+                                    <div class="panel-footer">
+                                        <div class="row">
+                                            <c:choose>
+                                                <c:when test="${p.isConsegnato()}">
+                                                    <div class="col-md-12">
+                                                        Ordine consegnato! 
+                                                        Lascia un feedback se ti va! 
+                                                    </div>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <div class="col-md-6">
+                                                        <a href="#0" data-id="${p.id}" 
+                                                           class="delete-deliver btn btn-warning btn-block">
+                                                            Annulla prenotazione
+                                                        </a>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <a href="#0" data-id="${p.id}" 
+                                                           class="confirm-deliver btn btn-success btn-block">
+                                                            Conferma consegna
+                                                        </a>
+                                                    </div>
+                                                </c:otherwise>
+                                            </c:choose>
                                         </div>
-                                        <address class="text-capitalize">
-                                            <c:out value="${p.citofono}"/><br/>
-                                            <c:out value="${p.indirizzo}"/><br/>
-                                        </address>
-                                        <hr>
-                                        <p>
-                                            Consegna per il giorno
-                                            <strong>
-                                                <fmt:formatDate value="${p.dataConsegna}" 
-                                                                pattern="dd-MM-yyyy" />
-                                            </strong>
-                                            alle  
-                                            <strong>
-                                                <fmt:formatDate value="${p.orarioConsegna}" 
-                                                                pattern="HH:mm" />
-                                            </strong>
-                                        </p>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="panel-footer">
-                                <div class="row">
-                                    <c:choose>
-                                        <c:when test="${p.isConsegnato()}">
-                                            <div class="col-md-12">
-                                                Ordine consegnato! 
-                                                Lascia un feedback se ti va! 
-                                            </div>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <div class="col-md-6">
-                                                <a href="#0" data-id="${p.id}" 
-                                                   class="delete-deliver btn btn-warning btn-block">
-                                                    Annulla prenotazione
-                                                </a>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <a href="#0" data-id="${p.id}" 
-                                                   class="confirm-deliver btn btn-success btn-block">
-                                                    Conferma consegna
-                                                </a>
-                                            </div>
-                                        </c:otherwise>
-                                    </c:choose>
-                                </div>
-                            </div>
-                        </div>
-                    </c:forEach>
+                            </c:forEach>
+                        </c:otherwise>
+                    </c:choose>
+
+
+
                 </div>
             </div>
             <div class="col-md-3"></div>

@@ -3,7 +3,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <nav class="navbar navbar-default">
-    
     <div class="container-fluid">
         <div class="col-md-1"></div>
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -11,7 +10,9 @@
         <div class="navbar-header">
             <a class="navbar-brand" href="index.jsp">PiWeb</a>
         </div>
-        <div id="__error" style="display:none"></div>
+            <div id="__error" style="display:none">
+                <c:out value="${error}"/>
+            </div>
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">

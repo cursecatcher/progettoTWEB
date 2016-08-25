@@ -63,6 +63,41 @@ public class GestoreCucina extends HttpServlet {
                 ArrayList<Pizza> pizze = Query.pizzaGetAll();
 
                 for (Pizza p : pizze) {
+                    out.write(
+                            "<div id='pizza-" + p.getId() + "' class='row-fluid'>\n"
+                            + "<div class='row'>\n"
+                            + "<div class='col-md-8'>\n"
+                            + "<span class='pizza-nome text-uppercase'>\n"
+                            + "<h4>\n"
+                            + p.getNome()
+                            + "</h4>\n"
+                            + "</span>\n"
+                            + "</div>\n"
+                            + "</div>\n"
+                            + "<div class='row'>\n"
+                            + "<div class='col-md-8 text-lowercase'>\n"
+                            + p.getListaIngredienti()
+                            + "</div>\n"
+                            + "<div class='col-md-2 text-muted'>\n"
+                            + "<strong>\n"
+                            + String.format("%.2f", p.getPrezzo())
+                            //   + "<fmt:formatNumber type='number' value='${pizza.prezzo}' minFractionDigits='2'/>\n"
+                            + "&nbsp;&euro;\n"
+                            + "</strong>\n"
+                            + "</div>\n"
+                            + "<div class='col-md-2'>\n"
+                            + "<a href='#0' class='edit-link btn btn-primary btn-xs' data-id='" + p.getId() + "'>\n"
+                            + "<span class='glyphicon glyphicon-pencil'></span>\n"
+                            + "</a>\n"
+                            + "<a href='#0' class='delete-link btn btn-danger btn-xs' data-id='" + p.getId() + "'>\n"
+                            + "<span class='glyphicon glyphicon-remove'></span>\n"
+                            + "</a>\n"
+                            + "</div>\n"
+                            + "</div>\n"
+                            + "<hr>"
+                            + "</div>\n");
+
+                    /*
                     out.write("<div id=\"pizza-" + p.getId() + "\" class=\"row-fluid\">");
                     out.write("<div class=\"row-fluid\">\n"
                             + "<div class=\"col-md-8 text-uppercase\">\n"
@@ -89,8 +124,7 @@ public class GestoreCucina extends HttpServlet {
                             + "<span class=\"glyphicon glyphicon-remove\"></span>\n"
                             + "</a>");
 
-                    out.write("</div></div></div></hr>");
-
+                    out.write("</div></div></div></hr>");*/
                 }
 
             } else if (action.equalsIgnoreCase("ajax-html-ingr")) {
@@ -101,14 +135,14 @@ public class GestoreCucina extends HttpServlet {
                             + "<div class='col-md-8 text-uppercase'>"
                             + "<h4>"
                             + i.getNome()
-          //                  + "<c:out value='${ingrediente.nome}'/>"
+                            //                  + "<c:out value='${ingrediente.nome}'/>"
                             + "</h4>"
                             + "</div>"
                             + "<div class='col-md-4'>"
                             + "<h4>"
                             + "<small>"
                             + String.format("%.2f", i.getPrezzo())
-//                            + "<fmt:formatNumber type='number' value='${ingrediente.prezzo}' minFractionDigits='2'/>"
+                            //                            + "<fmt:formatNumber type='number' value='${ingrediente.prezzo}' minFractionDigits='2'/>"
                             + "&nbsp;&euro;"
                             + "</small>"
                             + "</h4>"

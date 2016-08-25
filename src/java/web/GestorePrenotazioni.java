@@ -138,6 +138,9 @@ public class GestorePrenotazioni extends HttpServlet {
                 rd = ctx.getRequestDispatcher("/index.jsp");
 
             } else if (action.equalsIgnoreCase("add-prenotazione")) {
+                String dataConsegna = request.getParameter("dataConsegna");
+                String oraConsegna = request.getParameter("oraConsegna");
+
                 java.sql.Date date = null;
                 java.sql.Time time = null;
                 boolean ok = false;
@@ -145,25 +148,22 @@ public class GestorePrenotazioni extends HttpServlet {
                 // parsing data e orario
                 try {
                     SimpleDateFormat sdf = new SimpleDateFormat("dd-M-yyyy hh:mm");
-                    String dataConsegna = request.getParameter("dataConsegna");
-                    String oraConsegna = request.getParameter("oraConsegna");
                     java.util.Date temp = sdf.parse(dataConsegna + " " + oraConsegna);
-                    out.println("Data parsata: " + temp);
+                    System.out.println("Data parsata: " + temp);
                     date = new java.sql.Date(temp.getTime());
                     time = new java.sql.Time(temp.getTime());
 
                     ok = true;
                 } catch (ParseException ex) {
-                    Logger.getLogger(GestorePrenotazioni.class.getName()).log(Level.SEVERE, null, ex);
-                    out.println(ex.getMessage());
+                    System.out.println("Eccezione nel parsing date/time: " + ex.getMessage());
                 }
 
+                String nomeCompleto = request.getParameter("nominativo");
+                String indirizzo = request.getParameter("indirizzo");
+
                 if (ok) {
-                    String nomeCompleto = request.getParameter("nominativo"); 
-                    String indirizzo = request.getParameter("indirizzo"); 
-                    
-                    
                     HttpSession session = request.getSession();
+
                     int id_utente = (int) session.getAttribute("idUtente");
                     Carrello cart = (Carrello) session.getAttribute("carrello");
                     ArrayList<ElementoOrdine> ordine = new ArrayList<>(cart.getOrdine());
@@ -173,9 +173,15 @@ public class GestorePrenotazioni extends HttpServlet {
                         rd = ctx.getRequestDispatcher("/mie-prenotazioni.jsp");
                     }
                 } else {
-                    //errrore parse date / time
+                    //parametri per la riscrittura del form
+                    request.setAttribute("nominativo", nomeCompleto);
+                    request.setAttribute("indirizzo", indirizzo);
+                    request.setAttribute("data", dataConsegna);
+                    
+                    request.setAttribute("error", "ERR_PARSE_DATETIME");
+                    rd = ctx.getRequestDispatcher("/confirm-order.jsp");
                 }
-                
+
             } else if (action.equalsIgnoreCase("confirm-deliver")) {
                 int id_prenotazione = Integer.parseInt(request.getParameter("idp"));
                 String resp = Query.prenotazioneConfermaConsegna(id_prenotazione) ? "OK" : "ERR";
@@ -208,6 +214,6 @@ public class GestorePrenotazioni extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
+    }
 
 }

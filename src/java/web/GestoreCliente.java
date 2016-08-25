@@ -203,15 +203,17 @@ public class GestoreCliente extends HttpServlet {
                 String confirm_p = request.getParameter("confirm-password");
                 String res = "ERR_MISMATCH";
 
-                if (confirm_p.equalsIgnoreCase(new_p)) {
+                if (new_p.equalsIgnoreCase(confirm_p)) {
                     if (DigestUtils.sha1Hex(old_p).equalsIgnoreCase(user.getPassword())) {
                         res = Query.utenteUpdatePassword(user.getId(), new_p)
                                 ? "OK" : "ERR_UPDATE_FAILED";
+                        user.setPassword(DigestUtils.sha1Hex(new_p));
+                        session.setAttribute("user", user);
                     } else {
                         res = "ERR_OLD_PWD";
                     }
 
-                }
+                } 
 
                 out.print(res);
 

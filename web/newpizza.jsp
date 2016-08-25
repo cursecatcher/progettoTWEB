@@ -63,37 +63,38 @@
                 </div>
                 <div id="catalogo">
                     <c:forEach var="pizza" items="${menu.pizze}">
-                        <div id="pizza-${pizza.id}" class="row-fluid">
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <span class="pizza-nome text-uppercase">
+                        <div id='pizza-${pizza.id}' class='row-fluid'>
+                            <div class='row'>
+                                <div class='col-md-8'>
+                                    <span class='pizza-nome text-uppercase'>
                                         <h4>
-                                            <c:out value="${pizza.nome}"/>
+                                            <c:out value='${pizza.nome}'/>
                                         </h4>
                                     </span>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-md-8 text-lowercase">
-                                    <c:out value="${pizza.listaIngredienti}"/>
+                            <div class='row'>
+                                <div class='col-md-8 text-lowercase'>
+                                    <c:out value='${pizza.listaIngredienti}'/>
                                 </div>
-                                <div class="col-md-2 text-muted">
+                                <div class='col-md-2 text-muted'>
                                     <strong>
-                                        <fmt:formatNumber type="number" value="${pizza.prezzo}" minFractionDigits="2"/>
+                                        <fmt:formatNumber type='number' value='${pizza.prezzo}' minFractionDigits='2'/>
                                         &nbsp;&euro;
                                     </strong>
                                 </div>
-                                <div class="col-md-2">
-                                    <a href="#0" class="edit-link btn btn-primary btn-xs" data-id="${pizza.id}">
-                                        <span class="glyphicon glyphicon-pencil"></span>
+                                <div class='col-md-2'>
+                                    <a href='#0' class='edit-link btn btn-primary btn-xs' data-id='${pizza.id}'>
+                                        <span class='glyphicon glyphicon-pencil'></span>
                                     </a>
-                                    <a href="#0" class="delete-link btn btn-danger btn-xs" data-id="${pizza.id}">
-                                        <span class="glyphicon glyphicon-remove"></span>
+                                    <a href='#0' class='delete-link btn btn-danger btn-xs' data-id='${pizza.id}'>
+                                        <span class='glyphicon glyphicon-remove'></span>
                                     </a>
                                 </div>
                             </div>
+                            <hr>
                         </div>
-                        <hr>
+
                     </c:forEach>
                 </div>
             </div>
@@ -114,13 +115,13 @@
                         <input type="hidden" name="action" value="pizza-create"/>
                         <!-- nome pizza -->
                         <div class="form-group">
-                            <label for="nome_pizza_create">Nome pizza</label>
+                            <!-- <label for="nome_pizza_create">Nome pizza</label> -->
                             <input id="nome_pizza_create" name="nome" type="text" class="form-control"
                                    placeholder="Nome della pizza" required/>
                         </div>
                         <!-- prezzo -->
                         <div class="form-group">
-                            <label for="prezzo_pizza_create">Prezzo pizza</label>
+                            <!-- <label for="prezzo_pizza_create">Prezzo pizza</label> -->
                             <div class="input-group">
                                 <input id="prezzo_pizza_create" name="prezzo" type="number" min="0.1" step="0.1"
                                        class="form-control" placeholder="Prezzo della pizza..." required/>
@@ -129,7 +130,7 @@
                         </div>
                         <!-- ingredienti -->
                         <div>
-                            <p><strong>Seleziona gli ingredienti da mettere sulla pizza </strong></p>
+                            <!--<p><strong>Seleziona gli ingredienti da mettere sulla pizza </strong></p> -->
                             <select id='select-ingredienti' name='ingredientiPizza' multiple="multiple">
                                 <c:forEach var="ingrediente" items="${ingredienti.listaIngredienti}">
                                     <option value="${ingrediente.id}">
@@ -141,7 +142,13 @@
                             <script type='text/javascript'>
                                 $(function () {
                                     $('#select-ingredienti').searchableOptionList({
-                                        maxHeight: '200px'
+                                        maxHeight: '200px',
+                                        showSelectAll: false,
+                                        allowNullSelection: false,
+                                        texts: {
+                                            noItemsAvailable: "Errore nel caricamento degli ingredienti",
+                                            searchplaceholder: "Seleziona gli ingredienti da mettere sulla pizza"
+                                        }
                                     });
                                 });
                             </script>
