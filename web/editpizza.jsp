@@ -22,6 +22,8 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" 
               integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" 
               crossorigin="anonymous">
+        
+                <link rel="stylesheet" href="include/css/style.css">
 
         <!-- jQuery -->
         <script src="https://code.jquery.com/jquery-2.2.4.min.js"   
@@ -79,7 +81,9 @@
                     </div>
 
                     <div>
-                        <p><strong>Seleziona gli ingredienti da mettere sulla pizza </strong></p>
+                        <p>
+                            <strong>Seleziona gli ingredienti da mettere sulla pizza </strong>
+                        </p>
                         <select id='select-ingredienti' name='ingredientiPizza' multiple="multiple">
                             <!-- imposta gli ingredienti presenti nella pizza come selezionati -->
                             <c:forEach var="ingrediente" items="${ingredienti.listaIngredienti}">
@@ -92,7 +96,7 @@
 
                                 <option value="${ingrediente.id}"
                                         <c:if test="${contains eq 'true'}">selected</c:if>>
-                                        ${ingrediente.nome}
+                                    ${ingrediente.nome}
                                 </option>
                             </c:forEach>
                         </select>
@@ -100,16 +104,28 @@
                         <script type='text/javascript'>
                             $(function () {
                                 $('#select-ingredienti').searchableOptionList({
-                                    maxHeight: '200px'
+                                    maxHeight: '200px',
+                                    showSelectAll: false,
+                                    allowNullSelection: false,
+                                    texts: {
+                                        noItemsAvailable: "Errore nel caricamento degli ingredienti",
+                                        searchplaceholder: "Seleziona gli ingredienti da mettere sulla pizza"
+                                    }
                                 });
                             });
                         </script>
                     </div>
                     <br/>
-                    <button id='submit-editpi' type="submit" class="btn btn-default">
-                        Conferma modifiche
-                    </button>
-                    <a href="newpizza.jsp" class="btn btn-default">Annulla modifiche</a>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input type="submit" class="btn btn-success btn-block" value="Conferma modifiche"/>
+                        </div>
+                        <div class="col-md-6">
+                            <a href="newpizza.jsp" class="btn btn-default btn-block">
+                                Annulla modifiche
+                            </a>
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>

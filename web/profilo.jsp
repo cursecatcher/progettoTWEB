@@ -24,6 +24,7 @@
               crossorigin="anonymous">
 
         <link rel="stylesheet" href="include/css/footer.css">
+        <link rel="stylesheet" href="include/css/style.css">
 
         <script src="https://code.jquery.com/jquery-2.2.4.min.js"   
                 integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   
@@ -47,11 +48,34 @@
         <%@include file="include/header.jsp" %>
 
         <div class="container">
-            <div class="col-md-3"></div>
-            <div class="col-md-6">
-                <div class="page-header">
+            
+            <div class="page-header">
                     <h4 class="text-center text-uppercase">Il mio profilo</h4>
                 </div>
+            
+            <div class="col-md-4">
+                <ul class="nav nav-pills nav-stacked">
+                    <li class="active">
+                        <a href="profilo.jsp">Il mio profilo</a>
+                    </li>
+                    <li>
+                        <a href="#0" data-toggle="collapse" data-target="#collapse-pwd">
+                            Modifica password
+                        </a>
+                    </li>
+                    <c:if test="${user.isAdmin()}">
+                    <li>
+                        <a href="gestione-prenotazioni.jsp">Prenotazioni utenti</a>
+                    </li>
+                    <li>
+                        <a href="newpizza.jsp">Gestione menu</a>
+                    </li>
+                    </c:if>
+                </ul>
+            </div>
+
+            <div class="col-md-6">
+                
 
                 <div class="row">
                     <div class="col-md-6 form-group">
@@ -72,23 +96,10 @@
                                class="form-control" readonly
                                placeholder="Indirizzo email"/>
                     </div>
-                </div><%--
-                <div class="row">
-                    <div class="col-md-12 form-group">
-                        <label for="phone">Numero di telefono</label>
-                        <input id="phone" name="phone" type="tel" value=""
-                               class="form-control"/>
-                    </div>
-                </div> --%>
+                </div>
                 <hr>
                 <div>
-                    <p>
-                        <a href="#0" data-toggle="collapse" data-target="#demo">
-                            Modifica password
-                        </a>
-                    </p>
-
-                    <div id="demo" class="collapse">
+                    <div id="collapse-pwd" class="collapse">
                         <div class="form-group">       
                             <form id="form-change-pwd" method="POST" action="Controller">
                                 <input type="hidden" name="action" value="user-change-pwd"/>
@@ -115,12 +126,13 @@
                                         <input type="submit" name="submit" value="Aggiorna password"
                                                class="btn btn-primary btn-block"/>
                                     </div>
-                                    
+
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
+                <%--
                 <c:if test="${user.isAdmin()}">
                     <hr>
                     <div>
@@ -148,9 +160,9 @@
                             </a>
                         </div>
                     </div>
-                </c:if>
+                </c:if> --%>
             </div>
-            <div class="col-md-3"></div>
+            <div class="col-md-2"></div>
         </div>
         <%@include file="include/footer.html" %>
 

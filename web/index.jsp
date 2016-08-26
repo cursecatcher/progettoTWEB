@@ -16,9 +16,9 @@
               integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" 
               crossorigin="anonymous">
 
-        
         <link rel="stylesheet" href="include/css/cover.css">
         <link rel="stylesheet" href="include/css/header.css">
+        <link rel="stylesheet" href="include/css/style.css">
 
         <script src="https://code.jquery.com/jquery-2.2.4.min.js"   
                 integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   
@@ -46,46 +46,42 @@
     <body>
 
         <jsp:include page="include/header.jsp"/>
-        
+
         <div class="site-wrapper">
 
             <div class="site-wrapper-inner">
 
                 <div class="cover-container">
-<%--
+<!--
                     <div class="masthead clearfix">
                         <div class="inner">
-                          
-                        
-                          <h3 class="masthead-brand">PiWeb</h3>
-                          <nav>
-                              <ul class="nav masthead-nav">
-                                  <li class="active"><a href="#">Home</a></li>
-                                  <li><a href="#">Features</a></li>
-                                  <li><a href="#">Contact</a></li>
-                              </ul>
-                          </nav>
-                      </div> 
-                    </div>--%>
+                            <h3 class="masthead-brand">Cover</h3>
+                            <nav>
+                                <ul class="nav masthead-nav">
+                                    <li class="active"><a href="#">Home</a></li>
+                                    <li><a href="#">Features</a></li>
+                                    <li><a href="#">Contact</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div> -->
 
                     <div class="inner cover">
                         <h1 class="cover-heading">PiWeb</h1>
                         <p class="lead">
-                            La prima pizzeria online random 1 2 3 stella!
+                            Sotto quel palazzo c'&egrave; un povero cane pazzo.<br/>
+                            Date da mangiare a quel povero pazzo cane.
                         </p>
                         <p class="lead">
-                        <c:choose>
-                            <c:when test="${usertoken == 'authenticated'}">
-                                <a href="newordine.jsp" class="btn btn-lg btn-default">
-                                    Ordina
-                                </a>
-                            </c:when>
-                            <c:otherwise>
-                            <a href="login.jsp" class="btn btn-lg btn-default">
-                                Accedi
-                            </a>
-                            </c:otherwise>
-                        </c:choose>
+                            <c:choose>
+                                <c:when test="${usertoken == 'authenticated'}">
+                                    <a href="newordine.jsp" class="btn btn-primary btn-lg">Ordina</a>
+                                </c:when>
+                                <c:otherwise>
+                                    <a href="login.jsp" class="btn btn-lg btn-primary">Accedi</a>
+                                </c:otherwise>
+                            </c:choose>
+                            
                         </p>
                     </div>
 
@@ -100,14 +96,15 @@
             </div>
 
         </div>
-
+        
     </body>
 </html>
 
 
-<%--
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+    <%--
+    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+    <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <jsp:useBean id='menu' scope="page" class="beans.Menu"/>
 <!DOCTYPE html>

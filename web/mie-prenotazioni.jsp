@@ -5,7 +5,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Le mie prenotazioni</title>
 
         <script src="https://code.jquery.com/jquery-2.2.4.min.js"   
                 integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   
@@ -20,6 +20,8 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" 
               integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" 
               crossorigin="anonymous">
+
+        <link rel="stylesheet" href="include/css/style.css">
 
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" 
@@ -48,10 +50,14 @@
             <div class="col-md-6">
                 <div class="page-header text-center">
                     <h1>Le mie prenotazioni</h1>
-                </div>
+                    <p class="">
+                        In questa pagina puoi visualizzare e gestire le tue prenotazioni
+                        in attesa di consegna. 
+                    </p>
+                </div> 
 
                 <div class="panel-group">
-                    <c:set var="listaPrenotazioni" value="${user.prenotazioni}"/>
+                    <c:set var="listaPrenotazioni" value="${user.prenotazioniNonConsegnate}"/>
                     <c:choose>
                         <c:when test="${empty listaPrenotazioni}">
                             Al momento non hai effettuato ancora nessuna prenotazione!
@@ -108,41 +114,27 @@
                                     </div>
                                     <div class="panel-footer">
                                         <div class="row">
-                                            <c:choose>
-                                                <c:when test="${p.isConsegnato()}">
-                                                    <div class="col-md-12">
-                                                        Ordine consegnato! 
-                                                        Lascia un feedback se ti va! 
-                                                    </div>
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <div class="col-md-6">
-                                                        <a href="#0" data-id="${p.id}" 
-                                                           class="delete-deliver btn btn-warning btn-block">
-                                                            Annulla prenotazione
-                                                        </a>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <a href="#0" data-id="${p.id}" 
-                                                           class="confirm-deliver btn btn-success btn-block">
-                                                            Conferma consegna
-                                                        </a>
-                                                    </div>
-                                                </c:otherwise>
-                                            </c:choose>
+                                            <div class="col-md-6">
+                                                <a href="#0" data-id="${p.id}" 
+                                                   class="delete-deliver btn btn-danger btn-block">
+                                                    Annulla prenotazione
+                                                </a>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <a href="#0" data-id="${p.id}" 
+                                                   class="confirm-deliver btn btn-success btn-block">
+                                                    Conferma consegna
+                                                </a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </c:forEach>
                         </c:otherwise>
                     </c:choose>
-
-
-
                 </div>
             </div>
             <div class="col-md-3"></div>
-
 
 
         </div>

@@ -7,7 +7,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Ingredienti </title>
+        <title>Catalogo ingredienti</title>
 
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" 
@@ -18,6 +18,8 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" 
               integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" 
               crossorigin="anonymous">
+        
+        <link rel="stylesheet" href="include/css/style.css">
 
         <script src="https://code.jquery.com/jquery-2.2.4.min.js"   
                 integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   
@@ -58,7 +60,7 @@
                             <div class="col-md-4">
                                 <h4>
                                     <small>
-                                           <fmt:formatNumber type="number" value="${ingrediente.prezzo}" minFractionDigits="2"/>
+                                        <fmt:formatNumber type="number" value="${ingrediente.prezzo}" minFractionDigits="2"/>
                                         &nbsp;&euro;
                                     </small>
                                 </h4>
@@ -76,20 +78,21 @@
                         <input type="hidden" name="action" value="ingrediente-add"/>
                     </div>
                     <div class="form-group">
-                        <label for='nome-ingrediente'>Nome ingrediente</label>
+                        <!--  <label for='nome-ingrediente'>Nome ingrediente</label> -->
                         <input id='nome-ingrediente' type="text" name="nome" class="form-control"
-                               maxlength="32" placeholder="Nome ingrediente..." required/>
+                               maxlength="32" placeholder="Nome ingrediente" required/>
                     </div>
                     <div class="form-group">
-                        <label for='prezzo-ingrediente'>Prezzo</label>
-                        <input id='prezzo-ingrediente' type="number" name="prezzo" class="form-control"
-                               min="0.1" step="0.1" required/>
+                        <!--  <label for='prezzo-ingrediente'>Prezzo</label> -->
+                        <div class="input-group">
+                            <input id="prezzo-ingrediente" name="prezzo" type="number" min="0.1" step="0.1"
+                                   class="form-control" placeholder="Prezzo ingrediente" required/>
+                            <span class="input-group-addon">&euro;</span>
+                        </div>
                     </div>
-                    <button type="submit" class='btn btn-default' 
-                            id="submit-newingr">Inserisci</button>
+                    <input type="submit" class="btn btn-default btn-block" value="Inserisci"/>
                 </form>
                 <p>Torna all'<a href='newpizza.jsp'>inserimento delle pizze</a>!!</p>
-                <div id="result-op" class="alert" role="alert"><!--jquery--></div>
             </div>
         </div>
     </body>

@@ -4,6 +4,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.stream.Collectors;
 import web.Query;
 
 public class Utente {
@@ -110,6 +111,22 @@ public class Utente {
         return prenotazioniUtente;
     }
 
+    public ArrayList<Prenotazione> getPrenotazioniConsegnate() {
+        return this.getPrenotazioni()
+                .stream()
+                .filter((Prenotazione p) -> p.isConsegnato())
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+    
+    public ArrayList<Prenotazione> getPrenotazioniNonConsegnate() {
+        return this.getPrenotazioni()
+                .stream()
+                .filter((Prenotazione p) -> !p.isConsegnato())
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+    
+    
+    
     
     public ArrayList<Prenotazione> getAllPrenotazioni() {
         ArrayList<Prenotazione> ret = null; 

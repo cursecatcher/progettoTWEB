@@ -18,6 +18,8 @@
               integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" 
               crossorigin="anonymous">
 
+        <link rel="stylesheet" href="include/css/style.css">
+
         <script src="https://code.jquery.com/jquery-2.2.4.min.js"   
                 integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   
         crossorigin="anonymous"></script>
@@ -28,7 +30,7 @@
         <!--growl -->
         <script type="text/javascript" src="include/lib/jquery-growl/jquery.growl.js"></script>
         <link rel="stylesheet" href="include/lib/jquery-growl/jquery.growl.css" type="text/css" />
-        
+
         <script type='text/javascript' src='include/js/prenotazioni.js'></script>
         <script type="text/javascript" src="include/js/general.js"></script>
     </head>

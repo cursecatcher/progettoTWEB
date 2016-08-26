@@ -1,0 +1,78 @@
+/** navbar **/
+.navbar {
+    color: #FFFFFF;
+    background-color: #CC3333;
+}
+
+/***************** override stile bottoni bootstrap */
+.btn {
+    /*    padding: 14px 24px; */
+    border: 0 none;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.btn:focus, .btn:active:focus, .btn.active:focus {
+    outline: 0 none;
+}
+
+/* btn-primary */
+.btn-primary {
+    background: #0099cc;
+    color: #ffffff;
+}
+
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open > .dropdown-toggle.btn-primary {
+    background: #33a6cc;
+}
+
+.btn-primary:active, .btn-primary.active {
+    background: #007299;
+    box-shadow: none;
+}
+
+/* btn-success */
+.btn-success {
+    background: #00cc99;
+    color: #ffffff;
+}
+
+.btn-success:hover, .btn-success:focus, .btn-success:active, .btn-success.active, .open > .dropdown-toggle.btn-success {
+    background: #33cca6;
+}
+
+.btn-success:active, .btn-success.active {
+    background: #009973;
+    box-shadow: none;
+}
+
+/* btn-danger */
+.btn-danger {
+    background: #d20000;
+    color: #ffffff;
+}
+
+.btn-danger:hover, .btn-danger:focus, .btn-danger:active, .btn-danger.active, .open > .dropdown-toggle.btn-danger {
+    background: #ce0e0e;
+}
+
+.btn-danger:active, .btn-danger.active {
+    background: #009973;
+    box-shadow: none;
+}
+
+/* btn-warning */
+.btn-warning {
+    background: #faa632;
+    color: #ffffff;
+}
+
+.btn-warning:hover, .btn-warning:focus, .btn-warning:active, .btn-warning.active, .open > .dropdown-toggle.btn-warning {
+      background: #f99406;
+}
+
+.btn-warning:active, .btn-warning.active {
+    background: #009973;
+    box-shadow: none;
+}

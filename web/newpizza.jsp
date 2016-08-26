@@ -25,6 +25,7 @@
               integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" 
               crossorigin="anonymous">
 
+        <link rel="stylesheet" href="include/css/style.css">
         <link rel="stylesheet" href="include/css/footer.css">
 
         <!-- jQuery -->
@@ -154,16 +155,11 @@
                             </script>
                         </div>
                         <br/>
-                        <button id='submit-newpi' type="submit" class="btn btn-default">
+                        <button id='submit-newpi' type="submit" class="btn btn-primary btn-block">
                             Inserisci pizza
                         </button>
                     </form>
-                    <div id="result-container" class="alert alert-dismissible hidden" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <span id="result-message"></span>
-
-                    </div>
-
+                    
                     Clicca <a href='newingrediente.jsp'>qui</a> per inserire un ingrediente mancante! 
                 </div> 
 

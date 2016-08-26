@@ -96,35 +96,6 @@ public class GestoreCucina extends HttpServlet {
                             + "</div>\n"
                             + "<hr>"
                             + "</div>\n");
-
-                    /*
-                    out.write("<div id=\"pizza-" + p.getId() + "\" class=\"row-fluid\">");
-                    out.write("<div class=\"row-fluid\">\n"
-                            + "<div class=\"col-md-8 text-uppercase\">\n"
-                            + "<h4>" + p.getNome() + "</h4>\n"
-                            + "</div>\n"
-                            + "<div class=\"col-md-2\">\n"
-                            + "<h4><small>" + p.getPrezzo() + "&nbsp;&euro;</small></h4>\n"
-                            + "</div>\n"
-                            + "<div class=\"col-md-2\">\n"
-                            + "</div>\n"
-                            + "</div>");
-
-                    out.write("<div class=\"row-fluid\">\n"
-                            + "<div class=\"col-md-9\">\n"
-                            + p.getListaIngredienti()
-                            + "</div>\n"
-                            + "<div class=\"col-md-1\"></div>\n"
-                            + "<div class=\"col-md-2 pull-right\">");
-
-                    out.write("<a href=\"#0\" class=\"edit-link btn btn-primary btn-xs\" data-id=\"" + p.getId() + "\">\n"
-                            + "<span class=\"glyphicon glyphicon-pencil\"></span>\n"
-                            + "</a>\n"
-                            + "<a href=\"#0\" class=\"delete-link btn btn-danger btn-xs\" data-id=\"" + p.getId() + "\">\n"
-                            + "<span class=\"glyphicon glyphicon-remove\"></span>\n"
-                            + "</a>");
-
-                    out.write("</div></div></div></hr>");*/
                 }
 
             } else if (action.equalsIgnoreCase("ajax-html-ingr")) {
@@ -135,14 +106,12 @@ public class GestoreCucina extends HttpServlet {
                             + "<div class='col-md-8 text-uppercase'>"
                             + "<h4>"
                             + i.getNome()
-                            //                  + "<c:out value='${ingrediente.nome}'/>"
                             + "</h4>"
                             + "</div>"
                             + "<div class='col-md-4'>"
                             + "<h4>"
                             + "<small>"
                             + String.format("%.2f", i.getPrezzo())
-                            //                            + "<fmt:formatNumber type='number' value='${ingrediente.prezzo}' minFractionDigits='2'/>"
                             + "&nbsp;&euro;"
                             + "</small>"
                             + "</h4>"

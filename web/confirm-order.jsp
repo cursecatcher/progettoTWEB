@@ -19,6 +19,8 @@
               integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" 
               crossorigin="anonymous">
 
+        <link rel="stylesheet" href="include/css/style.css">
+
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" 
                 integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" 
@@ -44,18 +46,18 @@
         <script type="text/javascript" src="include/js/general.js"></script>
 
         <script type="text/javascript">
-            $(function() {
-                var check = $('#__error').text().trim(); 
-                
+            $(function () {
+                var check = $('#__error').text().trim();
+
                 if (check === "ERR_PARSE_DATETIME") {
                     $.growl.error({
-                        title: "Errore", 
+                        title: "Errore",
                         message: "L'orario inserito non &egrave; valido!"
-                    }); 
+                    });
                 }
-            }); 
+            });
         </script>
-        
+
     </head>
     <body>
         <%@include file="include/header.jsp" %>

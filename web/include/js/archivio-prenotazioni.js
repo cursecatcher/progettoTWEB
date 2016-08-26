@@ -1,19 +1,20 @@
 jQuery(document).ready(function ($) {
     $(".confirm-deliver").on("click", function () {
         var idp = $(this).data("id");
+        
         console.log("Confirm deliver n. " + idp);
+        
         bootbox.confirm({
             title: "Conferma ricezione ordine",
             message: "Sei sicuro di voler contrassegnare l'ordine come ricevuto?",
             buttons: {
                 confirm: {
                     label: "Conferma ricezione"
-                }, 
+                },
                 cancel: {
                     label: "Annulla operazione"
                 }
-                
-            }, 
+            },
             callback: function (choice) {
                 if (choice) {
                     $.post(
@@ -29,6 +30,9 @@ jQuery(document).ready(function ($) {
                                         message: "La tua prenotazione &egrave; stata confermata!<br/>" +
                                                 "Sta senza pensieri!"
                                     });
+                                    
+                                    $('#pren-' + idp).html("Prenotazione archiviata! <a href='archivio-prenotazioni.jsp'>Visualizza</a>"); 
+                                    
                                 } else {
                                     $.growl.error({
                                         title: "Si &egrave; verificato un errore :(",
@@ -49,11 +53,11 @@ jQuery(document).ready(function ($) {
             buttons: {
                 confirm: {
                     label: "Cancella prenotazione"
-                }, 
+                },
                 cancel: {
                     label: "Annulla operazione"
                 }
-                
+
             },
             callback: function (choice) {
                 if (choice) {
@@ -68,9 +72,8 @@ jQuery(document).ready(function ($) {
                                 if (response === "OK") {
                                     $("#pren-" + idp).addClass("hide");
                                     $.growl.notice({
-                                        title: "Prenotazione annullata!",
-                                        message: "La tua prenotazione &egrave; stata annullata!<br/>" +
-                                                "Sta senza pensieri!"
+                                        title: "OK!",
+                                        message: "Il tuo ordine &egrave; stato annullato"
                                     });
                                 } else {
                                     $.growl.error({
