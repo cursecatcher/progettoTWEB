@@ -9,7 +9,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Ordini ricevuti</title>
 
         <script src="https://code.jquery.com/jquery-2.2.4.min.js"   
                 integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   
@@ -25,7 +25,14 @@
               integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" 
               crossorigin="anonymous">
         
-                <link rel="stylesheet" href="include/css/style.css">
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" 
+              rel="stylesheet" 
+              integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" 
+              crossorigin="anonymous">
+        
+        
+        <link rel="stylesheet" href="include/css/footer.css">
+        <link rel="stylesheet" href="include/css/style.css">
 
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" 
@@ -48,7 +55,10 @@
         <div class="container">
             <div class="col-md-3"></div>
             <div class="col-md-6">
-                <h1>Prenotazioni utenti - solo admin</h1>
+                <div class="page-header">
+                <h1>Ordini utenti</h1>
+                In questa pagina sono visualizzate le ordinazioni in attesa di consegna
+                </div>
 
                 <c:forEach var="p" items="${user.allPrenotazioni}">
                     <c:if test="${p.isConsegnato() == false}">
@@ -150,5 +160,7 @@
             </div>
             <div class="col-md-3"></div>
         </div>
+        
+        <%@include file="include/footer.html" %>
     </body>
 </html>

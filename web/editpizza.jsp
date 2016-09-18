@@ -23,7 +23,14 @@
               integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" 
               crossorigin="anonymous">
         
-                <link rel="stylesheet" href="include/css/style.css">
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" 
+              rel="stylesheet" 
+              integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" 
+              crossorigin="anonymous">
+        
+
+        <link rel="stylesheet" href="include/css/footer.css">
+        <link rel="stylesheet" href="include/css/style.css">
 
         <!-- jQuery -->
         <script src="https://code.jquery.com/jquery-2.2.4.min.js"   
@@ -129,5 +136,7 @@
                 </form>
             </div>
         </div>
+
+        <%@include file="include/footer.html" %>
     </body>
 </html>

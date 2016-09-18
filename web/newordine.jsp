@@ -1,7 +1,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <jsp:useBean id='menu' scope="page" class="beans.Menu"/>
+
+<c:if test="${usertoken != 'authenticated'}">
+    <c:redirect url="login.jsp"/>
+</c:if>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -21,7 +27,14 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" 
               integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" 
               crossorigin="anonymous">
+        
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" 
+              rel="stylesheet" 
+              integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" 
+              crossorigin="anonymous">
+        
 
+        <link rel="stylesheet" href="include/css/footer.css">
         <link rel="stylesheet" href="include/css/style.css">
         <link rel="stylesheet" href="include/css/ordinazioni.css">
 
@@ -82,8 +95,9 @@
                                     <a class="choose-pizza" href="#0"
                                        data-id-pizza="${pizza.id}"
                                        data-nome-pizza="${pizza.nome}"
-                                       data-prezzo-pizza="${pizza.prezzo}">
-                                        <span class="glyphicon glyphicon-plus"></span>
+                                       data-prezzo-pizza="${pizza.prezzo}"><!--
+                                        <span class="glyphicon glyphicon-plus"></span>-->
+                                        <i class='fa fa-plus-square-o fa-3x' aria-hidden='true'></i>
                                     </a>
                                 </div>
                             </div>
@@ -110,5 +124,7 @@
                 </div>
             </div>
         </div>
+
+        <%@include file="include/footer.html" %>
     </body>
 </html>

@@ -1,4 +1,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+
+<jsp:useBean id='menu' scope="page" class="beans.Menu"/>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -15,8 +20,22 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" 
               integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" 
               crossorigin="anonymous">
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" 
+              rel="stylesheet" 
+              integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" 
+              crossorigin="anonymous">
+        
+        
+        <!-- include il css corretto in base al fatto che l'utente sia autenticato -->
+        <c:choose>
+            <c:when test="${usertoken != 'authenticated'}">
+                <link rel="stylesheet" href="include/css/cover.css">
+            </c:when>
+            <c:otherwise>
+                <link rel="stylesheet" href="include/css/footer.css">
+            </c:otherwise>
+        </c:choose>
 
-        <link rel="stylesheet" href="include/css/cover.css">
         <link rel="stylesheet" href="include/css/header.css">
         <link rel="stylesheet" href="include/css/style.css">
 
@@ -47,64 +66,88 @@
 
         <jsp:include page="include/header.jsp"/>
 
-        <div class="site-wrapper">
+        <c:choose>
+            <c:when test="${usertoken != 'authenticated'}">
+                <div class="site-wrapper">
 
-            <div class="site-wrapper-inner">
-
-                <div class="cover-container">
-<!--
-                    <div class="masthead clearfix">
-                        <div class="inner">
-                            <h3 class="masthead-brand">Cover</h3>
-                            <nav>
-                                <ul class="nav masthead-nav">
-                                    <li class="active"><a href="#">Home</a></li>
-                                    <li><a href="#">Features</a></li>
-                                    <li><a href="#">Contact</a></li>
-                                </ul>
-                            </nav>
-                        </div>
-                    </div> -->
-
-                    <div class="inner cover">
-                        <h1 class="cover-heading">PiWeb</h1>
-                        <p class="lead">
-                            Sotto quel palazzo c'&egrave; un povero cane pazzo.<br/>
-                            Date da mangiare a quel povero pazzo cane.
-                        </p>
-                        <p class="lead">
-                            <c:choose>
-                                <c:when test="${usertoken == 'authenticated'}">
-                                    <a href="newordine.jsp" class="btn btn-primary btn-lg">Ordina</a>
-                                </c:when>
-                                <c:otherwise>
+                    <div class="site-wrapper-inner">
+                        <div class="cover-container">
+                            <div class="inner cover">
+                                <h1 class="cover-heading">PiWeb</h1>
+                                <p class="lead">
+                                    Sotto quel palazzo c'&egrave; un povero cane pazzo.<br/>
+                                    Date da mangiare a quel povero pazzo cane.
+                                </p>
+                                <p class="lead">
                                     <a href="login.jsp" class="btn btn-lg btn-primary">Accedi</a>
-                                </c:otherwise>
-                            </c:choose>
-                            
-                        </p>
-                    </div>
+                                </p>
+                            </div>
+                            <!--
+                                                        <div class="mastfoot">
+                                                            <div class="inner">
+                                                                <p>Cover template for <a href="http://getbootstrap.com">Bootstrap</a>, by <a href="https://twitter.com/mdo">@mdo</a>.</p>
+                                                            </div>
+                                                        </div> -->
 
-                    <div class="mastfoot">
-                        <div class="inner">
-                            <p>Cover template for <a href="http://getbootstrap.com">Bootstrap</a>, by <a href="https://twitter.com/mdo">@mdo</a>.</p>
                         </div>
+
                     </div>
 
                 </div>
+            </c:when>
+            <c:otherwise>
 
-            </div>
+                <div class="container">
 
-        </div>
-        
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8">
+                        <div class="page-header text-center">
+                            <h1>Il nostro menu</h1>
+                        </div>
+
+                        <c:forEach var="pizza" items="${menu.pizze}">
+                            <div class="row-fluid">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <span class="pizza-nome text-uppercase">
+                                            <strong><c:out value="${pizza.nome}"/></strong>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <c:out value="${pizza.listaIngredienti}"/>
+                                    </div>
+                                    <div class="col-md-4 text-muted text-right">
+                                        <strong>
+                                            <fmt:formatNumber type="number" value="${pizza.prezzo}" minFractionDigits="2"/>
+                                            &nbsp;&euro;
+                                        </strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                        </c:forEach>
+                    </div>
+                    <div class="col-md-2"></div>
+
+                </div>
+
+                <%@include file="include/footer.html" %>
+            </c:otherwise>
+        </c:choose>
+
+
+
+
     </body>
 </html>
 
 
 
-    <%--
-    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-    <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%--
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <jsp:useBean id='menu' scope="page" class="beans.Menu"/>
 <!DOCTYPE html>

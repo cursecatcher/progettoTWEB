@@ -78,8 +78,10 @@ public class GestoreCliente extends HttpServlet {
                         out.println("<div class='col-md-1'>");
                         out.println("<a class='remove-pizza' href='#0' "
                                 + "data-id-pizza='" + e.getId() + "'"
-                                + "data-nome-pizza='" + e.getNome() + "'>"
-                                + "<span class='glyphicon glyphicon-minus'></span></a>");
+                                + "data-nome-pizza='" + e.getNome() + "'>");
+                        //out.println("<span class='glyphicon glyphicon-minus'></span>");
+                        out.println("<i class='fa fa-minus-square-o fa-2x' aria-hidden='true'></i>");
+                        out.println("</a>");
                         out.println("</div>"); //col-md-1
 
                         out.println("<div class='col-md-8'>");

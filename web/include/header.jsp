@@ -36,7 +36,8 @@
                         </li>
                         <li>
                             <a href="newordine.jsp">
-                                <span class='glyphicon glyphicon-shopping-cart'></span>
+                                <span class='glyphicon glyphicon-shopping-cart'></span> 
+                                
                                 <span id="cart-badge" class='badge'>
                                     <c:out value="${carrello.length}"/>
                                 </span>
