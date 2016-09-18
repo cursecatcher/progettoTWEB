@@ -12,7 +12,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>New pizza is coming</title>
+        <title>Inserimento pizza</title>
 
 
         <!-- Latest compiled and minified CSS -->
@@ -24,12 +24,12 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" 
               integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" 
               crossorigin="anonymous">
-        
+
         <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" 
               rel="stylesheet" 
               integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" 
               crossorigin="anonymous">
-        
+
 
         <link rel="stylesheet" href="include/css/style.css">
         <link rel="stylesheet" href="include/css/footer.css">
@@ -92,10 +92,12 @@
                                 </div>
                                 <div class='col-md-2'>
                                     <a href='#0' class='edit-link btn btn-primary btn-xs' data-id='${pizza.id}'>
-                                        <span class='glyphicon glyphicon-pencil'></span>
+                                        <!--<span class='glyphicon glyphicon-pencil'></span>-->
+                                        <i class='fa fa-pencil' aria-hidden='true'></i>
                                     </a>
                                     <a href='#0' class='delete-link btn btn-danger btn-xs' data-id='${pizza.id}'>
-                                        <span class='glyphicon glyphicon-remove'></span>
+                                        <!--<span class='glyphicon glyphicon-remove'></span> -->
+                                        <i class='fa fa-times' aria-hidden='true'></i>
                                     </a>
                                 </div>
                             </div>
@@ -165,8 +167,8 @@
                             Inserisci pizza
                         </button>
                     </form>
-                    
-                    Clicca <a href='newingrediente.jsp'>qui</a> per inserire un ingrediente mancante! 
+                    <p class='text-muted text-center'>oppure</p>
+                    <a href='newingrediente.jsp' class='btn btn-primary btn-block'>Inserisci ingrediente mancante</a>
                 </div> 
 
             </div>

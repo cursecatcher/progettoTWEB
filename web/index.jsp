@@ -58,7 +58,7 @@
         <script type="text/javascript" src="include/js/general.js"></script>      
 
 
-        <title>Home | PiWeb</title>
+        <title>Home</title>
 
     </head>
 

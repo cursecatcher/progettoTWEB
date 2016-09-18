@@ -102,9 +102,11 @@
                             <span class="input-group-addon">&euro;</span>
                         </div>
                     </div>
-                    <input type="submit" class="btn btn-default btn-block" value="Inserisci"/>
+                    <input type="submit" class="btn btn-primary btn-block" value="Inserisci"/>
                 </form>
-                <p>Torna all'<a href='newpizza.jsp'>inserimento delle pizze</a>!!</p>
+                <p class='text-muted text-center'>oppure</p>
+                <a href='newpizza.jsp.jsp' class='btn btn-primary btn-block'>Torna all'inserimento pizze</a>
+                
             </div>
         </div>
         
