@@ -8,7 +8,10 @@
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="col-md-10">
         <div class="navbar-header">
-            <a class="navbar-brand" href="index.jsp">PiWeb</a>
+            <a class="navbar-brand" href="index.jsp">
+                
+                PiWeb <i class="fa fa-home fa-2x" aria-hidden="true"></i>
+            </a>
         </div>
             <div id="__error" style="display:none">
                 <c:out value="${error}"/>
@@ -46,6 +49,11 @@
                                 </span>&euro;
                             </a>
                         </li> 
+                        <li>
+                            <a href="index.jsp">
+                                Menu
+                            </a>
+                        </li>
                     </c:when>
                     <c:otherwise>
                         <li><a href='login.jsp'>Accedi</a></li>

@@ -105,7 +105,7 @@
                     <input type="submit" class="btn btn-primary btn-block" value="Inserisci"/>
                 </form>
                 <p class='text-muted text-center'>oppure</p>
-                <a href='newpizza.jsp.jsp' class='btn btn-primary btn-block'>Torna all'inserimento pizze</a>
+                <a href='newpizza.jsp' class='btn btn-primary btn-block'>Torna all'inserimento pizze</a>
                 
             </div>
         </div>
