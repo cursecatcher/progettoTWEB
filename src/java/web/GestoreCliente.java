@@ -99,16 +99,16 @@ public class GestoreCliente extends HttpServlet {
                         out.println("</div>"); //row
                     }
                     // totale
-                    out.println("<hr><div class='row'>"); 
-                    
-                    out.println("<div class='col-md-9'>"); 
-                    out.println("<h3>Totale</h3>"); 
-                    out.println("</div>"); 
-                    
-                    out.println("<div class=col-md-3'>"); 
+                    out.println("<hr><div class='row'>");
+
+                    out.println("<div class='col-md-9'>");
+                    out.println("<h3>Totale</h3>");
+                    out.println("</div>");
+
+                    out.println("<div class=col-md-3'>");
                     out.println("<h3><small>" + String.format("%.2f", cart.getPrezzoTotale()) + "&nbsp;&euro;</small></h3>");
-                    out.println("</div>"); 
-                    
+                    out.println("</div>");
+
                     out.println("</div><hr>");  //row
                     /*
                     out.println("<hr><div class='page-header'>"
@@ -215,7 +215,7 @@ public class GestoreCliente extends HttpServlet {
                         res = "ERR_OLD_PWD";
                     }
 
-                } 
+                }
 
                 out.print(res);
 

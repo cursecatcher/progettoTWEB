@@ -63,7 +63,11 @@
                     <h1>Archivio prenotazioni</h1>
                     <p>
                         In questa pagina puoi visualizzare i riepiloghi delle prenotazioni 
-                        che hai contrassegnato come consegnate
+                        che hai contrassegnato come consegnate. <br/>
+                        Vedi le <a href="mie-prenotazioni.jsp">
+                            prenotazioni attuali
+                        </a>.
+                        
                     </p>
                 </div>
 

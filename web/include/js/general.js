@@ -49,42 +49,7 @@ jQuery(document).ready(function ($) {
         $form_action.submit();
     });
 
-    $('#form-change-pwd').submit(function (event) {
-        event.preventDefault(); //ajax 
-
-        var p1 = $(this).find("input[name=new-password]").val();
-        var p2 = $(this).find("input[name=confirm-password]").val();
-        if (p1 === p2) {
-            $.post("Controller", $(this).serialize(), function (response) {
-                if (response === "OK") {
-                    $.growl.notice({
-                        title: "Password modificata",
-                        message: "La password &egrave; stata aggiornata con successo!"
-                    });
-                } else if (response === "ERR_OLD_PWD") {
-                    $.growl.error({
-                        title: "Errore",
-                        message: "La vecchia password &egrave; incorretta!"
-                    });
-                } else if (response === "ERR_MISMATCH") {
-                    $.growl.error({
-                        title: "Errore",
-                        message: "Le password inserite non coincidono!"
-                    });
-                } else if (response === "ERR_UPDATE_FAILED") {
-                    $.growl.error({
-                        title: "Errore",
-                        message: "Si &egrave; verificato un errore random!"
-                    });
-                }
-            });
-        } else {
-            $.growl.error({
-                title: "Errore",
-                message: "Le password inserite non coincidono!"
-            });
-        }
-    });
+    
 
     $('.choose-pizza').on('click', function () {
         var idpizza = $(this).data("id-pizza");

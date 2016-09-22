@@ -167,7 +167,9 @@
                             Inserisci pizza
                         </button>
                     </form>
-                    <p class='text-muted text-center'>oppure</p>
+                    <p class='text-muted text-center'>
+                        oppure
+                    </p>
                     <a href='newingrediente.jsp' class='btn btn-primary btn-block'>Inserisci ingrediente mancante</a>
                 </div> 
 

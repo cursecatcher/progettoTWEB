@@ -28,7 +28,7 @@
               integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" 
               crossorigin="anonymous">
 
-
+        <link rel="stylesheet" href="include/css/profilo.css">
         <link rel="stylesheet" href="include/css/footer.css">
         <link rel="stylesheet" href="include/css/style.css">
 
@@ -54,24 +54,30 @@
         <script type="text/javascript" src="include/lib/jquery-dropdown/jquery.dropdown.min.js"></script>
 
         <script type="text/javascript" src="include/js/general.js"></script>
+        <script type="text/javascript" src="include/js/profile.js"></script>
 
     </head>
     <body>
         <%@include file="include/header.jsp" %>
 
         <div class="container">
-
-            <div class="page-header">
-                <h4 class="text-center text-uppercase">Il mio profilo</h4>
-            </div>
+            <!--
+                        <div class="page-header">
+                            <h4 class="text-center text-uppercase">Il mio profilo</h4>
+                        </div> -->
 
             <div class="col-md-4">
+                <div class="page-header">
+                    <h5 class="text-uppercase"><strong>Pannello utente</strong></h5>
+                </div>
+
                 <ul class="nav nav-pills nav-stacked">
                     <li class="active">
-                        <a href="profilo.jsp">Il mio profilo</a>
+                        <a href="#0">Il mio profilo</a>
                     </li>
                     <li>
-                        <a href="#0" data-toggle="collapse" data-target="#collapse-pwd">
+                        <!--  <a href="#0" data-toggle="collapse" data-target="#collapse-pwd"> -->
+                        <a href="#0" id="show-pwd">
                             Modifica password
                         </a>
                     </li>
@@ -84,7 +90,9 @@
                 </ul>
 
                 <c:if test="${user.isAdmin()}">
-                    <strong>Pannello admin</strong>
+                    <div class="page-header">
+                        <h5 class="text-uppercase"><strong>Pannello admin</strong></h5>
+                    </div>
                     <ul class="nav nav-pills nav-stacked">
 
 
@@ -101,6 +109,9 @@
 
             <div class="col-md-6">
 
+                <div class="page-header">
+                    <h4 class="text-center text-uppercase">Il mio profilo</h4>
+                </div>
 
                 <div class="row">
                     <div class="col-md-6 form-group">
@@ -123,38 +134,39 @@
                     </div>
                 </div>
                 <hr>
-                <div>
-                    <div id="collapse-pwd" class="collapse">
-                        <div class="form-group">       
-                            <form id="form-change-pwd" method="POST" action="Controller">
-                                <input type="hidden" name="action" value="user-change-pwd"/>
+                <div id="editpwd-div" >
+                    
+                    <div class="form-group">       
+                        <form id="form-change-pwd" method="POST" action="Controller">
+                            <input type="hidden" name="action" value="user-change-pwd"/>
 
-                                <div class="form-group">
-                                    <input type="password" name="old-password" class="form-control" 
-                                           placeholder="Password attuale" required/>
+                            <div class="form-group">
+                                <input type="password" name="old-password" class="form-control" 
+                                       placeholder="Password attuale" required/>
+                            </div>
+                            <div class="form-group">
+                                <input type="password" name="new-password" class="form-control"
+                                       placeholder="Nuova password" required/>
+                            </div>
+                            <div class="form-group">
+                                <input type="password" name="confirm-password" class="form-control"
+                                       placeholder="Conferma password" required/>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <input type="reset" name="reset" value="Annulla"
+                                           id="hide-pwd"
+                                           data-toggle="collapse" data-target="#demo"
+                                           class="btn btn-danger btn-block"/> 
                                 </div>
-                                <div class="form-group">
-                                    <input type="password" name="new-password" class="form-control"
-                                           placeholder="Nuova password" required/>
+                                <div class="col-md-6">
+                                    
+                                    <input type="submit" name="submit" value="Aggiorna password"
+                                           class="btn btn-primary btn-block"/>
                                 </div>
-                                <div class="form-group">
-                                    <input type="password" name="confirm-password" class="form-control"
-                                           placeholder="Conferma password" required/>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <input type="reset" name="reset" value="Annulla"
-                                               data-toggle="collapse" data-target="#demo"
-                                               class="btn btn-danger btn-block"/> 
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input type="submit" name="submit" value="Aggiorna password"
-                                               class="btn btn-primary btn-block"/>
-                                    </div>
 
-                                </div>
-                            </form>
-                        </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
                 <%--

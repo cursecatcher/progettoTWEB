@@ -99,14 +99,13 @@ public class Controller extends HttpServlet {
 
         } else if (action.equalsIgnoreCase("ajax-update-admin-pizzas")) {
             rd = ctx.getNamedDispatcher("GestoreCucina");
-            
+
         } else if (action.equalsIgnoreCase("ajax-html-cart")) {
-            rd = ctx.getNamedDispatcher("GestoreCliente"); 
-            
-        }
-        else if (action.equalsIgnoreCase("ajax-html-ingr")) {
+            rd = ctx.getNamedDispatcher("GestoreCliente");
+
+        } else if (action.equalsIgnoreCase("ajax-html-ingr")) {
             rd = ctx.getNamedDispatcher("GestoreCucina");
-            
+
         }
 
         rd.forward(request, response);
@@ -171,9 +170,22 @@ public class Controller extends HttpServlet {
             } else if (action.equalsIgnoreCase("pizza-remove")) {
                 rd = ctx.getNamedDispatcher("GestoreCucina");
 
+            } else if (action.equalsIgnoreCase("delete-order")) {
+                HttpSession session = request.getSession(false);
+                rd = null; 
+
+                if (session == null) {
+                    out.write("ERR");
+                } else {
+                    out.write("OK");
+                    session.setAttribute("carrello", new Carrello());
+                }
+
             }
 
-            rd.forward(request, response);
+            if (rd != null) {
+                rd.forward(request, response);
+            }
         }
     }
 
