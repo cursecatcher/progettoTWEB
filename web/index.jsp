@@ -3,6 +3,80 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 
+<html>
+    <head>
+        <title>Login</title>
+        <link rel="stylesheet" href="include/css/styndex.css">
+        <link href='//fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+
+        <!-- For-Mobile-Apps-and-Meta-Tags -->
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="keywords" content="Simple Login Form Widget Responsive, Login Form Web Template, Flat Pricing Tables, Flat Drop-Downs, Sign-Up Web Templates, Flat Web Templates, Login Sign-up Responsive Web Template, Smartphone Compatible Web Template, Free Web Designs for Nokia, Samsung, LG, Sony Ericsson, Motorola Web Design" />
+        <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+        <!-- //For-Mobile-Apps-and-Meta-Tags -->
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-2.2.4.min.js"   
+                integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   
+        crossorigin="anonymous"></script>
+        <!--growl -->
+        <script type="text/javascript" src="include/lib/jquery-growl/jquery.growl.js"></script>
+        <link rel="stylesheet" href="include/lib/jquery-growl/jquery.growl.css" type="text/css" />
+
+        <script type="text/javascript" src="include/js/log-reg-checks.js"></script>
+    </head>
+
+    <body>
+        <div id="result-message" style="display: none">
+            ${message}
+        </div>
+
+        <h1>PiWeb</h1>
+        <div class="container w3">
+
+            <h2>Accedi</h2>
+            <form id="form_login" action="Controller" method="POST">
+                <input type="hidden" name="action" value="user-login"/>
+                <div class="email">
+                    <span class="username">Email</span>
+                    <!--
+                    <input type="text" name="name" class="name" placeholder="" required=""> 
+                    -->
+                    <input id="email" name="email" type="email" class="name"
+                           value="${previous_email}" required/>
+                    <div class="clear"></div>
+                </div>
+                <div class="password-agileits">
+                    <span class="username">Password:</span>
+                    <!--
+                    <input type="password" name="password" class="password" placeholder="" required="">
+                    -->
+                    <input id="password" name="password" class="password" type="password" 
+                           required/>
+                    <div class="clear"></div>
+                </div>
+                <div class="rem-for-agile">
+                    <!--   <input type="checkbox" name="remember" class="remember">Remember me<br> -->
+                    Non hai un account? <br/>
+                    <a href="register.jsp"><strong>Registrati!</strong></a><br>
+                </div>
+                <div class="login-w3">
+                    <input type="submit" class="login" value="Login">
+                </div>
+                <div class="clear"></div>
+            </form>
+        </div>
+    </body>
+</html>
+
+
+
+<%--
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+
 <jsp:useBean id='menu' scope="page" class="beans.Menu"/>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,8 +98,8 @@
               rel="stylesheet" 
               integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" 
               crossorigin="anonymous">
-        
-        
+
+
         <!-- include il css corretto in base al fatto che l'utente sia autenticato -->
         <c:choose>
             <c:when test="${usertoken != 'authenticated'}">
@@ -68,31 +142,33 @@
 
         <c:choose>
             <c:when test="${usertoken != 'authenticated'}">
-                <div class="site-wrapper">
+                <div class="container">
+                    <div class="site-wrapper">
 
-                    <div class="site-wrapper-inner">
-                        <div class="cover-container">
-                            <div class="inner cover">
-                                <h1 class="cover-heading">PiWeb</h1>
-                                <p class="lead">
-                                    Sotto quel palazzo c'&egrave; un povero cane pazzo.<br/>
-                                    Date da mangiare a quel povero pazzo cane.
-                                </p>
-                                <p class="lead">
-                                    <a href="login.jsp" class="btn btn-lg btn-primary">Accedi</a>
-                                </p>
+                        <div class="site-wrapper-inner">
+                            <div class="cover-container">
+                                <div class="inner cover">
+                                    <h1 class="cover-heading">PiWeb</h1>
+                                    <p class="lead">
+                                        Sotto quel palazzo c'&egrave; un povero cane pazzo.<br/>
+                                        Date da mangiare a quel povero pazzo cane.
+                                    </p>
+                                    <p class="lead">
+                                        <a href="login.jsp" class="btn btn-lg btn-primary">Accedi</a>
+                                    </p>
+                                </div>
+                                <!--
+                                                            <div class="mastfoot">
+                                                                <div class="inner">
+                                                                    <p>Cover template for <a href="http://getbootstrap.com">Bootstrap</a>, by <a href="https://twitter.com/mdo">@mdo</a>.</p>
+                                                                </div>
+                                                            </div> -->
+
                             </div>
-                            <!--
-                                                        <div class="mastfoot">
-                                                            <div class="inner">
-                                                                <p>Cover template for <a href="http://getbootstrap.com">Bootstrap</a>, by <a href="https://twitter.com/mdo">@mdo</a>.</p>
-                                                            </div>
-                                                        </div> -->
 
                         </div>
 
                     </div>
-
                 </div>
             </c:when>
             <c:otherwise>
@@ -143,7 +219,7 @@
     </body>
 </html>
 
-
+--%>
 
 <%--
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>

@@ -8,7 +8,14 @@ jQuery(document).ready(function ($) {
     $(function () {
         var $span = $('#result-message');
         var t = $span.text().trim();
+        
+        
+        console.log("--> " + t);
+        
         if (t !== "") {
+            console.log("--> " + t);
+            
+            
             //         $('#result-container').removeClass("hidden"); 
             if (t === "WRONG_PASSWORD") {
                 $.growl.error({

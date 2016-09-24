@@ -168,11 +168,11 @@ public class GestoreCliente extends HttpServlet {
                         } else {
                             request.setAttribute("message", "WRONG_PASSWORD");
                             request.setAttribute("previous_email", email);
-                            rd = ctx.getRequestDispatcher("/login.jsp");
+                            rd = ctx.getRequestDispatcher("/index.jsp");
                         }
                     } else {
                         request.setAttribute("message", "EMAIL_NOT_FOUND");
-                        rd = ctx.getRequestDispatcher("/login.jsp");
+                        rd = ctx.getRequestDispatcher("/index.jsp");
                     }
                 } catch (SQLException ex) {
                     Logger.getLogger(GestoreCliente.class.getName()).log(Level.SEVERE, null, ex);

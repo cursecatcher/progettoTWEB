@@ -24,21 +24,26 @@ a:hover {
  * Base structure
  */
 
-html,
-body {
-  height: 100%;
-  background-color: #333;
-  background-image: url(../img/test.png);
+
+
+html {
+    height: 100%;
 }
+body {
+  height: 100%;/*
+  background-color: #333;
+  background-image: url(../img/asd.jpg);*/
+} 
+/*
 body {
   color: #fff;
   text-align: center;
   text-shadow: 0 1px 3px rgba(0,0,0,.5);
-}
-
+}*/
+/*
 body > nav {
     text-shadow: 0 1px 3px rgba(0,0,0,0);
-}
+} */
 
 /* Extra markup and styles for table-esque vertical and horizontal centering */
 .site-wrapper {

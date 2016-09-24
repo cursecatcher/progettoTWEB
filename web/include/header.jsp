@@ -2,67 +2,69 @@
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
-<nav class="navbar navbar-default">
+<nav id="header" class="navbar navbar-default">
     <div class="container-fluid">
-        <div class="col-md-1"></div>
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="col-md-10">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="index.jsp">
-                
-                PiWeb <i class="fa fa-home fa-2x" aria-hidden="true"></i>
-            </a>
-        </div>
-            <div id="__error" style="display:none">
-                <c:out value="${error}"/>
-            </div>
+        <div class="row navbar-inner">
+            <div class="col-md-1"></div>
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="col-md-10">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="index.jsp">
 
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav navbar-right">
-                <c:choose>
-                    <c:when test="${usertoken == 'authenticated'}">
-                        <li class="dropdown">
-                            <a href="#0" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                Ciao,&nbsp;
-                                <strong><c:out value="${user.nome}"/></strong>
-                                <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu">                                
-                                <li><a href="profilo.jsp">Profilo</a></li>
-                                <li role="separator" class="divider"></li>
-                                <li><a href="newordine.jsp">Ordina</a></li>
-                                <li role="separator" class="divider"></li>
-                                <li><a href="mie-prenotazioni.jsp">Le mie prenotazioni</a></li>
-                                <li role="separator" class="divider"></li>
-                                <li><a href="#0" id="disconnect">Logout</a></li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="newordine.jsp">
-                                <span class='glyphicon glyphicon-shopping-cart'></span> 
-                                
-                                <span id="cart-badge" class='badge'>
-                                    <c:out value="${carrello.length}"/>
-                                </span>
-                                <span id="cart-euro">
-                                    <fmt:formatNumber type="number" value="${carrello.prezzoTotale}" minFractionDigits="2"/>
-                                </span>&euro;
-                            </a>
-                        </li> 
-                        <li>
-                            <a href="index.jsp">
-                                Menu
-                            </a>
-                        </li>
-                    </c:when>
-                    <c:otherwise>
-                        <li><a href='login.jsp'>Accedi</a></li>
-                        </c:otherwise>
-                    </c:choose> 
-            </ul>
-        </div><!-- /.navbar-collapse -->
+                        PiWeb <i class="fa fa-home fa-2x" aria-hidden="true"></i>
+                    </a>
+                </div>
+                <div id="__error" style="display:none">
+                    <c:out value="${error}"/>
+                </div>
+
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav navbar-right">
+                        <c:choose>
+                            <c:when test="${usertoken == 'authenticated'}">
+                                <li class="dropdown">
+                                    <a href="#0" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                        Ciao,&nbsp;
+                                        <strong><c:out value="${user.nome}"/></strong>
+                                        <span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu">                                
+                                        <li><a href="profilo.jsp">Profilo</a></li>
+                                        <li role="separator" class="divider"></li>
+                                        <li><a href="newordine.jsp">Ordina</a></li>
+                                        <li role="separator" class="divider"></li>
+                                        <li><a href="mie-prenotazioni.jsp">Le mie prenotazioni</a></li>
+                                        <li role="separator" class="divider"></li>
+                                        <li><a href="#0" id="disconnect">Logout</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="newordine.jsp">
+                                        <span class='glyphicon glyphicon-shopping-cart'></span> 
+
+                                        <span id="cart-badge" class='badge'>
+                                            <c:out value="${carrello.length}"/>
+                                        </span>
+                                        <span id="cart-euro">
+                                            <fmt:formatNumber type="number" value="${carrello.prezzoTotale}" minFractionDigits="2"/>
+                                        </span>&euro;
+                                    </a>
+                                </li> 
+                                <li>
+                                    <a href="index.jsp">
+                                        Menu
+                                    </a>
+                                </li>
+                            </c:when>
+                            <c:otherwise>
+                                <li><a href='index.jsp'>Accedi</a></li>
+                                </c:otherwise>
+                            </c:choose> 
+                    </ul>
+                </div><!-- /.navbar-collapse -->
+            </div>
+            <div class="col-md-1"></div>
         </div>
-        <div class="col-md-1"></div>
     </div><!-- /.container-fluid -->
 </nav>
 

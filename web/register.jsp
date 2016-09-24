@@ -90,7 +90,7 @@
                 </form>
 
                 <p>
-                    Hai gi&agrave; un account? <a href="login.jsp">Accedi</a>!
+                    Hai gi&agrave; un account? <a href="index.jsp">Accedi</a>!
                 </p>
                 <div id="result-container" class="alert alert-dismissible hidden" role="alert">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>

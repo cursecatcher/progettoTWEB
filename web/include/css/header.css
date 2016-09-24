@@ -1,0 +1,31 @@
+.navbar-inner {
+    background: none; 
+    filter: none; 
+    box-shadow: none; 
+    border: none;
+    
+    background-color: #2d3538;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.navbar .nav > li > a {
+    color: #fff;
+    text-shadow: none; 
+}
+
+.navbar .nav > li > a:hover {
+    color: #666; 
+}
+
+.navbar .nav .active > a {
+    color: #666; 
+    background: none; 
+}
+
+.navbar .nav .active > a:hover {
+    background: none; 
+}
+
+
+
