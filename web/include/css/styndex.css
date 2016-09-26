@@ -29,7 +29,7 @@ nav.horizontal ul li{display: inline-block;}/* horizontal menu */
 img{max-width:100%;}
 /*-- //Reset-Code --*/
 body {
-    background:url('../img/bg01.jpg') no-repeat 0px 0px;
+    background:url('../img/home.jpg') no-repeat 0px 0px;
     background-size: cover;
     font-family: 'Open Sans', sans-serif;
     background-attachment: fixed;
