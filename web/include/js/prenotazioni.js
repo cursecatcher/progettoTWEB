@@ -5,7 +5,8 @@ jQuery(document).ready(function ($) {
         weekStart: 1,
         language: "it",
         autoclose: true,
-        todayHighlight: true
+        todayHighlight: true,
+        startDate: "+1d"
     });
     // init timepicker
     $('#orario').timepicker({
@@ -22,7 +23,7 @@ jQuery(document).ready(function ($) {
             $.growl.error({
                 title: "Carrello vuoto",
                 message: "Devi inserire almeno un prodotto nel carrello per effettuare l'ordine!",
-                location: "tc"
+                location: "tr"
             });
         }
     });

@@ -140,7 +140,7 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <a href="#0" data-id="${p.id}" 
-                                                   class="confirm-deliver btn btn-success btn-block">
+                                                   class="confirm-deliver btn btn-primary btn-block">
                                                     Conferma consegna
                                                 </a>
                                             </div>
