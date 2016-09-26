@@ -18,6 +18,7 @@
               integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" 
               crossorigin="anonymous">
 
+        <link rel="stylesheet" href="include/css/header.css">
         <link rel="stylesheet" href="include/css/footer.css">
         <link rel="stylesheet" href="include/css/style.css">
 
@@ -38,25 +39,42 @@
     <body>
         <%@include file="include/header.jsp" %>
 
-        <div class='container'>
-            <h1>Elenco Pizze</h1>
+        <div class="container">
 
-            <c:forEach var="pizza" items="${menu.pizze}">
-                <div class="menu-pizza">
-                    <div class="pizza-nome">
-                        <c:out value="${pizza.nome}"/>
-                    </div>
-                    <div class="pizza-prezzo">
-                        <c:out value="${pizza.prezzo}"/>
-                    </div>
-                    <div class="pizza-ingredienti">
-                        <c:out value="${pizza.listaIngredienti}"/>
-                    </div>
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <div class="page-header text-center">
+                    <h1>Il nostro menu</h1>
                 </div>
-            </c:forEach>
+
+                <c:forEach var="pizza" items="${menu.pizze}">
+                    <div class="row-fluid">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <span class="pizza-nome text-uppercase">
+                                    <strong><c:out value="${pizza.nome}"/></strong>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <c:out value="${pizza.listaIngredienti}"/>
+                            </div>
+                            <div class="col-md-4 text-muted text-right">
+                                <strong>
+                                    <fmt:formatNumber type="number" value="${pizza.prezzo}" minFractionDigits="2"/>
+                                    &nbsp;&euro;
+                                </strong>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                </c:forEach>
+            </div>
+            <div class="col-md-2"></div>
 
         </div>
-        
+
         <%@include file="include/footer.html" %>
     </body>
 </html>

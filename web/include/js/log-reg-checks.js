@@ -2,35 +2,25 @@
 
 var email_regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 jQuery(document).ready(function ($) {
-    var $form_login = $('#form_login');
     var $form_reg = $('#form_reg');
 
     $(function () {
         var $span = $('#result-message');
         var t = $span.text().trim();
         
-        
-        console.log("--> " + t);
-        
         if (t !== "") {
-            console.log("--> " + t);
-            
-            
             //         $('#result-container').removeClass("hidden"); 
             if (t === "WRONG_PASSWORD") {
                 $.growl.error({
                     title: "ERRORE!",
                     message: "Password non corretta!"
-                }); /*
-                 $span.html("<h4>Attenzione!</h4>" + 
-                 "Password incorretta. Riprova, sarai pi&ugrave; fortunato! ");*/
+                }); 
+                
             } else if (t === "EMAIL_NOT_FOUND") {
                 $.growl.warning({
                     title: "ATTENZIONE",
                     message: "L'email specificata non &egrave; associata a nessun account"
-                }); /*
-                 $span.html("<h4>Attenzione!</h4>" + 
-                 "L'email specificata non &egrave; associata a nessun account. Per ora");*/
+                }); 
             }
         }
 
@@ -86,12 +76,16 @@ jQuery(document).ready(function ($) {
         var email = $form_reg.find('input[name=email]').val().trim();
         var password = $form_reg.find('input[name=password]').val();
         var confirmPassword = $form_reg.find('input[name=password2]').val();
+        
         if (email_regex.test(email)) {
             if (password === confirmPassword) {
                 $.post($(this).attr('action'), $(this).serialize(), function (response) {
                     console.log("response: " + response);
                     $div.removeClass("alert-success alert-warning alert-danger hidden");
                     if (response === "OK") {
+                        window.location.href = "redirect.html";
+                        
+                        /*
                         bootbox.alert({
                             title: "Registrazione avvenuta", 
                             message: "La registrazione &egrave; andata a buon fine!<br/>" + 
@@ -99,7 +93,7 @@ jQuery(document).ready(function ($) {
                             callback: function() {
                                 window.location.href = "login.jsp"
                             }
-                        }); 
+                        });  */
                         /*
                         $.growl.notice({
                             title: "Missione compiuta!",
@@ -122,14 +116,9 @@ jQuery(document).ready(function ($) {
                         $.growl.warning({
                             title: "Password mismatch",
                             message: "Le due password non coincidono!"
-                        }); /*
-                         $div.addClass("alert-warning");/*
-                         $span.html("<h4>Attenzione</h4>" +
-                         "Le password non coincidono");*/
+                        }); 
                     }
-
-                }
-                );
+                });
             } else {
                 $.growl.warning({
                     title: "Password mismatch",

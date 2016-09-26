@@ -618,8 +618,8 @@ public class Query {
     }
 
     public static ResultSet prenotazioneGetByUserID(Statement st, int userId)
-            throws SQLException {
-        String query = "SELECT * FROM Prenotazione WHERE fk_utente=" + userId;
+            throws SQLException { 
+        String query = "SELECT * FROM Prenotazione WHERE fk_utente=" + userId + " ORDER BY data_consegna, ora_consegna";
         System.out.println("Eseguo query: " + query);
         return st.executeQuery(query);
     }

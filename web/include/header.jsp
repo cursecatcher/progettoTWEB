@@ -11,7 +11,7 @@
                 <div class="navbar-header">
                     <a class="navbar-brand" href="index.jsp">
 
-                        PiWeb <i class="fa fa-home fa-2x" aria-hidden="true"></i>
+                        &nbsp;<i class="fa fa-home fa-2x" aria-hidden="true"></i>
                     </a>
                 </div>
                 <div id="__error" style="display:none">

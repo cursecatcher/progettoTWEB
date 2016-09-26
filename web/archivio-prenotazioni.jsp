@@ -25,13 +25,14 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" 
               integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" 
               crossorigin="anonymous">
-        
+
         <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" 
               rel="stylesheet" 
               integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" 
               crossorigin="anonymous">
-        
 
+
+        <link rel="stylesheet" href="include/css/header.css">
         <link rel="stylesheet" href="include/css/footer.css">
         <link rel="stylesheet" href="include/css/style.css">
 
@@ -67,7 +68,7 @@
                         Vedi le <a href="mie-prenotazioni.jsp">
                             prenotazioni attuali
                         </a>.
-                        
+
                     </p>
                 </div>
 
@@ -75,7 +76,7 @@
                     <c:set var="listaPrenotazioni" value="${user.prenotazioniConsegnate}"/>
                     <c:choose>
                         <c:when test="${empty listaPrenotazioni}">
-                            Non sono presenti prenotazioni 
+                            <p class="text-center">Non sono presenti prenotazioni </p>
                         </c:when>
                         <c:otherwise>
                             <c:forEach var="p" items="${listaPrenotazioni}">
@@ -113,11 +114,11 @@
                                                 </address>
                                                 <hr>
                                                 <p>
-                                                    Consegna per il giorno
+                                                    Consegnata il 
                                                     <strong>
                                                         <fmt:formatDate value="${p.dataConsegna}" 
                                                                         pattern="dd-MM-yyyy" />
-                                                    </strong>
+                                                    </strong><br/>
                                                     alle  
                                                     <strong>
                                                         <fmt:formatDate value="${p.orarioConsegna}" 

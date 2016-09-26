@@ -32,7 +32,7 @@
               integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" 
               crossorigin="anonymous">
 
-
+        <link rel="stylesheet" href="include/css/header.css">
         <link rel="stylesheet" href="include/css/footer.css">
         <link rel="stylesheet" href="include/css/style.css">
 
@@ -78,7 +78,7 @@
                     <c:set var="listaPrenotazioni" value="${user.prenotazioniNonConsegnate}"/>
                     <c:choose>
                         <c:when test="${empty listaPrenotazioni}">
-                            Al momento non hai effettuato ancora nessuna prenotazione!
+                            <p class="text-center">Non sono presenti prenotazioni </p>
                         </c:when>
                         <c:otherwise>
                             <c:forEach var="p" items="${listaPrenotazioni}">
@@ -116,11 +116,11 @@
                                                 </address>
                                                 <hr>
                                                 <p>
-                                                    Consegna per il giorno
+                                                    Consegna per il
                                                     <strong>
                                                         <fmt:formatDate value="${p.dataConsegna}" 
                                                                         pattern="dd-MM-yyyy" />
-                                                    </strong>
+                                                    </strong><br/>
                                                     alle  
                                                     <strong>
                                                         <fmt:formatDate value="${p.orarioConsegna}" 

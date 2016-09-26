@@ -29,6 +29,7 @@
               crossorigin="anonymous">
 
         <link rel="stylesheet" href="include/css/profilo.css">
+        <link rel="stylesheet" href="include/css/header.css">
         <link rel="stylesheet" href="include/css/footer.css">
         <link rel="stylesheet" href="include/css/style.css">
 
