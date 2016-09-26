@@ -3,7 +3,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <c:if test="${usertoken != 'authenticated'}">
-    <c:redirect url="login.jsp"/>
+    <c:redirect url="index.jsp"/>
 </c:if>
 
 <!DOCTYPE html>
@@ -94,14 +94,14 @@
                         <label for="nominativo">Nome completo</label>-->
                         <input type="text" id="nominativo" name="nominativo" 
                                class="form-control" required
-                               value="${nominativo}"
+                               value="${nominativo}" maxlength="40"
                                placeholder="Il tuo nome"/>
                     </div>
                     <div class="form-group"><!--
                         <label for="indirizzo">Indirizzo di consegna</label>-->
                         <input type="text" id="indirizzo" name="indirizzo"
                                class="form-control" required
-                               value="${indirizzo}"
+                               value="${indirizzo}" maxlength="40"
                                placeholder="Indirizzo di consegna"/>
                     </div>
 

@@ -3,7 +3,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <c:if test="${usertoken != 'authenticated'}">
-    <c:redirect url="login.jsp"/>
+    <c:redirect url="index.jsp"/>
 </c:if>
 
 

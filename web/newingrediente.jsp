@@ -5,7 +5,7 @@
 <jsp:useBean id='ingredienti' scope="page" class="beans.Ingredienti"/>
 
 <c:if test="${usertoken != 'authenticated'}">
-    <c:redirect url="login.jsp"/>
+    <c:redirect url="index.jsp"/>
 </c:if>
 
 <!DOCTYPE html>

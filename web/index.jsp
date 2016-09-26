@@ -86,7 +86,7 @@
                             <input type="text" name="name" class="name" placeholder="" required=""> 
                             -->
                             <input id="email" name="email" type="email" class="name"
-                                   value="${previous_email}" required/>
+                                   value="${previous_email}" maxlength="64" required/>
                             <div class="clear"></div>
                         </div>
                         <div class="password-agileits">

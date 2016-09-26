@@ -4,7 +4,7 @@
 <jsp:useBean id="ingredienti" scope="page" class="beans.Ingredienti" />
 
 <c:if test="${usertoken != 'authenticated'}">
-    <c:redirect url="login.jsp"/>
+    <c:redirect url="index.jsp"/>
 </c:if>
 
 <!DOCTYPE html>
@@ -78,6 +78,7 @@
                             <label for="nome_pizza_edit">Nome pizza</label>
                             <input id="nome_pizza_edit" name="nome" type="text" class="form-control"
                                    value="${requestScope.pizza.nome}" required
+                                   maxlength="32"
                                    placeholder="Nome della pizza" />
                         </div>
 

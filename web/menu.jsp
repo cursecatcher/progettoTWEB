@@ -2,6 +2,10 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 
+<c:if test="${usertoken != 'authenticated'}">
+    <c:redirect url="index.jsp"/>
+</c:if>
+
 <jsp:useBean id='menu' scope="page" class="beans.Menu"/>
 <html>
     <head>

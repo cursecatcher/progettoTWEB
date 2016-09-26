@@ -5,7 +5,7 @@
 <jsp:useBean id="menu" scope="page" class="beans.Menu" />
 
 <c:if test="${usertoken != 'authenticated'}">
-    <c:redirect url="login.jsp"/>
+    <c:redirect url="index.jsp"/>
 </c:if>
 
 <!DOCTYPE html>
@@ -127,6 +127,7 @@
                         <div class="form-group">
                             <!-- <label for="nome_pizza_create">Nome pizza</label> -->
                             <input id="nome_pizza_create" name="nome" type="text" class="form-control"
+                                   maxlength="32"
                                    placeholder="Nome della pizza" required/>
                         </div>
                         <!-- prezzo -->

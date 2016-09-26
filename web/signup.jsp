@@ -65,17 +65,18 @@
                 <div>
                     <span>Nome</span>
                     <input id="nome" type="text" name="nome" class="name"
-                           placeholder="Il tuo nome" required/>
+                           placeholder="Il tuo nome" maxlength="19" required/>
                 </div>
                 <div class="username">
                     <span class="username">Cognome</span>
                     <input id="cognome" type="text" name="cognome" class="name"
-                           placeholder="Il tuo cognome" required=""/>
+                           placeholder="Il tuo cognome" maxlength="19"  required=""/>
                 </div>
                 <div class="username">
                     <span class="username">Email</span>
                     <input id="email" type="email" name="email" 
-                           class="name" placeholder="La tua email" required/>
+                           class="name" placeholder="La tua email" 
+                            maxlength="64"  required/>
                 </div>
                 <div class="password-agileits">
                     <span class="username">Password:</span>
