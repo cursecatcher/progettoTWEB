@@ -92,11 +92,11 @@
 
                 <c:if test="${user.isAdmin()}">
                     <div class="page-header">
-                        <h5 class="text-uppercase"><strong>Pannello admin</strong></h5>
+                        <h5 class="text-uppercase">
+                            <strong>Pannello admin</strong>
+                        </h5>
                     </div>
                     <ul class="nav nav-pills nav-stacked">
-
-
                         <li>
                             <a href="gestione-prenotazioni.jsp">Prenotazioni utenti</a>
                         </li>

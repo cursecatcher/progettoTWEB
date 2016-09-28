@@ -64,119 +64,132 @@
     <body>
         <%@include file="include/header.jsp" %>
 
-        <div class='container'>
-            <div class="col-md-6">
-                <div class="page-header">
-                    <h1>Catalogo pizze</h1>
-                </div>
-                <div id="catalogo">
-                    <c:forEach var="pizza" items="${menu.pizze}">
-                        <div id='pizza-${pizza.id}' class='row-fluid'>
-                            <div class='row'>
-                                <div class='col-md-8'>
-                                    <span class='pizza-nome text-uppercase'>
-                                        <h4>
-                                            <c:out value='${pizza.nome}'/>
-                                        </h4>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class='row'>
-                                <div class='col-md-8 text-lowercase'>
-                                    <c:out value='${pizza.listaIngredienti}'/>
-                                </div>
-                                <div class='col-md-2 text-muted'>
-                                    <strong>
-                                        <fmt:formatNumber type='number' value='${pizza.prezzo}' minFractionDigits='2'/>
-                                        &nbsp;&euro;
-                                    </strong>
-                                </div>
-                                <div class='col-md-2'>
-                                    <a href='#0' class='edit-link btn btn-primary btn-xs' data-id='${pizza.id}'>
-                                        <!--<span class='glyphicon glyphicon-pencil'></span>-->
-                                        <i class='fa fa-pencil' aria-hidden='true'></i>
-                                    </a>
-                                    <a href='#0' class='delete-link btn btn-danger btn-xs' data-id='${pizza.id}'>
-                                        <!--<span class='glyphicon glyphicon-remove'></span> -->
-                                        <i class='fa fa-times' aria-hidden='true'></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <hr>
+        <c:choose>
+            <c:when test="${user.ruolo == 'admin'}">
+                <div class='container'>
+                    <div class="col-md-6">
+                        <div class="page-header">
+                            <h1>Catalogo pizze</h1>
                         </div>
+                        <div id="catalogo">
+                            <c:forEach var="pizza" items="${menu.pizze}">
+                                <div id='pizza-${pizza.id}' class='row-fluid'>
+                                    <div class='row'>
+                                        <div class='col-md-8'>
+                                            <span class='pizza-nome text-uppercase'>
+                                                <h4>
+                                                    <c:out value='${pizza.nome}'/>
+                                                </h4>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class='row'>
+                                        <div class='col-md-8 text-lowercase'>
+                                            <c:out value='${pizza.listaIngredienti}'/>
+                                        </div>
+                                        <div class='col-md-2 text-muted'>
+                                            <strong>
+                                                <fmt:formatNumber type='number' value='${pizza.prezzo}' minFractionDigits='2'/>
+                                                &nbsp;&euro;
+                                            </strong>
+                                        </div>
+                                        <div class='col-md-2'>
+                                            <a href='#0' class='edit-link btn btn-primary btn-xs' data-id='${pizza.id}'>
+                                                <!--<span class='glyphicon glyphicon-pencil'></span>-->
+                                                <i class='fa fa-pencil' aria-hidden='true'></i>
+                                            </a>
+                                            <a href='#0' class='delete-link btn btn-danger btn-xs' data-id='${pizza.id}'>
+                                                <!--<span class='glyphicon glyphicon-remove'></span> -->
+                                                <i class='fa fa-times' aria-hidden='true'></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                </div>
 
-                    </c:forEach>
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <form id="edit-req" action="Controller" method="GET">
-                    <input type="hidden" name="action" value="edit-req"/>
-                    <input type="hidden" name="id" value="-1"/>
-                </form>
-
-                <div id="inserimento-pizza">
-                    <div class="page-header">
-                        <h1>Nuova pizza</h1>
+                            </c:forEach>
+                        </div>
                     </div>
 
-                    <form id="form_newpi" action="Controller" method="POST">
-                        <!--action-->
-                        <input type="hidden" name="action" value="pizza-create"/>
-                        <!-- nome pizza -->
-                        <div class="form-group">
-                            <!-- <label for="nome_pizza_create">Nome pizza</label> -->
-                            <input id="nome_pizza_create" name="nome" type="text" class="form-control"
-                                   maxlength="32"
-                                   placeholder="Nome della pizza" required/>
-                        </div>
-                        <!-- prezzo -->
-                        <div class="form-group">
-                            <!-- <label for="prezzo_pizza_create">Prezzo pizza</label> -->
-                            <div class="input-group">
-                                <input id="prezzo_pizza_create" name="prezzo" type="number" min="0.1" step="0.1"
-                                       class="form-control" placeholder="Prezzo della pizza..." required/>
-                                <span class="input-group-addon">&euro;</span>
+                    <div class="col-md-6">
+                        <form id="edit-req" action="Controller" method="GET">
+                            <input type="hidden" name="action" value="edit-req"/>
+                            <input type="hidden" name="id" value="-1"/>
+                        </form>
+
+                        <div id="inserimento-pizza">
+                            <div class="page-header">
+                                <h1>Nuova pizza</h1>
                             </div>
-                        </div>
-                        <!-- ingredienti -->
-                        <div>
-                            <!--<p><strong>Seleziona gli ingredienti da mettere sulla pizza </strong></p> -->
-                            <select id='select-ingredienti' name='ingredientiPizza' multiple="multiple">
-                                <c:forEach var="ingrediente" items="${ingredienti.listaIngredienti}">
-                                    <option value="${ingrediente.id}">
-                                        ${ingrediente.nome}
-                                    </option>
-                                </c:forEach>
-                            </select>
 
-                            <script type='text/javascript'>
-                                $(function () {
-                                    $('#select-ingredienti').searchableOptionList({
-                                        maxHeight: '200px',
-                                        showSelectAll: false,
-                                        allowNullSelection: false,
-                                        texts: {
-                                            noItemsAvailable: "Errore nel caricamento degli ingredienti",
-                                            searchplaceholder: "Seleziona gli ingredienti da mettere sulla pizza"
-                                        }
-                                    });
-                                });
-                            </script>
-                        </div>
-                        <br/>
-                        <button id='submit-newpi' type="submit" class="btn btn-primary btn-block">
-                            Inserisci pizza
-                        </button>
-                    </form>
-                    <p class='text-muted text-center'>
-                        oppure
+                            <form id="form_newpi" action="Controller" method="POST">
+                                <!--action-->
+                                <input type="hidden" name="action" value="pizza-create"/>
+                                <!-- nome pizza -->
+                                <div class="form-group">
+                                    <!-- <label for="nome_pizza_create">Nome pizza</label> -->
+                                    <input id="nome_pizza_create" name="nome" type="text" class="form-control"
+                                           maxlength="32"
+                                           placeholder="Nome della pizza" required/>
+                                </div>
+                                <!-- prezzo -->
+                                <div class="form-group">
+                                    <!-- <label for="prezzo_pizza_create">Prezzo pizza</label> -->
+                                    <div class="input-group">
+                                        <input id="prezzo_pizza_create" name="prezzo" type="number" min="0.1" step="0.1"
+                                               class="form-control" placeholder="Prezzo della pizza..." required/>
+                                        <span class="input-group-addon">&euro;</span>
+                                    </div>
+                                </div>
+                                <!-- ingredienti -->
+                                <div>
+                                    <!--<p><strong>Seleziona gli ingredienti da mettere sulla pizza </strong></p> -->
+                                    <select id='select-ingredienti' name='ingredientiPizza' multiple="multiple">
+                                        <c:forEach var="ingrediente" items="${ingredienti.listaIngredienti}">
+                                            <option value="${ingrediente.id}">
+                                                ${ingrediente.nome}
+                                            </option>
+                                        </c:forEach>
+                                    </select>
+
+                                    <script type='text/javascript'>
+                                        $(function () {
+                                            $('#select-ingredienti').searchableOptionList({
+                                                maxHeight: '200px',
+                                                showSelectAll: false,
+                                                allowNullSelection: false,
+                                                texts: {
+                                                    noItemsAvailable: "Errore nel caricamento degli ingredienti",
+                                                    searchplaceholder: "Seleziona gli ingredienti da mettere sulla pizza"
+                                                }
+                                            });
+                                        });
+                                    </script>
+                                </div>
+                                <br/>
+                                <button id='submit-newpi' type="submit" class="btn btn-primary btn-block">
+                                    Inserisci pizza
+                                </button>
+                            </form>
+                            <p class='text-muted text-center'>
+                                oppure
+                            </p>
+                            <a href='newingrediente.jsp' class='btn btn-primary btn-block'>Inserisci ingrediente mancante</a>
+                        </div> 
+
+                    </div>
+                </div>
+            </c:when>
+            <c:otherwise>
+                <div class="page-header text-center">
+                    <h3>Errore</h3>
+                    <p>
+                Non sei autorizzato a visualizzare questa pagina
                     </p>
-                    <a href='newingrediente.jsp' class='btn btn-primary btn-block'>Inserisci ingrediente mancante</a>
-                </div> 
-
-            </div>
-        </div>
+                </div>
+            </c:otherwise>
+            
+        </c:choose>
 
         <%@include file="include/footer.html" %>
     </body>

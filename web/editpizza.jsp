@@ -65,81 +65,96 @@
             <div class="col-md-2"></div>
             <div class="col-md-8">
 
-                <div id="modifica-pizza">
-                    <h1>
-                        Modifica pizza 
-                        <strong><c:out value="${requestScope.pizza.nome}"/></strong>
-                    </h1>
-                    <form id="editpi-form" action="Controller" method="POST">
-                        <input type="hidden" name="action" value="pizza-edit"/>
-                        <input type="hidden" name="id" id="id_pizza_edit" value="${requestScope.pizza.id}"/>
 
-                        <div class="form-group">
-                            <label for="nome_pizza_edit">Nome pizza</label>
-                            <input id="nome_pizza_edit" name="nome" type="text" class="form-control"
-                                   value="${requestScope.pizza.nome}" required
-                                   maxlength="32"
-                                   placeholder="Nome della pizza" />
+                <c:choose>
+                    <c:when test="${user.ruolo == 'admin'}">
+                        <div id="modifica-pizza">
+                            <h1>
+                                Modifica pizza 
+                                <strong><c:out value="${requestScope.pizza.nome}"/></strong>
+                            </h1>
+                            <form id="editpi-form" action="Controller" method="POST">
+                                <input type="hidden" name="action" value="pizza-edit"/>
+                                <input type="hidden" name="id" id="id_pizza_edit" value="${requestScope.pizza.id}"/>
+
+                                <div class="form-group">
+                                    <label for="nome_pizza_edit">Nome pizza</label>
+                                    <input id="nome_pizza_edit" name="nome" type="text" class="form-control"
+                                           value="${requestScope.pizza.nome}" required
+                                           maxlength="32"
+                                           placeholder="Nome della pizza" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="prezzo_pizza_edit">Prezzo pizza</label>
+                                    <div class="input-group">
+                                        <input id="prezzo_pizza_edit" name="prezzo" type="number" min="0.1" step="0.1"
+                                               class="form-control" placeholder="Prezzo della pizza..." required=""
+                                               value="${requestScope.pizza.prezzo}"/>
+                                        <span class="input-group-addon">&euro;</span>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <p>
+                                        <strong>Seleziona gli ingredienti da mettere sulla pizza </strong>
+                                    </p>
+                                    <select id='select-ingredienti' name='ingredientiPizza' multiple="multiple">
+                                        <!-- imposta gli ingredienti presenti nella pizza come selezionati -->
+                                        <c:forEach var="ingrediente" items="${ingredienti.listaIngredienti}">
+                                            <c:set var="contains" value="false"/>
+                                            <c:forEach var="item" items="${requestScope.pizza.ingredienti}">
+                                                <c:if test="${item.id eq ingrediente.id}">
+                                                    <c:set var="contains" value="true"/>
+                                                </c:if>
+                                            </c:forEach>
+
+                                            <option value="${ingrediente.id}"
+                                                    <c:if test="${contains eq 'true'}">selected</c:if>>
+                                                ${ingrediente.nome}
+                                            </option>
+                                        </c:forEach>
+                                    </select>
+
+                                    <script type='text/javascript'>
+                                        $(function () {
+                                            $('#select-ingredienti').searchableOptionList({
+                                                maxHeight: '200px',
+                                                showSelectAll: false,
+                                                allowNullSelection: false,
+                                                texts: {
+                                                    noItemsAvailable: "Errore nel caricamento degli ingredienti",
+                                                    searchplaceholder: "Seleziona gli ingredienti da mettere sulla pizza"
+                                                }
+                                            });
+                                        });
+                                    </script>
+                                </div>
+                                <br/>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <input type="submit" class="btn btn-success btn-block" value="Conferma modifiche"/>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <a href="newpizza.jsp" class="btn btn-default btn-block">
+                                            Annulla modifiche
+                                        </a>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
 
-                        <div class="form-group">
-                            <label for="prezzo_pizza_edit">Prezzo pizza</label>
-                            <div class="input-group">
-                                <input id="prezzo_pizza_edit" name="prezzo" type="number" min="0.1" step="0.1"
-                                       class="form-control" placeholder="Prezzo della pizza..." required=""
-                                       value="${requestScope.pizza.prezzo}"/>
-                                <span class="input-group-addon">&euro;</span>
-                            </div>
-                        </div>
-
-                        <div>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="page-header text-center">
+                            <h3>Errore</h3>
                             <p>
-                                <strong>Seleziona gli ingredienti da mettere sulla pizza </strong>
+                                Non sei autorizzato a visualizzare questa pagina
                             </p>
-                            <select id='select-ingredienti' name='ingredientiPizza' multiple="multiple">
-                                <!-- imposta gli ingredienti presenti nella pizza come selezionati -->
-                                <c:forEach var="ingrediente" items="${ingredienti.listaIngredienti}">
-                                    <c:set var="contains" value="false"/>
-                                    <c:forEach var="item" items="${requestScope.pizza.ingredienti}">
-                                        <c:if test="${item.id eq ingrediente.id}">
-                                            <c:set var="contains" value="true"/>
-                                        </c:if>
-                                    </c:forEach>
-
-                                    <option value="${ingrediente.id}"
-                                            <c:if test="${contains eq 'true'}">selected</c:if>>
-                                        ${ingrediente.nome}
-                                    </option>
-                                </c:forEach>
-                            </select>
-
-                            <script type='text/javascript'>
-                                $(function () {
-                                    $('#select-ingredienti').searchableOptionList({
-                                        maxHeight: '200px',
-                                        showSelectAll: false,
-                                        allowNullSelection: false,
-                                        texts: {
-                                            noItemsAvailable: "Errore nel caricamento degli ingredienti",
-                                            searchplaceholder: "Seleziona gli ingredienti da mettere sulla pizza"
-                                        }
-                                    });
-                                });
-                            </script>
                         </div>
-                        <br/>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <input type="submit" class="btn btn-success btn-block" value="Conferma modifiche"/>
-                            </div>
-                            <div class="col-md-6">
-                                <a href="newpizza.jsp" class="btn btn-default btn-block">
-                                    Annulla modifiche
-                                </a>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+                    </c:otherwise>
+                </c:choose>
+
             </div>
             <div class="col-md-2"></div>
 

@@ -148,7 +148,9 @@
                             </span>
                             x
                             <span class="name">
-                                <c:out value="${el.nome}"/>
+                                <strong>
+                                    <c:out value="${el.nome}"/>
+                                </strong>
                             </span>
                         </div>
                         <div class="col-md-3 text-muted">
